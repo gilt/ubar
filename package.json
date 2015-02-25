@@ -1,0 +1,34 @@
+{
+  "name": "ubar",
+  "group": "ubar",
+  "version": "0.0.1",
+  "description": "Unidirectional Browser App Resolver",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:gilt/ubar.git"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Jose Sanchez",
+      "email": "jsanchez@gilt.com"
+    },
+    {
+      "name": "Kyle Dorman",
+      "email": "kdorman@gilt.com"
+    },
+    {
+      "name": "Gregory Mazurek",
+      "email": "gmazurek@gilt.com"
+    },
+    {
+      "name": "Archana Kumar",
+      "email": "akumar@gilt.com"
+    }
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "moment": "^2.9.0"
+  }
+}
