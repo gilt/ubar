@@ -1,33 +1,34 @@
-(function (factory) {
+(function (root, factory) {
+  
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['moment'], factory);
+    define('ubar_config', ['../node_modules/moment/min/moment.min.js'], factory);
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('moment'));
+    module.exports = factory(require('../node_modules/moment/min/moment.min.js'));
 
   }
-} (function ubar_config (moment) {
+
+} (this, function ubar_config (moment) {
 
     'use strict';
 
     var expiration_time = {
-        disabled: moment().duration(2, 'weeks').asMilliseconds(),
-        enabled: moment().duration(1, 'year').asMilliseconds(),
-        redirected: moment().duration(60, 'seconds').asMilliseconds()
+        disabled: moment.duration(2, 'weeks').asMilliseconds(),
+        enabled: moment.duration(1, 'year').asMilliseconds(),
+        redirected: moment.duration(60, 'seconds').asMilliseconds()
       },
 
       redirect_interval = {
-        ios_app_store: moment().duration(2, 'seconds').asMilliseconds()
+        ios_app_store: moment.duration(2, 'seconds').asMilliseconds()
       };
 
     return {
       expirationTime : expiration_time,
       redirectInterval : redirect_interval
     };
-  });
 
 }));

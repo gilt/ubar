@@ -11,6 +11,10 @@
   ],
   "maintainers": [
     {
+      "name": "Archana Kumar",
+      "email": "akumar@gilt.com"
+    },
+    {
       "name": "Jose Sanchez",
       "email": "jsanchez@gilt.com"
     },
@@ -21,15 +25,12 @@
     {
       "name": "Gregory Mazurek",
       "email": "gmazurek@gilt.com"
-    },
-    {
-      "name": "Archana Kumar",
-      "email": "akumar@gilt.com"
     }
   ],
   "dependencies": {},
   "devDependencies": {
     "jasmine": "^2.2.1",
-    "moment": "^2.9.0"
+    "moment": "^2.9.0",
+    "requirejs": "^2.1.16"
   }
 }
