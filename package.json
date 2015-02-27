@@ -3,7 +3,7 @@
   "group": "ubar",
   "version": "0.0.1",
   "description": "Unidirectional Browser App Resolver",
-  "repositories": [
+  "repository": [
     {
       "type": "git",
       "url": "git@github.com:gilt/ubar.git"
@@ -27,10 +27,13 @@
       "email": "gmazurek@gilt.com"
     }
   ],
-  "dependencies": {},
+  "dependencies": {
+    "bean": "^1.0.15",
+    "handlebars": "^3.0.0",
+    "moment": "^2.9.0"
+  },
   "devDependencies": {
     "jasmine": "^2.2.1",
-    "moment": "^2.9.0",
     "requirejs": "^2.1.16"
   }
 }
