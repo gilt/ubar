@@ -30,7 +30,8 @@
   "dependencies": {
     "bean": "^1.0.15",
     "handlebars": "^3.0.0",
-    "moment": "^2.9.0"
+    "moment": "^2.9.0",
+    "when": "^3.7.2"
   },
   "devDependencies": {
     "jasmine": "^2.2.1",
