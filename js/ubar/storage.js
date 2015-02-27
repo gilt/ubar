@@ -20,9 +20,9 @@
     UBAR_KEY = 'ubar',
     REDIRECTED_NAME = 'ubar_redirected',
 
-    EXP_DURATION_ENABLED_MS = ubarConfig.expirationTime.enabled.asSeconds(),
-    EXP_DURATION_DISABLED_MS = ubarConfig.expirationTime.disabled.asSeconds(),
-    EXP_DURATION_REDIRECTED_MS = ubarConfig.expirationTime.redirected.asSeconds(),
+    EXP_DURATION_ENABLED_MS = config.expirationTime.enabled.asSeconds(),
+    EXP_DURATION_DISABLED_MS = config.expirationTime.disabled.asSeconds(),
+    EXP_DURATION_REDIRECTED_MS = config.expirationTime.redirected.asSeconds(),
 
     docCookies; // cookie getter and setter
 
@@ -126,6 +126,8 @@
    * Taken from Mozilla
    * https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
    * https://developer.mozilla.org/User:fusionchess
+   * This framework is released under the GNU Public License, version 3 or later.
+   *    http://www.gnu.org/licenses/gpl-3.0-standalone.html
    *
    * @private
    * @method docCookies
@@ -181,4 +183,4 @@
     isUbarDisabled   : isUbarDisabled,
     isUserRedirected : isUserRedirected
   };
-});
+}));
