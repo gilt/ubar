@@ -6,10 +6,10 @@ UBAR: Unidirectional Browser App Resolver.
 What is UBAR
 -------------
 UBAR is a front-end library that shepherds users into native apps from the browser and handles users returning to the browser.
-It's a more nuanced smart app banner to promote your app to your mobile-web users.
+With UBAR you can promote your app to your mobile-web users in a similar fashion to [Smart App Banners](https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html) but with extra functionality as well as greater ability to customize look and feel.
 
 User who turning UBAR on, will automatically be redirected to your app every time they open your url in the mobile web.
-However, if the user returns from the app to the mobile web, recognize that they perhaps prefer the mobile web to your app
+However, if the user returns from the app to the mobile web shortly after having being redirected to the app, recognize that they perhaps prefer the mobile web to your app
 and give them the ability to turn UBAR off and continue in the mobile web.
 
 
