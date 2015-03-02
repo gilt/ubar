@@ -1,7 +1,7 @@
 {
   "name": "ubar",
   "group": "ubar",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Unidirectional Browser App Resolver",
   "repository": [
     {
@@ -34,7 +34,9 @@
     "when": "^3.7.2"
   },
   "devDependencies": {
-    "jasmine": "^2.2.1",
+    "chai": "^2.1.0",
+    "gulp-mocha": "^2.0.0",
+    "mocha": "^2.1.0",
     "requirejs": "^2.1.16"
   }
 }
