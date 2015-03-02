@@ -219,7 +219,7 @@
      * @method renderOnBanner
      */
     function renderOnBanner() {
-      when(oafeDom.renderUberOnBanner()).then(function() {
+      when(ubar_Dom.renderUberOnBanner()).then(function() {
         bindOnBannerButtonEvents();
         ubar_dom.show();
       });
