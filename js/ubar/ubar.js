@@ -36,7 +36,7 @@
 
       bean.on(onButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        ubar_storage.enable( USER_CONFIG.enabled_time || DEFAULT_CONFIG.enabled_time );
+        ubar_storage.enable( getTimeInSeconds(USER_CONFIG.enabled_time || DEFAULT_CONFIG.enabled_time ) );
 
         redirect();
       });
@@ -50,7 +50,7 @@
         ev.preventDefault();
 
         ubar_dom.remove();
-        ubar_storage.disable( USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time );
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
       });
     }
 
@@ -68,7 +68,7 @@
 
       bean.on(offButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        disable();
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
 
       });
 
@@ -81,7 +81,7 @@
         ev.preventDefault();
 
         ubar_dom.remove();
-        disable();
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
       });
     }
 
@@ -210,6 +210,21 @@
         bindOnBannerButtonEvents();
         ubar_dom.show();
       });
+    }
+
+    /**
+     * Get Time in Seconds
+     *
+     * @private
+     * @method getTimeinSeconds
+     */
+    function getTimeinSeconds(time_string) {
+
+      var timeString = time_string.split(" "),
+          timeValue = parseInt(timeString[0], 10);
+          timeUnit = timeString[1];
+
+      return moment.duration( timeValue, timeUnit ).asSeconds() ;
     }
 
     /* Initialize UBAR with following params:
