@@ -2,13 +2,24 @@
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define('ubar', ['config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js' ], factory);
+    define(
+      'ubar',
+
+      [
+      'config.js',
+      '../node_modules/bean/bean.min.js',
+      '../node_modules/when/when.js',
+      '../node_modules/moment/min/moment.min.js'
+      ],
+
+      factory
+    );
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js' ));
+    module.exports = factory(require('config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js','../node_modules/moment/min/moment.min.js'));
 
   }
 
@@ -17,8 +28,8 @@
     'use strict';
 
     var
-      USER_CONFIG= {},
-      DEFAULT_CONFIG = ubar_config.defaultConfig,
+      USER_CONFIG              = {},
+      DEFAULT_CONFIG           = ubar_config.defaultConfig,
       TIME_BEFORE_IOS_REDIRECT = ubar_config.redirectInterval.ios_app_store.asMilliseconds();
 
     /**
@@ -29,10 +40,10 @@
      */
 
     function bindOnBannerButtonEvents () {
-      var ubarComponentDiv = document.querySelectorAll('.' + (USER_CONFIG.component_class || DEFAULT_CONFIG.component_class) )[0],
-          onButton = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.on_class || DEFAULT_CONFIG.on_class) )[0],
-          installAppButton = ubarComponentDiv.querySelectorAll('.' +(USER_CONFIG.install_class || DEFAULT_CONFIG.install_class) )[0],
-          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.close_class || DEFAULT_CONFIG.close_class) )[0];
+      var ubarComponentDiv    = document.querySelectorAll('.' + (USER_CONFIG.component_class || DEFAULT_CONFIG.component_class) )[0],
+          onButton            = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.on_class || DEFAULT_CONFIG.on_class) )[0],
+          installAppButton    = ubarComponentDiv.querySelectorAll('.' +(USER_CONFIG.install_class || DEFAULT_CONFIG.install_class) )[0],
+          closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.close_class || DEFAULT_CONFIG.close_class) )[0];
 
       bean.on(onButton, 'touchstart', function (ev) {
         ev.preventDefault();
@@ -148,10 +159,10 @@
      */
     function redirectToAppStoreOrRenderOffBanner(){
 
-      var currentTime = Date.now() ,
-          endTimerAt = currentTime + (TIME_BEFORE_IOS_REDIRECT),
-          intervalLength = TIME_BEFORE_IOS_REDIRECT/3,
-          timeThreshold = intervalLength/2,
+      var currentTime     = Date.now() ,
+          endTimerAt      = currentTime + (TIME_BEFORE_IOS_REDIRECT),
+          intervalLength  = TIME_BEFORE_IOS_REDIRECT/3,
+          timeThreshold   = intervalLength/2,
           redirectToAppStoreTimer;
 
         /** we want to run the interval at least three times
@@ -221,8 +232,8 @@
     function getTimeinSeconds(time_string) {
 
       var timeString = time_string.split(" "),
-          timeValue = parseInt(timeString[0], 10);
-          timeUnit = timeString[1];
+          timeValue  = parseInt(timeString[0], 10);
+          timeUnit   = timeString[1];
 
       return moment.duration( timeValue, timeUnit ).asSeconds() ;
     }

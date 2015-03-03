@@ -6,8 +6,8 @@
       'ubar_dom',
 
       [
-       'handlebars',
-       'when'
+       '../node_modules/handlebars/dist/handlebars.min.js',
+       '../node_modules/when/when.js'
       ],
 
       factory
@@ -17,7 +17,7 @@
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('../node_modules/handlebars/dist/handlebars.min.js'));
+    module.exports = factory(require('../node_modules/handlebars/dist/handlebars.min.js','../node_modules/when/when.js'));
 
   }
 

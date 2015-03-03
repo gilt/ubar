@@ -17,7 +17,7 @@
     'use strict';
 
   var
-    UBAR_KEY = 'ubar',
+    UBAR_KEY        = 'ubar',
     REDIRECTED_NAME = 'ubar_redirected',
 
     docCookies; // cookie getter and setter
