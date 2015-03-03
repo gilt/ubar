@@ -20,10 +20,6 @@
     UBAR_KEY = 'ubar',
     REDIRECTED_NAME = 'ubar_redirected',
 
-    EXP_DURATION_ENABLED_MS = config.expirationTime.enabled.asSeconds(),
-    EXP_DURATION_DISABLED_MS = config.expirationTime.disabled.asSeconds(),
-    EXP_DURATION_REDIRECTED_MS = config.expirationTime.redirected.asSeconds(),
-
     docCookies; // cookie getter and setter
 
   /**
@@ -84,7 +80,7 @@
    * @public
    * @method setRedirected
    */
-  function setRedirected () {
+  function setRedirected (EXP_DURATION_REDIRECTED_MS) {
     docCookies.setItem(REDIRECTED_NAME, true, EXP_DURATION_REDIRECTED_MS);
   }
 
@@ -95,7 +91,7 @@
    * @public
    * @method disableUbar
    */
-  function disableUbar () {
+  function disableUbar (EXP_DURATION_DISABLED_MS) {
     docCookies.setItem(UBAR_KEY, false, EXP_DURATION_DISABLED_MS);
   }
 
@@ -106,7 +102,7 @@
    * @public
    * @method enableUbar
    */
-  function enableUbar () {
+  function enableUbar (EXP_DURATION_ENABLED_MS) {
     docCookies.setItem(UBAR_KEY, true, EXP_DURATION_ENABLED_MS);
   }
 
@@ -176,8 +172,8 @@
 
   return {
     clear            : clear,
-    disableUbar      : disableUbar,
-    enableUbar       : enableUbar,
+    disable          : disableUbar,
+    enable           : enableUbar,
     setRedirected    : setRedirected,
     isUbarEnabled    : isUbarEnabled,
     isUbarDisabled   : isUbarDisabled,

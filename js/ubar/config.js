@@ -16,29 +16,21 @@
 
     'use strict';
 
-    /**
-    * Expiration Time:
-    *
-    * Disabled sets the amount of time the banner will
-    * not appear to the user. It's essentially the same
-    * as if the user said "ignore."
-    *
-    * Enabled sets the amount of time the redirection
-    * will take place. This exists once a user elects
-    * to participate in ubar.
-    *
-    * Redirected sets the amount of time the user has
-    * on the web before being redirected again. Imagine
-    * the user is redirected but wants to manager her
-    * settings. She has this amount of time do so before
-    * being redirected again. 
-    *
-    */
-    var expiration_time = {
-        disabled: moment.duration(2, 'weeks'),
-        enabled: moment.duration(1, 'year'),
-        redirected: moment.duration(60, 'seconds')
-      },
+    var defaultConfig = {
+        ios_app_store_url       : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+        app_deep_link           : 'gilt://',
+        sending_template_path   : '../templates/ubar/ubar_sending',
+        returning_template_path : '../templates/ubar/ubar_returning',
+        enabled_time            : '1 year',
+        disabled_time           : '2 weeks',
+        manage_window_time      : '60 seconds',
+        component_class         : 'component-ubar',
+        on_class                : 'ubar-on-button',
+        install_class           : 'ubar-install-app-button',
+        off_class               : 'ubar-off-button',
+        open_in_app_class       : 'ubar-open-in-app-button',
+        close_class             : 'ubar-close-banner-button'
+    },
 
     /**
     * Redirect Interval:
@@ -55,7 +47,7 @@
       };
 
     return {
-      expirationTime : expiration_time,
+      defaultConfig : defaultConfig,
       redirectInterval : redirect_interval
     };
 
