@@ -238,22 +238,7 @@
       return moment.duration( timeValue, timeUnit ).asSeconds() ;
     }
 
-    /* Initialize UBAR with following params:
-     * {
-     *   ios_app_store_url       : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
-     *   app_deep_link           : 'gilt://',
-     *   sending_template_path   : '../templates/ubar/ubar_sending',
-     *   returning_template_path : '../templates/ubar/ubar_returning',
-     *   enabled_time            : '1 year',
-     *   disabled_time           : '2 weeks',
-     *   manage_window_time      : '60 seconds',
-     *   component_class         : 'component-ubar',
-     *   on_class                : 'ubar-on-button',
-     *   install_class           : 'ubar-install-app-button',
-     *   off_class               : 'ubar-off-button',
-     *   open_in_app_class       : 'ubar-open-in-app-button',
-     *   close_class             : 'ubar-close-banner-button'
-     * }
+    /* Initialize UBAR with parameters set in config.js
      *
      * @public
      * @method init
