@@ -16,52 +16,93 @@
 
     'use strict';
 
-    var defaultConfig = {
-      
-      urls : {
-        ios_app_store_url       : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
-        app_deep_link           : 'gilt://',
-      },
-      
-      templates : {
-        sending_template_path   : '../templates/ubar/ubar_sending',
-        returning_template_path : '../templates/ubar/ubar_returning',
-      },
-      
-      
-      /**
-      * Timing:
-      *
-      * Disabled sets the amount of time the banner will
-      * not appear to the user. It's essentially the same
-      * as if the user said "ignore."
-      *
-      * Enabled sets the amount of time the redirection
-      * will take place. This exists once a user elects
-      * to participate in ubar.
-      *
-      * Redirected sets the amount of time the user has
-      * on the web before being redirected again. Imagine
-      * the user is redirected but wants to manager her
-      * settings. She has this amount of time do so before
-      * being redirected again. 
-      *
-      */
-      timing : {
-        enabled            : '1 year',
-        disabled           : '2 weeks',
-        manage_window      : '60 seconds',
-      },
-      
-      classNames : {
-        component_class         : 'component-ubar',
-        on_class                : 'ubar-on-button',
-        install_class           : 'ubar-install-app-button',
-        off_class               : 'ubar-off-button',
-        open_in_app_class       : 'ubar-open-in-app-button',
-        close_class             : 'ubar-close-banner-button'
-      }
-    },
+
+    /**
+    * Urls:
+    *
+    * ios_app_store_url: This is the url for the iOS app store
+    * for your app.
+    *
+    * app_deep_link: This is the prefix for your deep-link
+    * routing.
+    *
+    */
+    var urlConfig = {
+      ios_app_store_url       : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+      app_deep_link           : 'gilt://'
+    }
+
+    /**
+    * Templates:
+    *
+    * sending_template_path: This is the initial template rendered
+    * for the state where a user has not yet elected to opt
+    * into the UBAR redirection.
+    *
+    * returning_template_path: This is the template rendered
+    * for the state where a user has already opted into the UBAR
+    * redirection. You can use this template for allowing a user
+    * to manager her state.
+    *
+    */
+    var templateConfig = {
+      sending_template_path   : '../templates/ubar/ubar_sending',
+      returning_template_path : '../templates/ubar/ubar_returning'
+    }
+
+    /**
+    * Timing:
+    *
+    * Disabled sets the amount of time the banner will
+    * not appear to the user. It's essentially the same
+    * as if the user said "ignore."
+    *
+    * Enabled sets the amount of time the redirection
+    * will take place. This exists once a user elects
+    * to participate in ubar.
+    *
+    * Redirected sets the amount of time the user has
+    * on the web before being redirected again. Imagine
+    * the user is redirected but wants to manager her
+    * settings. She has this amount of time do so before
+    * being redirected again. 
+    *
+    */
+    var timingConfig = {
+      enabled_time            : '1 year',
+      disabled_time           : '2 weeks',
+      manage_window_time      : '60 seconds',
+    }
+
+    /**
+    * Class Names:
+    *
+    * These are all of the HTML classes that need to appear
+    * in the templates for UBAR to function correctly. If
+    * you make changes to the class names in your templates,
+    * please also make those changes here.
+    *
+    */
+    var classNames = {
+      component_class         : 'component-ubar',
+      on_class                : 'ubar-on-button',
+      install_class           : 'ubar-install-app-button',
+      off_class               : 'ubar-off-button',
+      open_in_app_class       : 'ubar-open-in-app-button',
+      close_class             : 'ubar-close-banner-button'
+    }
+
+    /**
+    * We concatenate all of the configs into one defaultConfig
+    * so that consumers can override the individual keys
+    * above if needed when init-ing UBAR. We break up the
+    * individual configs above for documentation purposes
+    * and ease of understanding only.
+    *
+    */
+    var defaultConfig = urlConfig.concat(templateConfig)
+                          .concat(timingConfig)
+                          .concat(classNames);
 
     /**
     * Redirect Interval:
@@ -73,9 +114,10 @@
     * website. For example,
     *
     */
-      redirect_interval = {
-        ios_app_store: moment.duration(2, 'seconds')
-      };
+    var redirect_interval = {
+      ios_app_store: moment.duration(2, 'seconds')
+    };
+
 
     return {
       defaultConfig : defaultConfig,
