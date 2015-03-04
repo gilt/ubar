@@ -75,7 +75,7 @@
     var timingConfig = {
       enabled_time            : '1 year',
       disabled_time           : '2 weeks',
-      manage_window_time      : '60 seconds',
+      manage_window_time      : '60 seconds'
     };
 
     /**
@@ -114,18 +114,29 @@
     };
 
     /**
-    * We concatenate all of the configs into one defaultConfig
-    * so that consumers can override the individual keys
-    * above if needed when init-ing UBAR. We break up the
-    * individual configs above for documentation purposes
-    * and ease of understanding only.
+    * Tracking Locations:
+    *
+    * If you take advantage of the event tracking API
+    * included with tracking.js, these are the values
+    * that you will be passing. To see where they are
+    * implemented, see ubar.js.
+    *
+    * tracking_sending_banner: this is the event when
+    * the ubar banner appears but the user has not
+    * yet opted in.
+    *
+    * tracking_returning_banner: this is the event when
+    * the user sees the banner after already opting in.
+    *
+    * 
     *
     */
-    var defaultConfig = urlConfig
-                          .concat(templateConfig)
-                          .concat(timingConfig)
-                          .concat(classNames)
-                          .concat(cookieNames);
+    var trackingLocations = {
+      tracking_sending_banner : 'oafe banner',
+      tracking_returning_banner : 'manage oafe banner',
+      tracking_account : 'account',
+      tracking_site : 'site'
+    }
 
     /**
     * Redirect Interval:
@@ -140,6 +151,24 @@
     var redirect_interval = {
       ios_app_store: moment.duration(2, 'seconds')
     };
+
+    /**
+    * Default Config:
+    *
+    * We concatenate all of the configs into one defaultConfig
+    * so that consumers can override the individual keys
+    * above if needed when init-ing UBAR. We break up the
+    * individual configs above for documentation purposes
+    * and ease of understanding only.
+    *
+    */
+    var defaultConfig = urlConfig
+                          .concat(templateConfig)
+                          .concat(timingConfig)
+                          .concat(classNames)
+                          .concat(cookieNames)
+                          .concat(trackingLocations)
+                          .concat(redirect_interval);
 
 
     return {
