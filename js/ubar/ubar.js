@@ -45,10 +45,8 @@
     'use strict';
 
     var
-      CONFIG                   = {},
-      TIME_BEFORE_IOS_REDIRECT = ubar_config.redirectInterval.ios_app_store.asMilliseconds(),
-
-      ubarStorage;
+      CONFIG = {},
+      ubarStorage; // storage instance
 
     /**
      * Binds the events of Uber ON Banner Buttons
@@ -129,7 +127,7 @@
      * @method redirectToApp
      */
     function redirectToApp(deepLinkToApp) {
-      deepLinkToApp = deepLinkToApp || UBAR_LINKS.IOS_APP_HOST;
+      deepLinkToApp = deepLinkToApp || CONFIG.app_deep_link ;
       var ifrm = document.createElement("IFRAME");
       ifrm.style.display = "none";
       ifrm.id = "app-linker";
@@ -149,7 +147,7 @@
     function redirectToAppStore() {
       ubar_tracking.attemptToRedirectToAppStore();
 
-      window.location.href = (CONFIG.ios_app_store);
+      window.location.href = ( CONFIG.ios_app_store_url );
     }
 
 
@@ -167,10 +165,8 @@
 
       ubar_tracking.attemptToRedirectToApp();
 
-      ubar_tracking.attemptToRedirectToApp();
-
       redirectToAppStoreOrRenderOffBanner();
-      redirectToApp(CONFIG.app_deep_link);
+      redirectToApp( CONFIG.app_deep_link );
 
       ubar_dom.remove();
     }
@@ -188,11 +184,13 @@
      */
     function redirectToAppStoreOrRenderOffBanner(){
 
-      var currentTime     = Date.now() ,
-          endTimerAt      = currentTime + (TIME_BEFORE_IOS_REDIRECT),
-          intervalLength  = TIME_BEFORE_IOS_REDIRECT/3,
-          timeThreshold   = intervalLength/2,
-          redirectToAppStoreTimer;
+      var
+        TIME_BEFORE_IOS_REDIRECT = CONFIG.ios_app_store_redirect.asMilliseconds(),
+        currentTime     = Date.now(),
+        endTimerAt      = currentTime + (TIME_BEFORE_IOS_REDIRECT),
+        intervalLength  = TIME_BEFORE_IOS_REDIRECT/3,
+        timeThreshold   = intervalLength/2,
+        redirectToAppStoreTimer;
 
         /** we want to run the interval at least three times
           * to allow for the time it takes to redirect to
@@ -233,7 +231,7 @@
      * @method renderOffBanner
      */
     function renderOffBanner() {
-      when(ubar_dom.renderTemplate(CONFIG.returning_template_path)).then(function() {
+      when(ubar_dom.renderTemplate( CONFIG.returning_template_path )).then(function() {
         bindOffBannerButtonEvents();
         ubar_dom.show();
         ubar_tracking.showReturningBanner();
@@ -247,7 +245,7 @@
      * @method renderOnBanner
      */
     function renderOnBanner() {
-      when(ubar_Dom.renderUberOnBanner(CONFIG.sending_template_path)).then(function() {
+      when(ubar_Dom.renderUberOnBanner( CONFIG.sending_template_path )).then(function() {
         bindOnBannerButtonEvents();
         ubar_dom.show();
         ubar_tracking.showSendingBanner();
@@ -258,27 +256,28 @@
      * Get Time in Seconds
      *
      * @private
-     * @method getTimeinSeconds
+     * @method getTimeinMoments
      */
-    function getTimeinSeconds(time_string) {
+    function getTimeinMoments(time_string) {
 
       var timeString = time_string.split(" "),
           timeValue  = parseInt(timeString[0], 10);
           timeUnit   = timeString[1];
 
-      return moment.duration( timeValue, timeUnit ).asSeconds() ;
+      return moment.duration( timeValue, timeUnit );
     }
 
     /**
      * Set config times using Moment library
      *
      * @private
-     * @method setTimeInMoments
+     * @method setConfigTime
      */
-    function setTimeInMoments (config) {
-      config.enabled_time = getTimeinSeconds(config.enabled_time);
-      config.disable_time = getTimeinSeconds(config.disable_time);
-      config.manage_window_time = getTimeinSeconds(config.manage_window_time);
+    function setConfigTime (config) {
+      config.enabled_time = getTimeinMoments( config.enabled_time );
+      config.disable_time = getTimeinMoments( config.disable_time );
+      config.manage_window_time = getTimeinMoments (config.manage_window_time );
+      config.ios_app_store = getTimeinMoments( config.ios_app_store_redirect );
 
       return config;
     }
@@ -311,9 +310,9 @@
      */
     function init (user_config) {
 
-      CONFIG = setTimeInMoments(_.extend(config.defaultConfig, user_config));
+      CONFIG = setConfigTime(_.extend( config.defaultConfig, user_config ));
 
-      ubarStorage = new UbarStorage(CONFIG);
+      ubarStorage = new UbarStorage( CONFIG );
 
       // TODO : user ubar = on param
 

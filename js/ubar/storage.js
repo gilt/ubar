@@ -77,9 +77,9 @@
   ubarStorage = function (config) {
     this.UBAR_KEY = config.device_preference_cookie;
     this.REDIRECTED_NAME = config.redirected_cookie;
-    this.EXP_DURATION_REDIRECTED_MS = config.manage_window_time;
-    this.EXP_DURATION_DISABLED_MS = disabled_time;
-    this.EXP_DURATION_ENABLED_MS = enabled_time;
+    this.EXP_DURATION_REDIRECTED_MS = config.manage_window_time.asSeconds();
+    this.EXP_DURATION_DISABLED_MS = disabled_time.asSeconds();
+    this.EXP_DURATION_ENABLED_MS = enabled_time.asSeconds();
   }
 
   /**

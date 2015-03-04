@@ -2,22 +2,19 @@
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(name ,
-      [
-        '../node_modules/moment/min/moment.min.js'
-      ], factory);
+    define(name , [], factory);
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('moment'));
+    module.exports = factory();
 
   } else {
-    root[name] = factory(root['moment']);
+    root[name] = factory();
   }
 
-} ('ubar_config', this, function ubar_config (moment) {
+} ('ubar_config', this, function ubar_config () {
 
     'use strict';
 
@@ -141,7 +138,7 @@
     /**
     * Redirect Interval:
     *
-    * ios_app_store is the amount of time we suspect it
+    * ios_app_store_redirect is the amount of time we suspect it
     * should take for a user to have been redirected to
     * the iOS App Store and the minimum amount of time
     * before which a user could possibly return to the
@@ -149,7 +146,7 @@
     *
     */
     var redirect_interval = {
-      ios_app_store: moment.duration(2, 'seconds')
+      ios_app_store_redirect: '2 seconds'
     };
 
     /**
@@ -162,13 +159,34 @@
     * and ease of understanding only.
     *
     */
-    var defaultConfig = urlConfig
-                          .concat(templateConfig)
-                          .concat(timingConfig)
-                          .concat(classNames)
-                          .concat(cookieNames)
-                          .concat(trackingLocations)
-                          .concat(redirect_interval);
+    var defaultConfig = extend(urlConfig,
+                          templateConfig,
+                          timingConfig,
+                          classNames,
+                          cookieNames,
+                          trackingLocations,
+                          redirect_interval);
+
+    /**
+     * Extend method for merging config values.
+     * Taken for Underscore.js, http://underscorejs.org/
+     *
+     * @private
+     * @method extend
+     */
+    function extend (obj) {
+      if (!_.isObject(obj)) return obj;
+      var source, prop;
+      for (var i = 1, length = arguments.length; i < length; i++) {
+        source = arguments[i];
+        for (prop in source) {
+          if (hasOwnProperty.call(source, prop)) {
+              obj[prop] = source[prop];
+          }
+        }
+      }
+      return obj;
+    };
 
 
     return {
