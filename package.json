@@ -37,6 +37,7 @@
     "chai": "^2.1.0",
     "gulp-mocha": "^2.0.0",
     "mocha": "^2.1.0",
-    "requirejs": "^2.1.16"
+    "requirejs": "^2.1.16",
+    "sinon": "^1.12.2"
   }
 }

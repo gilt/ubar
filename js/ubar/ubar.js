@@ -40,7 +40,7 @@
       root['ubar_storage'],
       root['ubar_dom'],
       root['uber_device'],
-      root['ubar_tracking']
+      root['ubar_tracking'],
       root['bean'],
       root['when'],
       root['moment']);
@@ -73,7 +73,7 @@
 
         ubarStorage.enable();
 
-        ubar_tracking.turnUbarOn();
+        ubar_tracking.turnUbarOn({ location : USER_CONFIG.tracking_sending_banner});
 
         redirect();
       });
@@ -107,8 +107,7 @@
         ev.preventDefault();
 
         ubarStorage.disable();
-
-        ubar_tracking.turnUbarOff();
+        ubar_tracking.turnUbarOff({ location: USER_CONFIG.tracking_sending_banner });
 
       });
 
@@ -151,8 +150,8 @@
      * @method redirectToApp
      */
 
-    function redirectToAppStore() {
-      ubar_tracking.attemptToRedirectToAppStore();
+    function redirectToAppStore(location) {
+      ubar_tracking.attemptToRedirectToAppStore({ location: location });
 
       window.location.href = ( CONFIG.ios_app_store_url );
     }
@@ -170,7 +169,7 @@
     function redirect() {
       ubarStorage.setRedirected();
 
-      ubar_tracking.attemptToRedirectToApp();
+      ubar_tracking.attemptToRedirectToApp({ location: location });
 
       redirectToAppStoreOrRenderOffBanner();
       redirectToApp( CONFIG.app_deep_link );
@@ -335,7 +334,8 @@
     }
 
     return {
-      init : init
+      init : init,
+      _bindOnBannerButtonEvents : bindOnBannerButtonEvents
     };
 
 }));

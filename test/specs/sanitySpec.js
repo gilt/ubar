@@ -7,8 +7,9 @@ describe('basic sanity test', function () {
     true.should.equal(true);
   });
 
-  it("be false. Fail damn it", function () {
-    requirejs(["ubar_storage"], function(storage) {
+  it('be false. Fail damn it', function () {
+    requirejs(['ubar_storage'], function(storage) {
+      (false.should.equal(true)).should.equal(false);
       false.should.not.equal(true);
     });
   });
