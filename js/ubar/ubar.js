@@ -1,15 +1,15 @@
-(function (root, factory) {
+(function (name, root, factory) {
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(
-      'ubar',
+      name,
 
       [
-      'config.js',
-      '../node_modules/bean/bean.min.js',
-      '../node_modules/when/when.js',
-      '../node_modules/moment/min/moment.min.js'
+        'config.js',
+        '../node_modules/bean/bean.min.js',
+        '../node_modules/when/when.js',
+        '../node_modules/moment/min/moment.min.js'
       ],
 
       factory
@@ -19,11 +19,22 @@
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js','../node_modules/moment/min/moment.min.js'));
+    module.exports = factory(
+      require('config.js'),
+      require('../node_modules/bean/bean.min.js'),
+      require('../node_modules/when/when.js'),
+      require('../node_modules/moment/min/moment.min.js')
+    );
 
+  } else {
+    root[name] = factory(
+      root['uber_config'],
+      root['bean'],
+      root['when'],
+      root['moment']);
   }
 
-} (this, function ubar (ubar_config, bean, when) {
+} ('ubar', this, function ubar (ubar_config, bean, when) {
 
     'use strict';
 

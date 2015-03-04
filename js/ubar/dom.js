@@ -1,9 +1,9 @@
-(function (root, factory) {
+(function (name, root, factory) {
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(
-      'ubar_dom',
+      name,
 
       [
        '../node_modules/handlebars/dist/handlebars.min.js',
@@ -17,11 +17,19 @@
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('../node_modules/handlebars/dist/handlebars.min.js','../node_modules/when/when.js'));
+    module.exports = factory(
+      require('../node_modules/handlebars/dist/handlebars.min.js'),
+      requre('../node_modules/when/when.js')
+    );
 
+  } else {
+    root[name] = factory(
+      root['handlebars'],
+      root['when']
+    );
   }
 
-} (this, function ubar_dom (handlebars, when) {
+} ('ubar_dom', this, function ubar_dom (handlebars, when) {
 
     'use strict';
 

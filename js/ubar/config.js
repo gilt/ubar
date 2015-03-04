@@ -1,21 +1,25 @@
-(function (root, factory) {
+(function (name, root, factory) {
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define('ubar_config', [], factory);
+    define(name ,
+      [
+        '../node_modules/moment/min/moment.min.js'
+      ], factory);
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require());
+    module.exports = factory(require('moment'));
 
+  } else {
+    root[name] = factory(root['moment']);
   }
 
-} (this, function ubar_config (moment) {
+} ('ubar_config', this, function ubar_config (moment) {
 
     'use strict';
-
 
     /**
     * Urls:
@@ -30,7 +34,7 @@
     var urlConfig = {
       ios_app_store_url       : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
       app_deep_link           : 'gilt://'
-    }
+    };
 
     /**
     * Templates:
@@ -48,7 +52,7 @@
     var templateConfig = {
       sending_template_path   : '../templates/ubar/ubar_sending',
       returning_template_path : '../templates/ubar/ubar_returning'
-    }
+    };
 
     /**
     * Timing:
@@ -65,22 +69,22 @@
     * on the web before being redirected again. Imagine
     * the user is redirected but wants to manager her
     * settings. She has this amount of time do so before
-    * being redirected again. 
+    * being redirected again.
     *
     */
     var timingConfig = {
       enabled_time            : '1 year',
       disabled_time           : '2 weeks',
       manage_window_time      : '60 seconds',
-    }
+    };
 
     /**
     * Class Names:
     *
     * These are all of the HTML classes that need to appear
     * in the templates for UBAR to function correctly. If
-    * you make changes to the class names in your templates,
-    * please also make those changes here.
+    * you make changes to the class names in your default templates,
+    * please make those changes here as well.
     *
     */
     var classNames = {
@@ -90,7 +94,24 @@
       off_class               : 'ubar-off-button',
       open_in_app_class       : 'ubar-open-in-app-button',
       close_class             : 'ubar-close-banner-button'
-    }
+    };
+
+    /**
+     * Cookie Names:
+     *
+     * These are all the cookie names which will keep track of
+     * a devices UBAR preferences and state.
+     *
+     * ubar_preference_key is whether UBAR is on, off, or unset.
+     *
+     * redirected_key is if the device has been redirect in the
+     * last X min (where X is another config value).
+     *
+    */
+    var cookieNames = {
+      device_preference_cookie = 'ubar',
+      redirected_cookie = 'ubar_redirected'
+    };
 
     /**
     * We concatenate all of the configs into one defaultConfig
@@ -100,9 +121,11 @@
     * and ease of understanding only.
     *
     */
-    var defaultConfig = urlConfig.concat(templateConfig)
+    var defaultConfig = urlConfig
+                          .concat(templateConfig)
                           .concat(timingConfig)
-                          .concat(classNames);
+                          .concat(classNames)
+                          .concat(cookieNames);
 
     /**
     * Redirect Interval:
