@@ -7,7 +7,9 @@
 
       [
         'config.js',
-        'storage.js'
+        'storage.js',
+        'dom.js',
+        'device.js',
         'tracking.js',
         '../node_modules/bean/bean.min.js',
         '../node_modules/when/when.js',
@@ -24,6 +26,8 @@
     module.exports = factory(
       require('config.js'),
       require('storage'),
+      require('dom'),
+      require('device'),
       require('tracking.js'),
       require('../node_modules/bean/bean.min.js'),
       require('../node_modules/when/when.js'),
@@ -32,21 +36,24 @@
 
   } else {
     root[name] = factory(
-      root['uber_config'],
+      root['ubar_config'],
       root['ubar_storage'],
+      root['ubar_dom'],
+      root['uber_device'],
       root['ubar_tracking']
       root['bean'],
       root['when'],
       root['moment']);
   }
 
-} ('ubar', this, function ubar (ubar_config, UbarStorage, ubar_tracking, bean, when) {
+} ('ubar', this, function ubar (ubar_config, UbarStorage, UbarDom, device, ubar_tracking, bean, when) {
 
     'use strict';
 
     var
       CONFIG = {},
-      ubarStorage; // storage instance
+      ubarStorage, // storage instance
+      ubarDom, // dom instance
 
     /**
      * Binds the events of Uber ON Banner Buttons
@@ -57,9 +64,9 @@
 
     function bindOnBannerButtonEvents () {
       var ubarComponentDiv    = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-          onButton            = ubarComponentDiv.querySelectorAll('.' + (CONFIG.on_class) )[0],
+          onButton            = ubarComponentDiv.querySelectorAll('.' + (CONFIG.on_button_class) )[0],
           installAppButton    = ubarComponentDiv.querySelectorAll('.' +(CONFIG.install_class) )[0],
-          closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_class) )[0];
+          closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_button_class) )[0];
 
       bean.on(onButton, 'touchstart', function (ev) {
         ev.preventDefault();
@@ -79,7 +86,7 @@
       bean.on(closeBannerButton, 'touchstart', function (ev) {
         ev.preventDefault();
 
-        ubar_dom.remove();
+        ubarDom.remove();
         ubarStorage.disable();
       });
     }
@@ -92,7 +99,7 @@
      */
     function bindOffBannerButtonEvents () {
       var ubarComponentDiv = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_class)[0],
+          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_button_class)[0],
           openInAppButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.open_in_app_class) )[0],
           closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_class) )[0];
 
@@ -113,7 +120,7 @@
       bean.on(closeBannerButton, 'touchstart', function (ev) {
         ev.preventDefault();
 
-        ubar_dom.remove();
+        ubarDom.remove();
         ubarStorage.disable();
       });
     }
@@ -168,7 +175,7 @@
       redirectToAppStoreOrRenderOffBanner();
       redirectToApp( CONFIG.app_deep_link );
 
-      ubar_dom.remove();
+      ubarDom.remove();
     }
 
     /**
@@ -231,9 +238,9 @@
      * @method renderOffBanner
      */
     function renderOffBanner() {
-      when(ubar_dom.renderTemplate( CONFIG.returning_template_path )).then(function() {
+      ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
         bindOffBannerButtonEvents();
-        ubar_dom.show();
+        ubarDom.show();
         ubar_tracking.showReturningBanner();
       });
     }
@@ -245,9 +252,9 @@
      * @method renderOnBanner
      */
     function renderOnBanner() {
-      when(ubar_Dom.renderUberOnBanner( CONFIG.sending_template_path )).then(function() {
+      ubar_Dom.renderBanner( CONFIG.sending_template_path ).then(function() {
         bindOnBannerButtonEvents();
-        ubar_dom.show();
+        ubarDom.show();
         ubar_tracking.showSendingBanner();
       });
     }
@@ -313,16 +320,18 @@
       CONFIG = setConfigTime(_.extend( config.defaultConfig, user_config ));
 
       ubarStorage = new UbarStorage( CONFIG );
+      ubarDom = new UbarDom ( CONFIG );
 
       // TODO : user ubar = on param
 
-      if (ubarStorage.isEnabled()) {
-        ubarStorage.isUserRedirected() ? renderOffBanner() : redirect();
+      if (device.isAppSupported(CONFIG) {
+          if (ubarStorage.isEnabled()) {
+          ubarStorage.isUserRedirected() ? renderOffBanner() : redirect();
 
-      } else if (!ubarStorage.isDisabled()) {
-        renderOnBanner();
+        } else if (!ubarStorage.isDisabled()) {
+          renderOnBanner();
+        }
       }
-
     }
 
     return {

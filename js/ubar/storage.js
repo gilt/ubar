@@ -20,7 +20,7 @@
 
   var
     docCookies, // cookie getter and setter
-    ubarStorage;
+    ubarStorage; // Strorage constructor
 
   /**
    * Taken from Mozilla
@@ -74,13 +74,21 @@
     }
   };
 
+  /**
+   * Class responsible for getting and setting UBAR cookies.
+   *
+   * @public
+   * @constructor
+   *
+   * @params {Object} config  Config object for ubar
+   */
   ubarStorage = function (config) {
     this.UBAR_KEY = config.device_preference_cookie;
     this.REDIRECTED_NAME = config.redirected_cookie;
     this.EXP_DURATION_REDIRECTED_MS = config.manage_window_time.asSeconds();
-    this.EXP_DURATION_DISABLED_MS = disabled_time.asSeconds();
-    this.EXP_DURATION_ENABLED_MS = enabled_time.asSeconds();
-  }
+    this.EXP_DURATION_DISABLED_MS = config.disabled_time.asSeconds();
+    this.EXP_DURATION_ENABLED_MS = config.enabled_time.asSeconds();
+  };
 
   /**
    * Returns whether UBAR is enabled.
@@ -90,7 +98,7 @@
    */
   ubarStorage.prototype.isUbarEnabled = function isUbarEnabled () {
     return docCookies.getItem(this.UBAR_KEY) === 'true';
-  }
+  };
 
   /**
    * Returns whether UBAR has been disabled by the user.
@@ -100,7 +108,7 @@
    */
   ubarStorage.prototype.isUbarDisabled = function isUbarDisabled () {
     return docCookies.getItem(this.UBAR_KEY); === 'false';
-  }
+  };
 
   /**
    * Returns whether user was redirected.
@@ -110,7 +118,7 @@
    */
   ubarStorage.prototype.isUserRedirected = function isUserRedirected () {
     return docCookies.getItem(this.REDIRECTED_NAME) === 'true';
-  }
+  };
 
   /**
    * When a user is redirected via UBAR, set a storage value that records this.
@@ -121,7 +129,7 @@
    */
   ubarStorage.prototype.setRedirected = function setRedirected () {
     docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS);
-  }
+  };
 
   /**
    * UBAR is turned off. Storage expiration is set in ubar.config.
@@ -132,7 +140,7 @@
    */
   ubarStorage.prototype.disableUser = function disableUbar () {
     docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
-  }
+  };
 
   /**
    * UBAR is turned on. Storage expiration is set in ubar.config.
@@ -143,7 +151,7 @@
    */
   ubarStorage.prototype.enableUser = function enableUbar () {
     docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
-  }
+  };
 
   /**
    * Clears UBAR and UBAR Redirected storage items.
@@ -155,7 +163,7 @@
   ubarStorage.prototype.clear = function clear () {
     docCookies.removeItem(this.UBAR_KEY);
     docCookies.removeItem(this.REDIRECTED_NAME);
-  }
+  };
 
   return ubarStorage;
 

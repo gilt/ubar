@@ -85,12 +85,14 @@
     *
     */
     var classNames = {
-      component_class         : 'component-ubar',
-      on_class                : 'ubar-on-button',
-      install_class           : 'ubar-install-app-button',
-      off_class               : 'ubar-off-button',
-      open_in_app_class       : 'ubar-open-in-app-button',
-      close_class             : 'ubar-close-banner-button'
+      component_class    : 'component-ubar',
+      on_button_class    : 'ubar-on-button',
+      install_class      : 'ubar-install-app-button',
+      off_class          : 'ubar-off-button',
+      open_in_app_class  : 'ubar-open-in-app-button',
+      close_button_class : 'ubar-close-banner-button',
+      ubar_show_class    : 'ubar-show',
+      ubar_hide_class    : 'ubar-hide'
     };
 
     /**
@@ -150,6 +152,22 @@
     };
 
     /**
+     * Supported Devices
+     *
+     * Only show UBAR if we are on a device that supports the app we
+     * want to link to. Otherwise allow mobile/responsive web expereince.
+     *
+     */
+    var supported_devices {
+      ios : true,
+      min_ios_support : 7,
+      android : false,
+      min_android_suport : 4.2,
+      windows : false,
+      min_mindows_device : Infinity // Lets just not :p
+    };
+
+    /**
     * Default Config:
     *
     * We concatenate all of the configs into one defaultConfig
@@ -165,7 +183,8 @@
                           classNames,
                           cookieNames,
                           trackingLocations,
-                          redirect_interval);
+                          redirect_interval,
+                          supported_devices);
 
     /**
      * Extend method for merging config values.

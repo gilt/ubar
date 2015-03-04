@@ -6,8 +6,8 @@
       name,
 
       [
-       '../node_modules/handlebars/dist/handlebars.min.js',
-       '../node_modules/when/when.js'
+        '../node_modules/handlebars/dist/handlebars.min.js',
+        '../node_modules/when/when.js'
       ],
 
       factory
@@ -18,8 +18,8 @@
     // only CommonJS-like environments that support module.exports,
     // like Node.
     module.exports = factory(
-      require('../node_modules/handlebars/dist/handlebars.min.js'),
-      requre('../node_modules/when/when.js')
+      require('handlebars'),
+      requre('when')
     );
 
   } else {
@@ -33,42 +33,48 @@
 
     'use strict';
 
-    var
-      MAIN_UBAR_CLASS = 'main-ubar',
-      BODY_ELEM = 'body',
-      UBAR_SHOW_CLASS = 'ubar-show',
-      UBAR_HIDE_CLASS = 'ubar-hide',
-      MIN_IOS_SUPPORT = 7,
-      banner,
-      html = document.querySelectorAll('html')[0];
-
+  /**
+   * View class responsible for rendering the UBAR banners
+   * and hiding and showing the banners.
+   *
+   * @public
+   * @constructor
+   *
+   * @params {Object} config  Config object for ubar
+   */
+  var UbarDom = function UbarDom (config) {
+    this.MAIN_UBAR_CLASS = config.component_class;
+    this.UBAR_SHOW_CLASS = config.ubar_show_class;
+    this.UBAR_HIDE_CLASS = config.ubar_hide_class;
+    this.body = document.querySelectorAll('body')[0];
+  };
 
   /**
    * Renders a template as the first element inside body.
    *
-   * @private
-   * @method renderTemplate
+   * @public
+   * @method renderBanner
    * @param  {Object} templateSource The template to render
    */
-  function renderTemplate (templateSource) {
-    var dfd = when.defer(),
-        bodyElem = document.querySelectorAll('.' + BODY_ELEM)[0],
-        ubarDiv = document.createElement('div'),
-        renderedHtml;
+  Ubar.prototype.renderBanner = function renderBanner (templateSource) {
+    var
+      dfd = when.defer(),
+      self = this,
+      ubarDiv = document.createElement('div');
 
     when(handlebars.compile(templateSource)).then(function(template) {
       when(template({})).then(function(renderedHtml) {
 
         ubarDiv.innerHTML = renderedHtml;
-        bodyElem.parentElement.insertBefore(ubarDiv, bodyElem.firstChild);
-        banner = document.querySelectorAll('.' + MAIN_UBAR_CLASS)[0];
+        self.body.parentElement.insertBefore(ubarDiv, self.body.firstChild);
+        self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
 
-        dfd.resolve(renderedHtml);
+        dfd.resolve();
       });
     });
 
     return dfd.promise;
-  }
+  };
 
   /**
    * Removes ubar banners from the DOM.
@@ -76,15 +82,12 @@
    * @public
    * @method removeBanner
    */
-  function removeBanner () {
-    var ubarElem = document.querySelectorAll('.' + MAIN_UBAR_CLASS)[0],
-        ubarParentElem;
-
-    if (ubarElem) {
-      ubarParentElem = ubarElem.parentElement;
-      ubarParentElem.remove();
+  UbarDom.prototype.removeBanner = function removeBanner () {
+    if (this.banner && this.banner.parentElement) {
+      this.banner.parentElement.remove();
+      this.banner = undefined;
     }
-  }
+  };
 
   /**
    * Hides the currently displayed banner.
@@ -94,10 +97,10 @@
    * @public
    * @method hideBanner
    */
-  function hideBanner () {
-    banner.classList.remove(UBAR_SHOW_CLASS);
-    banner.classList.add(UBAR_HIDE_CLASS);
-  }
+  UbarDom.prototype.hideBanner = function hideBanner () {
+    this.banner.classList.remove(this.UBAR_SHOW_CLASS);
+    this.banner.classList.add(this.UBAR_HIDE_CLASS);
+  };
 
   /**
    * Shows the currently displayed banner.
@@ -107,52 +110,11 @@
    * @public
    * @method showBanner
    */
-  function showBanner () {
-    banner.classList.remove(UBAR_HIDE_CLASS);
-    banner.classList.add(UBAR_SHOW_CLASS);
-  }
-
-  /**
-   * Determine if device is iPhone safari based on browser_detect module.
-   *
-   * TODO: classList not supported in IE8 and IE9
-   *
-   * @public
-   * @method isIOS
-   */
-  function isIOS () {
-    return html.classList.contains('mobile') && html.classList.contains('ios');
-  }
-
-  /**
-   * Determine if device is ios greater or equal to current minimum ios the app
-   * supports based on browser_detect module.
-   *
-   * @private
-   * @method isSupportedIOS
-   */
-  function isSupportedIOS () {
-    return isIOS() && parseInt(html.className.match(/ios(\d+)_(\d+)/)[1], 10) >= MIN_IOS_SUPPORT;
-  }
-
-  /**
-   * Determine it there is an app for this device which supports open to app
-   *
-   * @public
-   * @method isAppSupported
-   */
-  function isAppSupported () {
-    return isSupportedIOS();
-  }
-
-  return {
-    version: '$$PACKAGE_VERSION$$',
-    isAppSupported : isAppSupported,
-    isIOS : isIOS,
-    hide: hideBanner,
-    show: showBanner,
-    remove: removeBanner,
-    renderTemplate: renderTemplate,
+  UbarDom.prototype.showBanner = function showBanner () {
+    this.banner.classList.remove(this.UBAR_HIDE_CLASS);
+    this.banner.classList.add(this.UBAR_SHOW_CLASS);
   };
+
+  return UbarDom;
 
 }));
