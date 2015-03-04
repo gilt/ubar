@@ -6,8 +6,8 @@
       'ubar_dom',
 
       [
-       'handlebars',
-       'when'
+       '../node_modules/handlebars/dist/handlebars.min.js',
+       '../node_modules/when/when.js'
       ],
 
       factory
@@ -17,7 +17,7 @@
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('../node_modules/handlebars/dist/handlebars.min.js'));
+    module.exports = factory(require('../node_modules/handlebars/dist/handlebars.min.js','../node_modules/when/when.js'));
 
   }
 
@@ -28,8 +28,6 @@
     var
       MAIN_UBAR_CLASS = 'main-ubar',
       BODY_ELEM = 'body',
-      UBAR_SEND_TEMPLATE = '../templates/ubar/ubar_sending',
-      UBAR_RETURN_TEMPLATE = '../templates/ubar/ubar_returning',
       UBAR_SHOW_CLASS = 'ubar-show',
       UBAR_HIDE_CLASS = 'ubar-hide',
       MIN_IOS_SUPPORT = 7,
@@ -62,26 +60,6 @@
     });
 
     return dfd.promise;
-  }
-
-  /**
-   * Renders the ubar template.
-   *
-   * @public
-   * @method renderUbarOnBanner
-   */
-  function renderUbarOnBanner () {
-    return renderTemplate(UBAR_SEND_TEMPLATE);
-  }
-
-  /**
-   * Renders the ubar manage banner.
-   *
-   * @public
-   * @method renderUbarOffBanner
-   */
-  function renderUbarOffBanner () {
-    return renderTemplate(UBAR_RETURN_TEMPLATE);
   }
 
   /**
@@ -166,8 +144,7 @@
     hide: hideBanner,
     show: showBanner,
     remove: removeBanner,
-    renderUbarOnBanner: renderUbarOnBanner,
-    renderUbarOffBanner: renderUbarOffBanner
+    renderTemplate: renderTemplate,
   };
 
 }));

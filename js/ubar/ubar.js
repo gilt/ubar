@@ -2,13 +2,24 @@
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define('ubar', ['config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js' ], factory);
+    define(
+      'ubar',
+
+      [
+      'config.js',
+      '../node_modules/bean/bean.min.js',
+      '../node_modules/when/when.js',
+      '../node_modules/moment/min/moment.min.js'
+      ],
+
+      factory
+    );
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js' ));
+    module.exports = factory(require('config.js','../node_modules/bean/bean.min.js', '../node_modules/when/when.js','../node_modules/moment/min/moment.min.js'));
 
   }
 
@@ -17,21 +28,8 @@
     'use strict';
 
     var
-      UBAR_COMPONENT_CLASS = 'component-ubar',
-      UBAR_BUTTON_CLASSES = {
-       TURN_ON          : 'ubar-on-button',
-       INSTALL_APP      : 'ubar-install-app-button',
-       TURN_OFF         : 'ubar-off-button',
-       OPEN_IN_APP      : 'ubar-open-in-app-button',
-       CLOSE_BANNER     : 'ubar-close-banner-button'
-      },
-
-      UBAR_LINKS = {
-        IOS_APP_STORE : '',
-        IOS_APP_HOST  : '',
-        IOS_APP_PATH  : ''
-      },
-
+      USER_CONFIG              = {},
+      DEFAULT_CONFIG           = ubar_config.defaultConfig,
       TIME_BEFORE_IOS_REDIRECT = ubar_config.redirectInterval.ios_app_store.asMilliseconds();
 
     /**
@@ -42,14 +40,14 @@
      */
 
     function bindOnBannerButtonEvents () {
-      var ubarComponentDiv = document.querySelectorAll('.' + UBAR_COMPONENT_CLASS)[0],
-          onButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.TURN_ON)[0],
-          installAppButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.INSTALL_APP)[0],
-          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.CLOSE_BANNER)[0];
+      var ubarComponentDiv    = document.querySelectorAll('.' + (USER_CONFIG.component_class || DEFAULT_CONFIG.component_class) )[0],
+          onButton            = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.on_class || DEFAULT_CONFIG.on_class) )[0],
+          installAppButton    = ubarComponentDiv.querySelectorAll('.' +(USER_CONFIG.install_class || DEFAULT_CONFIG.install_class) )[0],
+          closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.close_class || DEFAULT_CONFIG.close_class) )[0];
 
       bean.on(onButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        enable();
+        ubar_storage.enable( getTimeInSeconds(USER_CONFIG.enabled_time || DEFAULT_CONFIG.enabled_time ) );
 
         redirect();
       });
@@ -63,7 +61,7 @@
         ev.preventDefault();
 
         ubar_dom.remove();
-        disable();
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
       });
     }
 
@@ -74,14 +72,14 @@
      * @method bindOffBannerButtonEvents
      */
     function bindOffBannerButtonEvents () {
-      var ubarComponentDiv = document.querySelectorAll('.' + UBAR_COMPONENT_CLASS)[0],
-          offButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.TURN_OFF)[0],
-          openInAppButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.OPEN_IN_APP)[0],
-          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + UBAR_BUTTON_CLASSES.CLOSE_BANNER)[0];
+      var ubarComponentDiv = document.querySelectorAll('.' + (USER_CONFIG.component_class || DEFAULT_CONFIG.component_class) )[0],
+          offButton = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.off_class || DEFAULT_CONFIG.off_class) )[0],
+          openInAppButton = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.open_in_app_class || DEFAULT_CONFIG.open_in_app_class) )[0],
+          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (USER_CONFIG.close_class || DEFAULT_CONFIG.close_class) )[0];
 
       bean.on(offButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        disable();
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
 
       });
 
@@ -94,7 +92,7 @@
         ev.preventDefault();
 
         ubar_dom.remove();
-        disable();
+        ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
       });
     }
 
@@ -126,7 +124,7 @@
 
     function redirectToAppStore() {
 
-      window.location.href = UBAR_LINKS.IOS_APP_STORE;
+      window.location.href = ( USER_CONFIG.ios_app_store || DEFAULT_CONFIG.ios_app_store );
     }
 
 
@@ -140,10 +138,10 @@
      * @method redirect
      */
     function redirect() {
-      ubar_storage.setRedirected();
+      ubar_storage.setRedirected( USER_CONFIG.manage_window_time || DEFAULT_CONFIG.manage_window_time );
 
       redirectToAppStoreOrRenderOffBanner();
-      redirectToApp(UBAR_LINKS.IOS_APP_HOST + UBAR_LINKS.IOS_APP_PATH);
+      redirectToApp( USER_CONFIG.app_deep_link || DEFAULT_CONFIG.app_deep_link );
 
       ubar_dom.remove();
     }
@@ -161,10 +159,10 @@
      */
     function redirectToAppStoreOrRenderOffBanner(){
 
-      var currentTime = Date.now() ,
-          endTimerAt = currentTime + (TIME_BEFORE_IOS_REDIRECT),
-          intervalLength = TIME_BEFORE_IOS_REDIRECT/3,
-          timeThreshold = intervalLength/2,
+      var currentTime     = Date.now() ,
+          endTimerAt      = currentTime + (TIME_BEFORE_IOS_REDIRECT),
+          intervalLength  = TIME_BEFORE_IOS_REDIRECT/3,
+          timeThreshold   = intervalLength/2,
           redirectToAppStoreTimer;
 
         /** we want to run the interval at least three times
@@ -206,7 +204,7 @@
      * @method renderOffBanner
      */
     function renderOffBanner() {
-      when(ubar_dom.renderUbarOffBanner()).then(function() {
+      when(ubar_dom.renderTemplate( USER_CONFIG.returning_template_path || DEFAULT_CONFIG.returning_template_path )).then(function() {
         bindOffBannerButtonEvents();
         ubar_dom.show();
       });
@@ -219,25 +217,44 @@
      * @method renderOnBanner
      */
     function renderOnBanner() {
-      when(ubar_Dom.renderUberOnBanner()).then(function() {
+      when(ubar_Dom.renderUberOnBanner( USER_CONFIG.sending_template_path || DEFAULT_CONFIG.sending_template_path )).then(function() {
         bindOnBannerButtonEvents();
         ubar_dom.show();
       });
     }
 
-    function init (appStoreLink, host, path) {
+    /**
+     * Get Time in Seconds
+     *
+     * @private
+     * @method getTimeinSeconds
+     */
+    function getTimeinSeconds(time_string) {
 
-      UBAR_LINKS.IOS_APP_STORE = appStoreLink;
-      UBAR_LINKS.IOS_APP_HOST = host;
-      UBAR_LINKS.IOS_APP_PATH = path;
+      var timeString = time_string.split(" "),
+          timeValue  = parseInt(timeString[0], 10);
+          timeUnit   = timeString[1];
+
+      return moment.duration( timeValue, timeUnit ).asSeconds() ;
+    }
+
+    /* Initialize UBAR with parameters set in config.js
+     *
+     * @public
+     * @method init
+     */
+    function init (user_config) {
+
+      USER_CONFIG = user_config;
+
       // TODO : user ubar = on param
 
-        if (ubar_storage.isEnabled()) {
-          ubar_storage.isUserRedirected() ? renderOffBanner() : redirect();
+      if (ubar_storage.isEnabled()) {
+        ubar_storage.isUserRedirected() ? renderOffBanner() : redirect();
 
-        } else if (!ubar_storage.isDisabled()) {
-          renderOnBanner();
-        }
+      } else if (!ubar_storage.isDisabled()) {
+        renderOnBanner();
+      }
 
     }
 
