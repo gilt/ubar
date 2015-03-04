@@ -128,7 +128,7 @@
     * tracking_returning_banner: this is the event when
     * the user sees the banner after already opting in.
     *
-    * 
+    *
     *
     */
     var trackingLocations = {

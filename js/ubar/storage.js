@@ -2,123 +2,25 @@
 
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(name, ['ubar_config'], factory);
+    define(name, [], factory);
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('ubar_config'));
+    module.exports = factory();
 
   } else {
-    root[name] = factory(root['ubar_config']);
+    root[name] = factory();
   }
 
-} ('ubar_storage', function ubar_storage (config) {
+} ('ubar_storage', function ubar_storage () {
 
     'use strict';
 
   var
-    UBAR_KEY        = 'ubar',
-    REDIRECTED_NAME = 'ubar_redirected',
-
-    docCookies; // cookie getter and setter
-
-  /**
-   * Get the value of the UBAR storage object that determines whether a user has
-   * UBAR enabled or disabled.
-   *
-   * @private
-   * @method getUbarValue
-   */
-  function getUbarValue () {
-    return docCookies.getItem(UBAR_KEY);
-  }
-
-  /**
-   * Get the value of the redirected storage object.
-   *
-   * @private
-   * @method getRedirectedValue
-   */
-  function getRedirectedValue () {
-    return docCookies.getItem(REDIRECTED_NAME);
-  }
-
-  /**
-   * Returns whether UBAR is enabled.
-   *
-   * @public
-   * @method isUbarEnabled
-   */
-  function isUbarEnabled () {
-    return getUbarValue() === 'true';
-  }
-
-  /**
-   * Returns whether UBAR has been disabled by the user.
-   *
-   * @public
-   * @method isUbarDisabled
-   */
-  function isUbarDisabled () {
-    return getUbarValue() === 'false';
-  }
-
-  /**
-   * Returns whether user was redirected.
-   *
-   * @public
-   * @method isUserRedirected
-   */
-  function isUserRedirected () {
-    return getRedirectedValue() === 'true';
-  }
-
-  /**
-   * When a user is redirected via UBAR, set a storage value that records this.
-   * The value of the object is true.
-   *
-   * @public
-   * @method setRedirected
-   */
-  function setRedirected (EXP_DURATION_REDIRECTED_MS) {
-    docCookies.setItem(REDIRECTED_NAME, true, EXP_DURATION_REDIRECTED_MS);
-  }
-
-  /**
-   * UBAR is turned off. Storage expiration is set in ubar.config.
-   * The value of the object is false.
-   *
-   * @public
-   * @method disableUbar
-   */
-  function disableUbar (EXP_DURATION_DISABLED_MS) {
-    docCookies.setItem(UBAR_KEY, false, EXP_DURATION_DISABLED_MS);
-  }
-
-  /**
-   * UBAR is turned on. Storage expiration is set in ubar.config.
-   * The value of the object is true.
-   *
-   * @public
-   * @method enableUbar
-   */
-  function enableUbar (EXP_DURATION_ENABLED_MS) {
-    docCookies.setItem(UBAR_KEY, true, EXP_DURATION_ENABLED_MS);
-  }
-
-  /**
-   * Clears UBAR and UBAR Redirected storage items.
-   * The value of this object is null.
-   *
-   * @public
-   * @method clear
-   */
-  function clear () {
-    docCookies.removeItem(UBAR_KEY);
-    docCookies.removeItem(REDIRECTED_NAME);
-  }
+    docCookies, // cookie getter and setter
+    ubarStorage;
 
   /**
    * Taken from Mozilla
@@ -172,13 +74,89 @@
     }
   };
 
-  return {
-    clear            : clear,
-    disable          : disableUbar,
-    enable           : enableUbar,
-    setRedirected    : setRedirected,
-    isUbarEnabled    : isUbarEnabled,
-    isUbarDisabled   : isUbarDisabled,
-    isUserRedirected : isUserRedirected
-  };
+  ubarStorage = function (config) {
+    this.UBAR_KEY = config.device_preference_cookie;
+    this.REDIRECTED_NAME = config.redirected_cookie;
+    this.EXP_DURATION_REDIRECTED_MS = config.manage_window_time;
+    this.EXP_DURATION_DISABLED_MS = disabled_time;
+    this.EXP_DURATION_ENABLED_MS = enabled_time;
+  }
+
+  /**
+   * Returns whether UBAR is enabled.
+   *
+   * @public
+   * @method isUbarEnabled
+   */
+  ubarStorage.prototype.isUbarEnabled = function isUbarEnabled () {
+    return docCookies.getItem(this.UBAR_KEY) === 'true';
+  }
+
+  /**
+   * Returns whether UBAR has been disabled by the user.
+   *
+   * @public
+   * @method isUbarDisabled
+   */
+  ubarStorage.prototype.isUbarDisabled = function isUbarDisabled () {
+    return docCookies.getItem(this.UBAR_KEY); === 'false';
+  }
+
+  /**
+   * Returns whether user was redirected.
+   *
+   * @public
+   * @method isUserRedirected
+   */
+  ubarStorage.prototype.isUserRedirected = function isUserRedirected () {
+    return docCookies.getItem(this.REDIRECTED_NAME) === 'true';
+  }
+
+  /**
+   * When a user is redirected via UBAR, set a storage value that records this.
+   * The value of the object is true.
+   *
+   * @public
+   * @method setRedirected
+   */
+  ubarStorage.prototype.setRedirected = function setRedirected () {
+    docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS);
+  }
+
+  /**
+   * UBAR is turned off. Storage expiration is set in ubar.config.
+   * The value of the object is false.
+   *
+   * @public
+   * @method disableUbar
+   */
+  ubarStorage.prototype.disableUser = function disableUbar () {
+    docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
+  }
+
+  /**
+   * UBAR is turned on. Storage expiration is set in ubar.config.
+   * The value of the object is true.
+   *
+   * @public
+   * @method enableUbar
+   */
+  ubarStorage.prototype.enableUser = function enableUbar () {
+    docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
+  }
+
+  /**
+   * Clears UBAR and UBAR Redirected storage items.
+   * The value of this object is null.
+   *
+   * @public
+   * @method clear
+   */
+  ubarStorage.prototype.clear = function clear () {
+    docCookies.removeItem(this.UBAR_KEY);
+    docCookies.removeItem(this.REDIRECTED_NAME);
+  }
+
+  return ubarStorage;
+
 }));
