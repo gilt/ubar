@@ -158,13 +158,13 @@
      * want to link to. Otherwise allow mobile/responsive web expereince.
      *
      */
-    var supported_devices {
-      ios : true,
+    var supported_devices = {
+      ios_support : true,
       min_ios_support : 7,
-      android : false,
-      min_android_suport : 4.2,
-      windows : false,
-      min_mindows_device : Infinity // Lets just not :p
+      android_support : false,
+      min_android_suport : 4.3,
+      windows_mobile_support : false,
+      min_mindows_mobile_support : Infinity // Lets just not :p
     };
 
     /**
