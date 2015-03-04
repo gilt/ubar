@@ -7,6 +7,7 @@
 
       [
         'config.js',
+        'tracking.js',
         '../node_modules/bean/bean.min.js',
         '../node_modules/when/when.js',
         '../node_modules/moment/min/moment.min.js'
@@ -21,6 +22,7 @@
     // like Node.
     module.exports = factory(
       require('config.js'),
+      require('tracking.js'),
       require('../node_modules/bean/bean.min.js'),
       require('../node_modules/when/when.js'),
       require('../node_modules/moment/min/moment.min.js')
@@ -34,7 +36,7 @@
       root['moment']);
   }
 
-} ('ubar', this, function ubar (ubar_config, bean, when) {
+} ('ubar', this, function ubar (ubar_config, ubar_tracking, bean, when) {
 
     'use strict';
 
@@ -59,6 +61,8 @@
       bean.on(onButton, 'touchstart', function (ev) {
         ev.preventDefault();
         ubar_storage.enable( getTimeInSeconds(USER_CONFIG.enabled_time || DEFAULT_CONFIG.enabled_time ) );
+
+        ubar_tracking.turnUbarOn();
 
         redirect();
       });
@@ -90,6 +94,9 @@
 
       bean.on(offButton, 'touchstart', function (ev) {
         ev.preventDefault();
+
+        ubar_tracking.turnUbarOff();
+
         ubar_storage.disable( getTimeInSeconds(USER_CONFIG.disabled_time || DEFAULT_CONFIG.disabled_time ) );
 
       });
@@ -134,6 +141,7 @@
      */
 
     function redirectToAppStore() {
+      ubar_tracking.attemptToRedirectToAppStore();
 
       window.location.href = ( USER_CONFIG.ios_app_store || DEFAULT_CONFIG.ios_app_store );
     }
@@ -150,6 +158,8 @@
      */
     function redirect() {
       ubar_storage.setRedirected( USER_CONFIG.manage_window_time || DEFAULT_CONFIG.manage_window_time );
+
+      ubar_tracking.attemptToRedirectToApp();
 
       redirectToAppStoreOrRenderOffBanner();
       redirectToApp( USER_CONFIG.app_deep_link || DEFAULT_CONFIG.app_deep_link );
@@ -218,6 +228,7 @@
       when(ubar_dom.renderTemplate( USER_CONFIG.returning_template_path || DEFAULT_CONFIG.returning_template_path )).then(function() {
         bindOffBannerButtonEvents();
         ubar_dom.show();
+        ubar_tracking.showReturningBanner();
       });
     }
 
@@ -231,6 +242,7 @@
       when(ubar_Dom.renderUberOnBanner( USER_CONFIG.sending_template_path || DEFAULT_CONFIG.sending_template_path )).then(function() {
         bindOnBannerButtonEvents();
         ubar_dom.show();
+        ubar_tracking.showSendingBanner();
       });
     }
 
