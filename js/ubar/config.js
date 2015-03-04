@@ -127,14 +127,16 @@
     * tracking_returning_banner: this is the event when
     * the user sees the banner after already opting in.
     *
-    *
+    * tracking_account_location and tracking_site_location
+    * are Gilt-specific and so they may not apply to you.
+    * tracking_account_location refers to an option on the
     *
     */
     var trackingLocations = {
-      tracking_sending_banner : 'oafe banner',
-      tracking_returning_banner : 'manage oafe banner',
-      tracking_account : 'account',
-      tracking_site : 'site'
+      tracking_sending_banner : 'sending banner',
+      tracking_returning_banner : 'returning banner',
+      tracking_account_location : 'account',
+      tracking_immediate_redirection : 'user immediately redirected'
     }
 
     /**
