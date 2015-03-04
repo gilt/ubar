@@ -14,7 +14,7 @@
     root[name] = factory();
   }
 
-} ('ubar_storage', function ubar_storage () {
+} ('ubar_storage', this, function ubar_storage () {
 
   'use strict';
 
