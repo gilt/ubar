@@ -53,7 +53,7 @@
     var
       CONFIG = {},
       ubarStorage, // storage instance
-      ubarDom, // dom instance
+      ubarDom; // dom instance
 
     /**
      * Binds the events of Uber ON Banner Buttons
@@ -99,9 +99,9 @@
      */
     function bindOffBannerButtonEvents () {
       var ubarComponentDiv = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_button_class)[0],
+          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_class)[0],
           openInAppButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.open_in_app_class) )[0],
-          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_class) )[0];
+          closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_button_class) )[0];
 
       bean.on(offButton, 'touchstart', function (ev) {
         ev.preventDefault();
@@ -323,7 +323,7 @@
 
       // TODO : user ubar = on param
 
-      if (device.isAppSupported(CONFIG) {
+      if (device.isAppSupported(CONFIG)) {
           if (ubarStorage.isEnabled()) {
           ubarStorage.isUserRedirected() ? renderOffBanner() : redirect();
 
