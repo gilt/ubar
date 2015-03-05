@@ -1,5 +1,5 @@
 (function (name, root, factory) {
-
+    'use strict';
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(
@@ -10,6 +10,7 @@
         'storage.js',
         'dom.js',
         'device.js',
+        'resolver.js',
         'tracking.js',
         '../node_modules/bean/bean.min.js',
         '../node_modules/when/when.js',
@@ -28,6 +29,7 @@
       require('storage'),
       require('dom'),
       require('device'),
+      require('resolver'),
       require('tracking.js'),
       require('../node_modules/bean/bean.min.js'),
       require('../node_modules/when/when.js'),
@@ -39,21 +41,33 @@
       root['ubar_config'],
       root['ubar_storage'],
       root['ubar_dom'],
-      root['uber_device'],
+      root['ubar_device'],
+      root['ubar_resolver'],
       root['ubar_tracking'],
       root['bean'],
       root['when'],
       root['moment']);
   }
 
-} ('ubar', this, function ubar (ubar_config, UbarStorage, UbarDom, device, ubar_tracking, bean, when) {
+} ('ubar', this, function ubar (
+  ubar_config,
+  UbarStorage,
+  UbarDom,
+  device,
+  Resolver,
+  ubar_tracking,
+  bean,
+  when,
+  moment
+) {
 
     'use strict';
 
     var
       CONFIG = {},
       ubarStorage, // storage instance
-      ubarDom; // dom instance
+      ubarDom, // dom instance
+      resolver; // app deeplink resolver/handler
 
     /**
      * Binds the events of Uber ON Banner Buttons
@@ -73,14 +87,15 @@
 
         ubarStorage.enable();
 
-        ubar_tracking.turnUbarOn({ location : USER_CONFIG.tracking_sending_banner});
+        ubar_tracking.turnUbarOn({ location : CONFIG.tracking_sending_banner});
 
-        redirect();
+        redirect(CONFIG.tracking_sending_banner);
       });
 
       bean.on(installAppButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        redirectToAppStore();
+
+        resolver.redirectToAppStore();
       });
 
       bean.on(closeBannerButton, 'touchstart', function (ev) {
@@ -107,13 +122,14 @@
         ev.preventDefault();
 
         ubarStorage.disable();
-        ubar_tracking.turnUbarOff({ location: USER_CONFIG.tracking_sending_banner });
+        ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
 
       });
 
       bean.on(openInAppButton, 'touchstart', function (ev) {
         ev.preventDefault();
-        redirect();
+
+        redirect(CONFIG.tracking_returning_banner);
       });
 
       bean.on(closeBannerButton, 'touchstart', function (ev) {
@@ -124,112 +140,35 @@
       });
     }
 
-    /**
-     * Creates an invisible iframe and deep links to the app,
-     * so as to avoid the ios safari alert that would say "Cannot Open Page"
-     * if we assigned window.location the deep link.
-     *
-     * @private
-     * @method redirectToApp
-     */
-    function redirectToApp(deepLinkToApp) {
-      deepLinkToApp = deepLinkToApp || CONFIG.app_deep_link ;
-      var ifrm = document.createElement("IFRAME");
-      ifrm.style.display = "none";
-      ifrm.id = "app-linker";
-      ifrm.setAttribute('src', deepLinkToApp);
-      document.body.appendChild(ifrm);
-    }
+  /**
+   * Attempts to redirect users to native app.
+   * If user remains in safari, presumes user
+   * doesn't have app, reset UBAR and redirect
+   * them to the app store.
+   *
+   * @private
+   * @method redirect
+   */
+  function redirect (location) {
+    var
+      // successfully redirected to the app
+      successCallback = function () { renderOffBanner(); },
 
-    /**
-     * Resets UBAR if User doesn't have the App
-     * and takes them to the App Store to
-     * Download the Gilt App
-     *
-     * @private
-     * @method redirectToApp
-     */
+       // fail to redirect to app, redirect to app store
+      failureCallback = function () {
+        ubarStorage.clear();
+        ubar_tracking.attemptToRedirectToAppStore({ location: location });
+      };
 
-    function redirectToAppStore(location) {
-      ubar_tracking.attemptToRedirectToAppStore({ location: location });
+    ubarStorage.setRedirected();
 
-      window.location.href = ( CONFIG.ios_app_store_url );
-    }
+    ubar_tracking.attemptToRedirectToApp({ location: location });
 
+    resolver.redirectWithFallback(successCallback, failureCallback);
 
-    /**
-     * Attempts to redirect users to native app.
-     * If user remains in safari, presumes user
-     * doesn't have app, reset UBAR and redirect
-     * them to the app store.
-     *
-     * @private
-     * @method redirect
-     */
-    function redirect() {
-      ubarStorage.setRedirected();
+    ubarDom.remove();
+  }
 
-      ubar_tracking.attemptToRedirectToApp({ location: location });
-
-      redirectToAppStoreOrRenderOffBanner();
-      redirectToApp( CONFIG.app_deep_link );
-
-      ubarDom.remove();
-    }
-
-    /**
-     * By checking for lapses in time in a setInterval,
-     * we can tell if a user doesn't have the app (i.e.
-     * there are no time skips) or has been redirected to
-     * the app and now returned (i.e. there are time skips).
-     * We can then redirect them to the App Store or
-     * show off banner appropriately.
-     *
-     * @private
-     * @method redirectToAppStoreOrRenderOffBanner
-     */
-    function redirectToAppStoreOrRenderOffBanner(){
-
-      var
-        TIME_BEFORE_IOS_REDIRECT = CONFIG.ios_app_store_redirect.asMilliseconds(),
-        currentTime     = Date.now(),
-        endTimerAt      = currentTime + (TIME_BEFORE_IOS_REDIRECT),
-        intervalLength  = TIME_BEFORE_IOS_REDIRECT/3,
-        timeThreshold   = intervalLength/2,
-        redirectToAppStoreTimer;
-
-        /** we want to run the interval at least three times
-          * to allow for the time it takes to redirect to
-          * the gilt app. The threshold is half the interval
-          * time so that we can round off the milliseconds
-          * between two intervals.
-          */
-
-      redirectToAppStoreTimer = setInterval(function() {
-        currentTime = Date.now();
-        if( currentTime >= (endTimerAt - timeThreshold) &&
-            currentTime <= (endTimerAt + timeThreshold) ){
-          /** This means time is progressing naturally
-            * and the user has not left safari, hence
-            * they don't have the app installed.
-          */
-          ubarStorage.clear();
-          redirectToAppStore();
-          clearInterval(redirectToAppStoreTimer);
-
-        }
-        else if (currentTime > (endTimerAt + timeThreshold) ){
-          /** This means there was a gap in time
-            * which can only happen if safari successfully
-            * opened the gilt app in the redirect() method
-            * and has now returned to Safari.
-            */
-          renderOffBanner();
-          clearInterval(redirectToAppStoreTimer);
-        }
-
-      }, intervalLength );
-    }
     /**
      * Renders the off banner and binds events
      *
@@ -251,7 +190,7 @@
      * @method renderOnBanner
      */
     function renderOnBanner() {
-      ubar_Dom.renderBanner( CONFIG.sending_template_path ).then(function() {
+      ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
         bindOnBannerButtonEvents();
         ubarDom.show();
         ubar_tracking.showSendingBanner();
@@ -282,10 +221,22 @@
     function setConfigTime (config) {
       config.enabled_time = getTimeinMoments( config.enabled_time );
       config.disable_time = getTimeinMoments( config.disable_time );
-      config.manage_window_time = getTimeinMoments (config.manage_window_time );
+      config.manage_window_time = getTimeinMoments ( config.manage_window_time );
       config.ios_app_store = getTimeinMoments( config.ios_app_store_redirect );
 
       return config;
+    }
+
+    /**
+     * isObject method for use in extend method.
+     * Taken for Underscore.js, http://underscorejs.org/
+     *
+     * @private
+     * @method isObject
+     */
+    function isObject (obj) {
+      var type = typeof obj;
+      return type === 'function' || type === 'object' && !!obj;
     }
 
     /**
@@ -307,7 +258,7 @@
         }
       }
       return obj;
-    };
+    }
 
     /* Initialize UBAR with parameters set in config.js
      *
@@ -316,16 +267,18 @@
      */
     function init (user_config) {
 
-      CONFIG = setConfigTime(_.extend( config.defaultConfig, user_config ));
+      CONFIG = setConfigTime(_.extend( ubar_config, user_config ));
 
       ubarStorage = new UbarStorage( CONFIG );
-      ubarDom = new UbarDom ( CONFIG );
+      ubarDom = new UbarDom( CONFIG );
+      resolver = new Resolver( CONFIG );
 
       // TODO : user ubar = on param
 
-      if (device.isAppSupported(CONFIG)) {
-          if (ubarStorage.isEnabled()) {
-          ubarStorage.isUserRedirected() ? renderOffBanner() : redirect();
+      if (device.isAppSupported(CONFIG) {
+        if (ubarStorage.isEnabled()) {
+
+          ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);
 
         } else if (!ubarStorage.isDisabled()) {
           renderOnBanner();

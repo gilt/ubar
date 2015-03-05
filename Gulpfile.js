@@ -11,7 +11,13 @@ gulp.task('less', function() {
 
 gulp.task('lint', function() {
   gulp.src('js/ubar/*.js')
-    .pipe(lint());
+    .pipe(lint({
+      predef: ['define', 'exports', 'module'],
+      sloppy: true,
+      vars: true,
+      white: true,
+      indent: 2
+    }));
 });
 
 gulp.task('test', function () {

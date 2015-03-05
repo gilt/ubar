@@ -1,5 +1,5 @@
 (function (root, factory) {
-
+    'use strict';
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define('ubar_tracking', [], factory);
@@ -39,7 +39,7 @@
     /**
     * Called when the user elects to opt into the
     * UBAR feature.
-    * 
+    *
     * @public
     * @method: _turnUbarOn
     * @param {Object} {location : 'where this was called'}
@@ -70,10 +70,10 @@
     *
     * @public
     * @method: _attemptToRedirectToAppStore
-    * @param {Object} { location : 'where this was called'} 
+    * @param {Object} { location : 'where this was called'}
     */
     var _attemptToRedirectToAppStore = function (trackingLocationObject) {
-        
+
     };
 
 
@@ -83,10 +83,10 @@
     *
     * @public
     * @method: _attemptToRedirectToAppStore
-    * @param {Object} { location : 'where this was called'} 
+    * @param {Object} { location : 'where this was called'}
     */
     var _attemptToRedirectToApp = function (trackingLocationObject) {
-        
+
     };
 
 
@@ -95,10 +95,10 @@
     *
     * @public
     * @method: _showReturningBanner
-    * @param {Object} { location : 'where this was called'} 
+    * @param {Object} { location : 'where this was called'}
     */
     var _showReturningBanner = function (trackingLocationObject) {
-        
+
     };
 
 
@@ -108,10 +108,10 @@
     *
     * @public
     * @method: _showSendingBanner
-    * @param {Object} { location : 'where this was called'} 
+    * @param {Object} { location : 'where this was called'}
     */
     var _showSendingBanner = function (trackingLocationObject) {
-        
+
     };
 
 
