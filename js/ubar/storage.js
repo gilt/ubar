@@ -107,7 +107,7 @@
    * @method isUbarDisabled
    */
   ubarStorage.prototype.isUbarDisabled = function isUbarDisabled () {
-    return docCookies.getItem(this.UBAR_KEY); === 'false';
+    return docCookies.getItem(this.UBAR_KEY) === 'false';
   };
 
   /**

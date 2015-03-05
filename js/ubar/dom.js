@@ -24,8 +24,8 @@
 
   } else {
     root[name] = factory(
-      root['handlebars'],
-      root['when']
+      root.handlebars,
+      root.when
     );
   }
 

@@ -223,7 +223,7 @@
                         supported_devices);
 
   return {
-    defaultConfig : defaultConfig,
+    defaultConfig : defaultConfig
   };
 
 }));

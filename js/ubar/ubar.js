@@ -38,15 +38,15 @@
 
   } else {
     root[name] = factory(
-      root['ubar_config'],
-      root['ubar_storage'],
-      root['ubar_dom'],
-      root['ubar_device'],
-      root['ubar_resolver'],
-      root['ubar_tracking'],
-      root['bean'],
-      root['when'],
-      root['moment']);
+      root.ubar_config,
+      root.ubar_storage,
+      root.ubar_dom,
+      root.ubar_device,
+      root.ubar_resolver,
+      root.ubar_tracking,
+      root.bean,
+      root.when,
+      root.moment);
   }
 
 } ('ubar', this, function ubar (
@@ -114,7 +114,7 @@
      */
     function bindOffBannerButtonEvents () {
       var ubarComponentDiv = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_class)[0],
+          offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_class) )[0],
           openInAppButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.open_in_app_class) )[0],
           closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_button_class) )[0];
 
@@ -275,7 +275,7 @@
 
       // TODO : user ubar = on param
 
-      if (device.isAppSupported(CONFIG) {
+      if (device.isAppSupported(CONFIG)) {
         if (ubarStorage.isEnabled()) {
 
           ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);

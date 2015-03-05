@@ -1,7 +1,7 @@
 var gulp  = require('gulp'),
     mocha = require('gulp-mocha'),
     less  = require('gulp-less'),
-    lint  = require('gulp-jslint');
+    jshint  = require('gulp-jshint');
 
 gulp.task('less', function() {
   return gulp.src('css/ubar/*.less')
@@ -11,13 +11,8 @@ gulp.task('less', function() {
 
 gulp.task('lint', function() {
   gulp.src('js/ubar/*.js')
-    .pipe(lint({
-      predef: ['define', 'exports', 'module'],
-      sloppy: true,
-      vars: true,
-      white: true,
-      indent: 2
-    }));
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('test', function () {
