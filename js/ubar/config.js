@@ -200,7 +200,7 @@
     android_support            : false,
     min_android_suport         : 4.3,
     windows_mobile_support     : false,
-    min_mindows_mobile_support : Infinity // hmmmmm
+    min_windows_mobile_support : Infinity // hmmmmm
   };
 
   /**

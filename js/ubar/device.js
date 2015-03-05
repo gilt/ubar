@@ -154,11 +154,14 @@
   function isAppSupported (config) {
     return config.ios_support       && isSupportedIOS(config.min_ios_support)        ||
       config.android_support        && isSupportedAndroid(config.min_android_suport) ||
-      config.windows_mobile_support && isSupportedWindowsMobile(config.min_mindows_mobile_support);
+      config.windows_mobile_support && isSupportedWindowsMobile(config.min_windows_mobile_support);
   }
 
   return {
-    isAppSupported : isAppSupported
+    isAppSupported  : isAppSupported,
+    isIOS           : isIOS,
+    isAndroid       : isAndroid,
+    isWindowsMobile : isWindowsMobile
   };
 
 }));
