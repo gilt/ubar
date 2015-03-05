@@ -2,26 +2,70 @@
   'use strict';
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(name, [], factory);
+    define(name, ['ubar_device'], factory);
 
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory();
+    module.exports = factory(require('ubar_device'));
 
   } else {
-    root[name] = factory();
+    root[name] = factory(root.ubar_device);
   }
 
-} ('ubar_resolver', this, function ubar_device () {
+} ('ubar_resolver', this, function ubar_resolver (device) {
 
   'use strict';
 
+  /**
+   * Get deep link from config based on device type
+   *
+   * @private
+   * @method getAppDeepLink
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+  */
+  function getAppDeepLink (config) {
+    if (device.isWindowsMobile()) return config.windows_app_deep_link_url;
+    if (device.isAndroid()) return config.android_app_deep_link_url;
+    return config.ios_app_deep_link_url;
+  }
+
+  /**
+   * Get app store link from config based on device type
+   *
+   * @private
+   * @method getAppStoreUrl
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+   */
+  function getAppStoreUrl (config) {
+    if (device.isWindowsMobile()) return config.windows_app_store_url;
+    if (device.isAndroid()) return config.android_app_store_url;
+    return config.ios_app_store_url;
+  }
+
+  /**
+   * An object to send users out of the browser and into native apps
+   * via supported deep linking.
+   * This object also tries to gracfully handle users returning to
+   * the borwser after a redirect to a navtive app.
+   *
+   * @public
+   * @constructor
+   *
+   * @param {Object} config  Ubar config object
+   *
+   */
   var Resolver = function (config) {
-    this.app_deep_link_url      = config.app_deep_link_url;
-    this.ios_app_store_url      = config.ios_app_store_url;
-    this.ios_app_store_redirect = config.ios_app_store_redirect.asMilliseconds();
+    this.app_store_redirect = config.app_store_redirect.asMilliseconds();
+    this.app_deep_link_url  = getAppDeepLink(config);
+    this.app_store_url      = getAppStoreUrl(config);
   };
 
   /**
@@ -50,7 +94,7 @@
    * @method redirectToAppStore
    */
   Resolver.prototype.redirectToAppStore = function redirectToAppStore () {
-    window.location.href = ( this.ios_app_store_url );
+    window.location.href = ( this.app_store_url );
   };
 
   /**
@@ -69,7 +113,7 @@
     success = success || function () {};
 
     var
-      time_before_redirect = this.ios_app_store_redirect,
+      time_before_redirect = this.app_store_redirect,
       currentTime     = Date.now(),
       endTimerAt      = currentTime + (time_before_redirect),
       intervalLength  = time_before_redirect/3,

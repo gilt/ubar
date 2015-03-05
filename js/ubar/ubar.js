@@ -221,8 +221,8 @@
     function setConfigTime (config) {
       config.enabled_time = getTimeinMoments( config.enabled_time );
       config.disable_time = getTimeinMoments( config.disable_time );
-      config.manage_window_time = getTimeinMoments ( config.manage_window_time );
-      config.ios_app_store = getTimeinMoments( config.ios_app_store_redirect );
+      config.manage_window_time = getTimeinMoments( config.manage_window_time );
+      config.app_store_redirect = getTimeinMoments( config.app_store_redirect );
 
       return config;
     }
@@ -266,16 +266,15 @@
      * @method init
      */
     function init (user_config) {
-
-      CONFIG = setConfigTime(_.extend( ubar_config, user_config ));
-
-      ubarStorage = new UbarStorage( CONFIG );
-      ubarDom = new UbarDom( CONFIG );
-      resolver = new Resolver( CONFIG );
-
       // TODO : user ubar = on param
-
       if (device.isAppSupported(CONFIG)) {
+
+        CONFIG = setConfigTime(_.extend( ubar_config, user_config ));
+
+        ubarStorage = new UbarStorage( CONFIG );
+        ubarDom = new UbarDom( CONFIG );
+        resolver = new Resolver( CONFIG );
+
         if (ubarStorage.isEnabled()) {
 
           ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);

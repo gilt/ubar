@@ -58,13 +58,23 @@
    * ios_app_store_url: This is the url for the iOS app store
    * for your app.
    *
-   * app_deep_link: This is the prefix for your deep-link
+   * ios_app_deep_link: This is the prefix for your iOS deep-link
+   * routing.
+   *
+   * android_app_store_url: This is the url for the android app store
+   * for your app.
+   *
+   * andorid_app_deep_link: This is the prefix for your dandroid deep-link
    * routing.
    *
    */
   var urlConfig = {
-    ios_app_store_url : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
-    app_deep_link     : 'gilt://'
+    ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+    ios_app_deep_link     : 'gilt://',
+    android_app_store_url : 'https://www.android.com',
+    android_app_deep_link : 'gilt://',
+    windows_app_store_url : 'https://www.microsoft.com/en-us/mobile/',
+    windows_app_deep_link : 'gilt://'
   };
 
   /**
@@ -176,7 +186,7 @@
   /**
    * Redirect Interval:
    *
-   * ios_app_store_redirect is the amount of time we suspect it
+   * app_store_redirect is the amount of time we suspect it
    * should take for a user to have been redirected to
    * the iOS App Store and the minimum amount of time
    * before which a user could possibly return to the
@@ -184,7 +194,7 @@
    *
   */
   var redirect_interval = {
-    ios_app_store_redirect : '2 seconds'
+    app_store_redirect : '2 seconds'
   };
 
   /**
