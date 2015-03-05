@@ -31,7 +31,7 @@
 
 } ('ubar_dom', this, function ubar_dom (handlebars, when) {
 
-    'use strict';
+  'use strict';
 
   /**
    * View class responsible for rendering the UBAR banners

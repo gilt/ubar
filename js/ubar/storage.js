@@ -16,7 +16,7 @@
 
 } ('ubar_storage', function ubar_storage () {
 
-    'use strict';
+  'use strict';
 
   var
     docCookies, // cookie getter and setter

@@ -16,7 +16,7 @@
 
 } ('ubar_device', this, function ubar_device () {
 
-    'use strict';
+  'use strict';
 
   /**
    * Determine if device is ios based on user agent.
