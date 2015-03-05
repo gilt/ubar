@@ -8,9 +8,9 @@ var browserify = require('browserify'),
     watchify = require('watchify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
-    sourceFile = './js/ubar/ubar.js',
+    sourceFile = './js/main.js',
     destFolder = './',
-    destFile = './ubar.min.js';
+    destFile = './main.min.js';
 
 gulp.task('browserify', function() {
   return browserify(sourceFile)
@@ -51,8 +51,9 @@ gulp.task('test', function () {
            .pipe(mocha({reporter: 'spec'}));
 });
 
-gulp.task('default', ['browserify', 'watch' /*, 'less', 'lint', 'test' */ ], function() {
+gulp.task('default', ['browserify', /*, 'less', 'lint', 'test' */ ], function() {
 
+  gulp.watch('js/main.js', ['browserify']);
   gulp.watch('js/ubar/*.js', ['lint' /*, 'test' */ ]);
   gulp.watch('css/ubar/*.less', ['less']);
 });

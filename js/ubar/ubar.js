@@ -1,6 +1,13 @@
+console.log("EEEEE");
+
 (function (name, root, factory) {
+
+  console.log("FFFFF");
+
     'use strict';
   if (typeof define === 'function' && define.amd) {
+    console.log("GGGGGG");
+
     // AMD. Register as an anonymous module.
     define(
       name,
