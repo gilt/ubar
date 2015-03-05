@@ -8,7 +8,7 @@
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require('ubar_device'));
+    module.exports = factory(require('./device'));
 
   } else {
     root[name] = factory(root.ubar_device);

@@ -12,7 +12,7 @@
         'device.js',
         'resolver.js',
         'tracking.js',
-        '../node_modules/bean/bean.min.js',
+        '../node_modules/bean.min.js',
         '../node_modules/when/when.js',
         '../node_modules/moment/min/moment.min.js'
       ],
@@ -25,15 +25,15 @@
     // only CommonJS-like environments that support module.exports,
     // like Node.
     module.exports = factory(
-      require('config.js'),
-      require('storage'),
-      require('dom'),
-      require('device'),
-      require('resolver'),
-      require('tracking.js'),
-      require('../node_modules/bean/bean.min.js'),
-      require('../node_modules/when/when.js'),
-      require('../node_modules/moment/min/moment.min.js')
+      require('./config.js'),
+      require('./storage.js'),
+      require('./dom.js'),
+      require('./device.js'),
+      require('./resolver.js'),
+      require('./tracking.js'),
+      require('bean'),
+      require('when'),
+      require('moment')
     );
 
   } else {
