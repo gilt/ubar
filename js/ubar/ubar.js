@@ -6,13 +6,13 @@
       name,
 
       [
-        'config.js',
-        'storage.js',
-        'dom.js',
-        'device.js',
-        'resolver.js',
-        'tracking.js',
-        '../node_modules/bean.min.js',
+        '../js/ubar/config.js',
+        '../js/ubar/storage.js',
+        '../js/ubar/dom.js',
+        '../js/ubar/device.js',
+        '../js/ubar/resolver.js',
+        '../js/ubar/tracking.js',
+        '../node_modules/bean/bean.min.js',
         '../node_modules/when/when.js',
         '../node_modules/moment/min/moment.min.js'
       ],
@@ -25,12 +25,12 @@
     // only CommonJS-like environments that support module.exports,
     // like Node.
     module.exports = factory(
-      require('./config.js'),
-      require('./storage.js'),
-      require('./dom.js'),
-      require('./device.js'),
-      require('./resolver.js'),
-      require('./tracking.js'),
+      require('config.js'),
+      require('storage.js'),
+      require('dom.js'),
+      require('device.js'),
+      require('resolver.js'),
+      require('tracking.js'),
       require('bean'),
       require('when'),
       require('moment')

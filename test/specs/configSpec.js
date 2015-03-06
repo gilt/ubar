@@ -1,73 +1,67 @@
-var requirejs = require('requirejs');
-var chai = require('chai');
-var should = chai.should();
+define(function(require) {
 
-describe("the ubar config for expiration should ", function () {
+var ubar_config = require('ubar_config');
+var momentjs = require('moment');
 
-	beforeEach(function () {
-	});
+function getTimeinMoments(time_string) {
 
-	afterEach(function () {
-	});
+  var timeString = time_string.split(" "),
+      timeValue  = parseInt(timeString[0], 10);
+      timeUnit   = timeString[1];
 
-	it("be the correct enabled time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			// expect(conf.expirationTime.enabled.asMilliseconds()).toBe(31536000000);
-			// console.log(conf.expirationTime.enabled.asMilliseconds());
-			// console.log(expect);
-			// expect(false).toBe(true);
-		});
-	});
+  return moment.duration( timeValue, timeUnit );
+}
 
-	it("not be an incorrect enabled time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.enabled.asMilliseconds().should.equal(3);
-		});
-	});
+  describe("the ubar config for expiration should ", function () {
 
-	it("be the correct disabled time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.disabled.asMilliseconds().should.equal(1209600000);
-		});
-	});
+    beforeEach(function () {
+      var ubar_config = require('ubar_config');
+    });
 
-	it("not be an incorrect disabled time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.disabled.asMilliseconds().should.equal(4);
-		});
-	});
+    afterEach(function () {
+    });
 
-	it("be the correct redirected time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.disabled.asMilliseconds().should.equal(60000);
-		});
-	});
+    it("be the correct enabled time", function() {
+      console.log(ubar_config.defaultConfig.enabled_time);
+      getTimeinMoments(ubar_config.defaultConfig.enabled_time).asMilliseconds().should.equal(31536000000);
+    });
 
-	it("not be an incorrect redirected time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.disabled.asMilliseconds().should.equaltoBe(5);
-		});
-	});
+    it("not be an incorrect enabled time", function() {
+      ubar_config.expirationTime.enabled.asMilliseconds().should.equal(3);
+      console.log("HI");
+    });
+
+    it("be the correct disabled time", function() {
+      ubar_config.expirationTime.disabled.asMilliseconds().should.equal(1209600000);
+    });
+
+    it("not be an incorrect disabled time", function() {
+      ubar_config.expirationTime.disabled.asMilliseconds().should.equal(4);
+    });
+
+    it("be the correct redirected time", function() {
+      ubar_config.expirationTime.disabled.asMilliseconds().should.equal(60000);
+    });
+
+    it("not be an incorrect redirected time", function() {
+      ubar_config.expirationTime.disabled.asMilliseconds().should.equaltoBe(5);
+    });
+  });
+
+  describe("the ubar config for redirect interval should ", function () {
+
+    beforeEach(function () {
+    });
+
+    afterEach(function () {
+    });
+
+    it("be the correct ios_app_store time", function() {
+      ubar_config.expirationTime.enabled.asMilliseconds().should.equal(2000);
+    });
+
+    it("not be an incorrect ios_app_store time", function() {
+      ubar_config.expirationTime.enabled.asMilliseconds().should.equal(3);
+    });
+  });
 });
-
-describe("the ubar config for redirect interval should ", function () {
-
-	beforeEach(function () {
-	});
-
-	afterEach(function () {
-	});
-
-	it("be the correct ios_app_store time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.enabled.asMilliseconds().should.equal(2000);
-		});
-	});
-
-	it("not be an incorrect ios_app_store time", function() {
-		requirejs(['ubar_config'], function(conf) {
-			conf.expirationTime.enabled.asMilliseconds().should.equal(3);
-		});
-	});
-});
-

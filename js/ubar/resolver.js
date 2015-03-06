@@ -108,7 +108,7 @@
    * @public
    * @method redirectWithFallback
    */
-  Resolcer.prototype.redirectWithFallback = function redirectWithFallback (success, failure, deeplink){
+  Resolver.prototype.redirectWithFallback = function redirectWithFallback (success, failure, deeplink){
     failure = failure || function () {};
     success = success || function () {};
 

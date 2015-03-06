@@ -56,7 +56,7 @@
    * @method renderBanner
    * @param  {Object} templateSource The template to render
    */
-  Ubar.prototype.renderBanner = function renderBanner (templateSource) {
+  UbarDom.prototype.renderBanner = function renderBanner (templateSource) {
     var
       dfd = when.defer(),
       self = this,
