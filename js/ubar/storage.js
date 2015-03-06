@@ -77,9 +77,9 @@
    * Returns whether UBAR is enabled.
    *
    * @public
-   * @method isUbarEnabled
+   * @method isEnabled
    */
-  ubarStorage.prototype.isUbarEnabled = function isUbarEnabled () {
+  ubarStorage.prototype.isEnabled = function isEnabled () {
     return docCookies.getItem(this.UBAR_KEY) === 'true';
   };
 
@@ -87,9 +87,9 @@
    * Returns whether UBAR has been disabled by the user.
    *
    * @public
-   * @method isUbarDisabled
+   * @method isDisabled
    */
-  ubarStorage.prototype.isUbarDisabled = function isUbarDisabled () {
+  ubarStorage.prototype.isDisabled = function isDisabled () {
     return docCookies.getItem(this.UBAR_KEY) === 'false';
   };
 

@@ -151,9 +151,8 @@ function renderOnBanner() {
  * @method getTimeinMoments
  */
 function getTimeinMoments(time_string) {
-
   var timeString = time_string.split(" "),
-      timeValue  = parseInt(timeString[0], 10);
+      timeValue  = parseInt(timeString[0], 10),
       timeUnit   = timeString[1];
 
   return moment.duration( timeValue, timeUnit );
@@ -167,7 +166,7 @@ function getTimeinMoments(time_string) {
  */
 function setConfigTime (config) {
   config.enabled_time = getTimeinMoments( config.enabled_time );
-  config.disable_time = getTimeinMoments( config.disable_time );
+  config.disabled_time = getTimeinMoments( config.disabled_time );
   config.manage_window_time = getTimeinMoments( config.manage_window_time );
   config.app_store_redirect = getTimeinMoments( config.app_store_redirect );
 
@@ -194,7 +193,7 @@ function isObject (obj) {
  * @method extend
  */
 function extend (obj) {
-  if (!_.isObject(obj)) return obj;
+  if (!isObject(obj)) return obj;
   var source, prop;
   for (var i = 1, length = arguments.length; i < length; i++) {
     source = arguments[i];
@@ -214,10 +213,11 @@ function extend (obj) {
  */
 function init (user_config) {
   // TODO : user ubar = on param
-  alert('hi');
-  if (device.isAppSupported(CONFIG)) {
+  CONFIG = setConfigTime(extend( ubar_config, user_config ));
 
-    CONFIG = setConfigTime(_.extend( ubar_config, user_config ));
+  if (device.isAppSupported(CONFIG)) {
+    console.log('yes');
+
 
     ubarStorage = new UbarStorage( CONFIG );
     ubarDom = new UbarDom( CONFIG );

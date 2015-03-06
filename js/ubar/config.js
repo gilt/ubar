@@ -73,8 +73,8 @@ var urlConfig = {
  *
  */
 var templateConfig = {
-  sending_template_path   : '../templates/ubar/ubar_sending',
-  returning_template_path : '../templates/ubar/ubar_returning'
+  sending_template_path   : 'templates/ubar/ubar_sending.handlebars',
+  returning_template_path : 'templates/ubar/ubar_returning'
 };
 
 /**
