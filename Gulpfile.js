@@ -17,7 +17,7 @@ gulp.task('browserify', function() {
            .bundle()
            .pipe(source(destFile))
            .pipe(buffer())
-           .pipe(uglify())
+           // .pipe(uglify())
            .pipe(gulp.dest(destFolder));
 });
 
@@ -54,6 +54,6 @@ gulp.task('test', function () {
 gulp.task('default', ['browserify', /*, 'less', 'lint', 'test' */ ], function() {
 
   gulp.watch('js/main.js', ['browserify']);
-  gulp.watch('js/ubar/*.js', ['lint' /*, 'test' */ ]);
+  gulp.watch('js/ubar/*.js', ['browserify', 'lint' /*, 'test' */ ]);
   gulp.watch('css/ubar/*.less', ['less']);
 });

@@ -1,37 +1,8 @@
-(function (name, root, factory) {
-  'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(
-      name,
+'use strict';
 
-      [
-        '../node_modules/handlebars/dist/handlebars.min.js',
-        '../node_modules/when/when.js'
-      ],
-
-      factory
-    );
-
-  } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory(
-      require('handlebars'),
-      requre('when')
-    );
-
-  } else {
-    root[name] = factory(
-      root.handlebars,
-      root.when
-    );
-  }
-
-} ('ubar_dom', this, function ubar_dom (handlebars, when) {
-
-  'use strict';
+var
+  handlebars = require('handlebars'),
+  when = require('when');
 
   /**
    * View class responsible for rendering the UBAR banners
@@ -115,6 +86,5 @@
     this.banner.classList.add(this.UBAR_SHOW_CLASS);
   };
 
-  return UbarDom;
+  module.exports = UbarDom;
 
-}));

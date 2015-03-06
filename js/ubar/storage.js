@@ -1,20 +1,3 @@
-(function (name, root, factory) {
-  'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(name, [], factory);
-
-  } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory();
-
-  } else {
-    root[name] = factory();
-  }
-
-} ('ubar_storage', this, function ubar_storage () {
 
   'use strict';
 
@@ -165,6 +148,6 @@
     docCookies.removeItem(this.REDIRECTED_NAME);
   };
 
-  return ubarStorage;
+  module.exports = ubarStorage;
 
-}));
+// }));
