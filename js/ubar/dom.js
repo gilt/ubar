@@ -21,7 +21,7 @@ function loadTemplate (templateUrl) {
 }
 
 function compileTemplate (templateUrl, templateString) {
-  return handlebars.templates[templateName] = handlebars.compile(template);
+  return handlebars.templates[templateUrl] = handlebars.compile(templateString);
 }
 
   /**
