@@ -2,7 +2,23 @@
 
 var
   handlebars = require('handlebars'),
-  when = require('when');
+  when = require('when'),
+  request = require('reqwest');
+
+var templateCache = {};
+
+function loadTemplate (templateUrl) {
+  if (templateCache[templateUrl]) {
+    return templateCache[templateUrl];
+  } else {
+    request({
+      url : templateUrl,
+      dataType : 'text'
+    }).then(function (templateString) {
+      debugger;
+    });
+  }
+}
 
   /**
    * View class responsible for rendering the UBAR banners
@@ -17,7 +33,6 @@ var
     this.MAIN_UBAR_CLASS = config.component_class;
     this.UBAR_SHOW_CLASS = config.ubar_show_class;
     this.UBAR_HIDE_CLASS = config.ubar_hide_class;
-    this.body = document.querySelectorAll('body')[0];
   };
 
   /**
@@ -33,16 +48,19 @@ var
       self = this,
       ubarDiv = document.createElement('div');
 
-    when(handlebars.compile(templateSource)).then(function(template) {
-      when(template({})).then(function(renderedHtml) {
+    loadTemplate(templateSource).then(function (templateString) {
 
-        ubarDiv.innerHTML = renderedHtml;
-        self.body.parentElement.insertBefore(ubarDiv, self.body.firstChild);
-        self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
-
-        dfd.resolve();
-      });
     });
+    // when(handlebars.compile(templateSource)).then(function(template) {
+    //   when(template({})).then(function(renderedHtml) {
+
+    //     ubarDiv.innerHTML = renderedHtml;
+    //     document.body.insertBefore(ubarDiv, document.body.firstChild);
+    //     self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
+
+    //     dfd.resolve();
+    //   });
+    // });
 
     return dfd.promise;
   };
