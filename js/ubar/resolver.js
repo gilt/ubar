@@ -1,20 +1,4 @@
-(function (name, root, factory) {
-  'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(name, ['ubar_device'], factory);
-
-  } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory(require('./device'));
-
-  } else {
-    root[name] = factory(root.ubar_device);
-  }
-
-} ('ubar_resolver', this, function ubar_resolver (device) {
+var device = require('./device');
 
   'use strict';
 
@@ -108,7 +92,7 @@
    * @public
    * @method redirectWithFallback
    */
-  Resolcer.prototype.redirectWithFallback = function redirectWithFallback (success, failure, deeplink){
+  Resolver.prototype.redirectWithFallback = function redirectWithFallback (success, failure, deeplink){
     failure = failure || function () {};
     success = success || function () {};
 
@@ -158,6 +142,6 @@
     self.redirectToApp(deeplink);
   };
 
-  return Resolver;
+  module.exports = Resolver;
 
-}));
+
