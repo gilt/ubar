@@ -206,6 +206,7 @@ function extend (obj) {
   return obj;
 }
 
+
 /* Initialize UBAR with parameters set in config.js
  *
  * @public
