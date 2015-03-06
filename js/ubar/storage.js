@@ -121,7 +121,7 @@
    * @public
    * @method disableUbar
    */
-  ubarStorage.prototype.disableUser = function disableUbar () {
+  ubarStorage.prototype.disable = function disable () {
     docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
   };
 
@@ -132,7 +132,7 @@
    * @public
    * @method enableUbar
    */
-  ubarStorage.prototype.enableUser = function enableUbar () {
+  ubarStorage.prototype.enable = function enable () {
     docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
   };
 
