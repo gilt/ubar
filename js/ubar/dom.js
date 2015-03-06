@@ -7,6 +7,8 @@ var
 
 var templateCache = {};
 
+handlebars.templates = handlebars.templates || {};
+
 function loadTemplate (templateUrl) {
   if (!templateCache[templateUrl]) {
     templateCache[templateUrl] = request({
@@ -21,6 +23,7 @@ function loadTemplate (templateUrl) {
 }
 
 function compileTemplate (templateUrl, templateString) {
+  debugger;
   return handlebars.templates[templateUrl] = handlebars.compile(templateString);
 }
 
