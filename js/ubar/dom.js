@@ -8,16 +8,20 @@ var
 var templateCache = {};
 
 function loadTemplate (templateUrl) {
-  if (templateCache[templateUrl]) {
-    return templateCache[templateUrl];
-  } else {
-    request({
+  if (!templateCache[templateUrl]) {
+    templateCache[templateUrl] = request({
       url : templateUrl,
       dataType : 'text'
-    }).then(function (templateString) {
-      debugger;
+    }).then(function (xhr) {
+      return compileTemplate(templateUrl, xhr.responseText);
     });
   }
+
+  return templateCache[templateUrl];
+}
+
+function compileTemplate (templateUrl, templateString) {
+  return Handlebars.templates[templateName] = Handlebars.compile(template);
 }
 
   /**
@@ -48,8 +52,8 @@ function loadTemplate (templateUrl) {
       self = this,
       ubarDiv = document.createElement('div');
 
-    loadTemplate(templateSource).then(function (templateString) {
-
+    loadTemplate(templateSource).then(function (template) {
+      debugger;
     });
     // when(handlebars.compile(templateSource)).then(function(template) {
     //   when(template({})).then(function(renderedHtml) {
