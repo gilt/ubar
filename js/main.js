@@ -1,8 +1,5 @@
-require(['js/ubar/ubar'],
+console.log('----------------------------------');
 
-function(ubar) {
+require('./ubar/ubar').init();
 
-  alert("FO SHO!");
-  ubar.init();
-
-})();
+console.log('----------------------------------');

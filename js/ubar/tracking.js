@@ -1,21 +1,7 @@
-(function (name, root, factory) {
-    'use strict';
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(name, [], factory);
 
-  } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory(require());
-
-  }
-
-} ('ubar_tracking', this, function ubar_tracking (moment) {
 
   'use strict';
-
+  // var moment = require('moment');
 
   /**
   * Tracking:
@@ -115,7 +101,7 @@
   };
 
 
-  return {
+  module.exports = {
       turnUbarOn: _turnUbarOn,
       turnUbarOff: _turnUbarOff,
       attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
@@ -124,4 +110,4 @@
       showSendingBanner: _showSendingBanner
   };
 
-}));
+// }));
