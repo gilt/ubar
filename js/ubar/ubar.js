@@ -218,8 +218,6 @@ function init (user_config) {
   CONFIG = setConfigTime(extend( ubar_config, user_config ));
 
   if (device.isAppSupported(CONFIG)) {
-    console.log('yes');
-
 
     ubarStorage = new UbarStorage( CONFIG );
     ubarDom = new UbarDom( CONFIG );
