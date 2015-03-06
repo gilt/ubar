@@ -23,7 +23,6 @@ function loadTemplate (templateUrl) {
 }
 
 function compileTemplate (templateUrl, templateString) {
-  debugger;
   return handlebars.templates[templateUrl] = handlebars.compile(templateString);
 }
 
