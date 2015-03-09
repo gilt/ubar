@@ -4,9 +4,10 @@
   var moment = require('moment');
   var should = chai.should();
 
-  var ubar_tracking = require('../js/ubar/tracking');
+  var ubarTracking = require('../js/ubar/tracking');
 
-  describe("ubar_tracking ", function () {
+
+  describe("ubarTracking ", function () {
 
     beforeEach(function () {
     });
@@ -15,33 +16,33 @@
     });
 
     it("_turnUbarOn is a no-op", function () {
-      ubar_tracking.turnUbarOn().should.equal(true);
-      ubar_tracking.turnUbarOn().should.not.equal(false);
+      ubarTracking.turnUbarOn().should.equal(true);
+      ubarTracking.turnUbarOn().should.not.equal(false);
     });
 
     it("_turnUbarOff is a no-op", function () {
-      ubar_tracking.turnUbarOff().should.equal(true);
-      ubar_tracking.turnUbarOff().should.not.equal(false);
+      ubarTracking.turnUbarOff().should.equal(true);
+      ubarTracking.turnUbarOff().should.not.equal(false);
     });
 
     it("_attemptToRedirectToAppStore is a no-op", function () {
-      ubar_tracking.attemptToRedirectToAppStore().should.equal(true);
-      ubar_tracking.attemptToRedirectToAppStore().should.not.equal(false);
+      ubarTracking.attemptToRedirectToAppStore().should.equal(true);
+      ubarTracking.attemptToRedirectToAppStore().should.not.equal(false);
     });
 
     it("_attemptToRedirectToApp is a no-op", function () {
-      ubar_tracking.attemptToRedirectToApp().should.equal(true);
-      ubar_tracking.attemptToRedirectToApp().should.not.equal(false);
+      ubarTracking.attemptToRedirectToApp().should.equal(true);
+      ubarTracking.attemptToRedirectToApp().should.not.equal(false);
     });
 
     it("_showReturningBanner is a no-op", function () {
-      ubar_tracking.showReturningBanner().should.equal(true);
-      ubar_tracking.showReturningBanner().should.not.equal(false);
+      ubarTracking.showReturningBanner().should.equal(true);
+      ubarTracking.showReturningBanner().should.not.equal(false);
     });
 
     it("_showSendingBanner is a no-op", function () {
-      ubar_tracking.showSendingBanner().should.equal(true);
-      ubar_tracking.showSendingBanner().should.not.equal(false);
+      ubarTracking.showSendingBanner().should.equal(true);
+      ubarTracking.showSendingBanner().should.not.equal(false);
     });
   });
 

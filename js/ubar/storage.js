@@ -2,7 +2,7 @@
   'use strict';
 
   var moment = require('moment');
-  var UbarHelpers = require('./helpers.js');
+  var ubarHelpers = require('./helpers.js');
 
   var
     docCookies, // cookie getter and setter
@@ -26,8 +26,6 @@
       this.EXP_DURATION_ENABLED_MS = 0;
       return;
     }
-
-    var ubarHelpers = new UbarHelpers;
 
     this.UBAR_KEY = config.device_preference_cookie;
     this.REDIRECTED_NAME = config.redirected_cookie;
