@@ -83,20 +83,47 @@
       (ubar_storage.EXP_DURATION_REDIRECTED_MS).should.equal(ubarHelpers.getTimeInSeconds(defaultConfig.manage_window_time));
     });
 
-    it("EXP_DURATION_DISABLED_MS should be set and equal to 1411200", function () {
+    it("EXP_DURATION_DISABLED_MS should be set and equal to 1209600", function () {
       var ubar_storage = new Storage(defaultConfig);
       ubar_storage.EXP_DURATION_DISABLED_MS.should.equal(ubarHelpers.getTimeInSeconds(defaultConfig.disabled_time));
     });
 
-    it("EXP_DURATION_ENABLED_MS should be set", function () {
+    it("EXP_DURATION_ENABLED_MS should be set and equal to 31536000", function () {
       var ubar_storage = new Storage(defaultConfig);
       ubar_storage.EXP_DURATION_ENABLED_MS.should.equal(ubarHelpers.getTimeInSeconds(defaultConfig.enabled_time));
     });
 
-    it("disable() should set cookie to false", function () {
+    it("disable() should set isDisabled() to true", function () {
       var ubar_storage = new Storage(defaultConfig);
       ubar_storage.disable();
-      ubar_storage.docCookies.getItem(this.REDIRECTED_NAME)
+      ubar_storage.isDisabled().should.equal(true);
+    });
+
+    it("disable() should set isEnabled() to false", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.disable();
+      ubar_storage.isEnabled().should.equal(false);
+    });
+
+    it("enable() should set isDisabled to false", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.enable();
+      ubar_storage.isDisabled().should.equal(false);
+    });
+
+    it("enable() should set isEnabled to true", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.enable();
+      ubar_storage.isEnabled().should.equal(true);
+    });
+
+    it("isUserRedirected() ", function () {
+    });
+
+    it("setRedirected() ", function () {
+    });
+
+    it("clear() ", function () {
     });
   });
 
