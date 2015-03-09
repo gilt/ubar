@@ -1,39 +1,7 @@
 (function() {
 'use strict';
 
-/**
- * isObject method for use in extend method.
- * Taken for Underscore.js, http://underscorejs.org/
- *
- * @private
- * @method isObject
- */
-function isObject (obj) {
-  var type = typeof obj;
-  return (type === 'function' || type === 'object') && !!obj;
-}
-
-/**
- * Extend method for merging config values.
- * Taken for Underscore.js, http://underscorejs.org/
- *
- * @private
- * @method extend
- */
-function extend (obj) {
-  if (!isObject(obj)) { return obj;}
-  var source, prop;
-
-  for (var i = 1, length = arguments.length; i < length; i++) {
-    source = arguments[i];
-    for (prop in source) {
-      if (hasOwnProperty.call(source, prop)) {
-          obj[prop] = source[prop];
-      }
-    }
-  }
-  return obj;
-}
+  var ubarHelpers = require('./helpers.js');
 
 /**
  * Urls:
@@ -206,7 +174,7 @@ var supported_devices = {
  * and ease of understanding only.
  *
 */
-var defaultConfig = extend(urlConfig,
+var defaultConfig = ubarHelpers.extend(urlConfig,
                       templateConfig,
                       timingConfig,
                       classNames,
