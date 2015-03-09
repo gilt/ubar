@@ -1,59 +1,16 @@
-var gulp  = require('gulp'),
-    mocha = require('gulp-mocha'),
-    less  = require('gulp-less'),
-    jshint  = require('gulp-jshint'),
-    uglify = require('gulp-uglify');
+/*
+  gulpfile.js
+  ===========
+  Rather than manage one giant configuration file responsible
+  for creating multiple tasks, each task has been broken out into
+  its own file in gulp/tasks. Any files in that directory get
+  automatically required below.
+  To add a new task, simply add a new task file that directory.
+  gulp/tasks/default.js specifies the default set of tasks to run
+  when you run `gulp`.
+*/
 
-var browserify = require('browserify'),
-    watchify = require('watchify'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer'),
-    sourceFile = './js/main.js',
-    destFolder = './',
-    destFile = './main.min.js';
+var requireDir = require('require-dir');
 
-gulp.task('browserify', function() {
-  return browserify(sourceFile)
-           .bundle()
-           .pipe(source(destFile))
-           .pipe(buffer())
-           // .pipe(uglify())
-           .pipe(gulp.dest(destFolder));
-});
-
-gulp.task('watch', function() {
-  var bundler = watchify(sourceFile);
-  bundler.on('update', rebundle);
-
-  function rebundle() {
-    return bundler.bundle()
-             .pipe(source(destFile))
-             .pipe(gulp.dest(destFolder));
-  }
-
-  return rebundle();
-});
-
-gulp.task('less', function() {
-  return gulp.src('css/ubar/*.less')
-           .pipe(less())
-           .pipe(gulp.dest('css/ubar'));
-});
-
-gulp.task('lint', function() {
-  gulp.src('js/ubar/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('test', function () {
-  return gulp.src('test/specs/*.js', {read: false})
-           .pipe(mocha({reporter: 'spec'}));
-});
-
-gulp.task('default', ['browserify', /*, 'less', 'lint', 'test' */ ], function() {
-
-  gulp.watch('js/main.js', ['browserify']);
-  gulp.watch('js/ubar/*.js', ['browserify', 'lint' /*, 'test' */ ]);
-  gulp.watch('css/ubar/*.less', ['less']);
-});
+// Require all tasks in gulp/tasks, including subfolders
+requireDir('./gulp/tasks', { recurse: true });
