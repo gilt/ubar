@@ -34,6 +34,9 @@
    * @method getTimeinMoments
    */
   function getTimeInSeconds ( time_string ) {
+    if (typeof time_string.asSeconds === 'function') {
+      return time_string.asSeconds();
+    }
     return this.getTimeInMoments( time_string ).asSeconds();
   };
 
