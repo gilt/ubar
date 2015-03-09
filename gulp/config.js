@@ -10,7 +10,7 @@ var CSS_DEST_FOLDER = './css/ubar';
 var CSS_DEST_FILE = 'ubar.css';
 
 // SPEC configs
-var SPEC_SOURCE_FOLDER = './test/specs';
+var SPEC_SOURCE_FOLDER = './test/';
 var SPEC_SOURCE_FILES = SPEC_SOURCE_FOLDER + '*.js';
 
 module.exports = {
