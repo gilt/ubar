@@ -117,13 +117,36 @@
       ubar_storage.isEnabled().should.equal(true);
     });
 
-    it("isUserRedirected() ", function () {
+    it("isUserRedirected() should return false when cookie isn't set", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.isUserRedirected().should.equal(false);
     });
 
-    it("setRedirected() ", function () {
+    it("setRedirected() should return true after calling setRedirected()", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.setRedirected();
+      ubar_storage.isUserRedirected().should.equal(true);
     });
 
-    it("clear() ", function () {
+    it("clear(), oafe is not enabled", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.setRedirected();
+      ubar_storage.clear();
+      ubar_storage.isEnabled().should.equal(false);
+    });
+
+    it("clear(), oafe means disabled is false", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.setRedirected();
+      ubar_storage.clear();
+      ubar_storage.isDisabled().should.equal(false);
+    });
+
+    it("clear(), oafe means user was not redirected", function () {
+      var ubar_storage = new Storage(defaultConfig);
+      ubar_storage.setRedirected();
+      ubar_storage.clear();
+      ubar_storage.isUserRedirected().should.equal(false);
     });
   });
 
