@@ -10,7 +10,6 @@ var
   Resolver = require('./resolver.js'),
   ubar_tracking = require('./tracking.js'),
   bean = require('bean'),
-  when = require('when'),
   moment = require('moment'),
 
   CONFIG = {},
