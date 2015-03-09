@@ -147,35 +147,16 @@ function renderOnBanner() {
 }
 
 /**
- * Get Time in Seconds
- *
- * @private
- * @method getTimeinMoments
- */
-function getTimeinMoments(time_string) {
-  if (!time_string) {
-    console.log('Error: empty time_string in getTimeinMoments');
-    return moment.duration( 0, 'seconds');
-  }
-
-  var timeString = time_string.split(" "),
-      timeValue  = parseInt(timeString[0], 10),
-      timeUnit   = timeString[1];
-
-  return moment.duration( timeValue, timeUnit );
-}
-
-/**
  * Set config times using Moment library
  *
  * @private
  * @method setConfigTime
  */
 function setConfigTime (config) {
-  config.enabled_time = getTimeinMoments( config.enabled_time );
-  config.disabled_time = getTimeinMoments( config.disabled_time );
-  config.manage_window_time = getTimeinMoments( config.manage_window_time );
-  config.app_store_redirect = getTimeinMoments( config.app_store_redirect );
+  config.enabled_time = ubarHelpers.getTimeinMoments( config.enabled_time );
+  config.disabled_time = ubarHelpers.getTimeinMoments( config.disabled_time );
+  config.manage_window_time = ubarHelpers.getTimeinMoments( config.manage_window_time );
+  config.app_store_redirect = ubarHelpers.getTimeinMoments( config.app_store_redirect );
 
   return config;
 }
@@ -208,7 +189,6 @@ function init (user_config) {
 
 module.exports = {
   init : init,
-  _bindOnBannerButtonEvents : bindOnBannerButtonEvents,
-  _getTimeinMoments : getTimeinMoments
+  _bindOnBannerButtonEvents : bindOnBannerButtonEvents
 };
 })();
