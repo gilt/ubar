@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 /**
@@ -215,3 +216,6 @@ var defaultConfig = extend(urlConfig,
                       supported_devices);
 
 module.exports = defaultConfig;
+
+})();
+

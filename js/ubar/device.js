@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 /**
@@ -145,3 +146,5 @@ module.exports = {
   isAndroid       : isAndroid,
   isWindowsMobile : isWindowsMobile
 };
+})();
+

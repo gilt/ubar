@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 var
@@ -105,4 +106,4 @@ function compileTemplate (templateUrl, templateString) {
   };
 
   module.exports = UbarDom;
-
+})();

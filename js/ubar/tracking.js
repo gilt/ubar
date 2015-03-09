@@ -1,4 +1,4 @@
-
+(function() {
 
   'use strict';
   // var moment = require('moment');
@@ -110,4 +110,4 @@
       showSendingBanner: _showSendingBanner
   };
 
-// }));
+})();

@@ -1,5 +1,7 @@
-
+(function() {
   'use strict';
+
+  var moment = require('moment');
 
   var
     docCookies, // cookie getter and setter
@@ -68,9 +70,9 @@
   ubarStorage = function (config) {
     this.UBAR_KEY = config.device_preference_cookie;
     this.REDIRECTED_NAME = config.redirected_cookie;
-    this.EXP_DURATION_REDIRECTED_MS = config.manage_window_time.asSeconds();
-    this.EXP_DURATION_DISABLED_MS = config.disabled_time.asSeconds();
-    this.EXP_DURATION_ENABLED_MS = config.enabled_time.asSeconds();
+    this.EXP_DURATION_REDIRECTED_MS = moment.duration(config.manage_window_time).asSeconds();
+    this.EXP_DURATION_DISABLED_MS = moment.duration(config.disabled_time).asSeconds();
+    this.EXP_DURATION_ENABLED_MS = moment.duration(config.enabled_time).asSeconds();
   };
 
   /**
@@ -150,4 +152,4 @@
 
   module.exports = ubarStorage;
 
-// }));
+})();

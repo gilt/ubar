@@ -1,3 +1,4 @@
+(function() {
 var device = require('./device');
 
   'use strict';
@@ -143,5 +144,5 @@ var device = require('./device');
   };
 
   module.exports = Resolver;
-
+})();
 

@@ -1,1 +1,3 @@
-require('./ubar/ubar').init();
+(function() {
+  require('./ubar/ubar').init();
+})();

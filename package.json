@@ -46,10 +46,18 @@
     "gulp-watch": "^4.1.1",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.1.0",
+    "mochify": "^2.6.0",
     "requirejs": "^2.1.16",
     "sinon": "^1.12.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.4.0"
+  },
+  "scripts"         : {
+    "start"         : "mochify --watch",
+    "phantom"       : "mochify",
+    "wd"            : "mochify --wd",
+    "cover"         : "mochify --cover",
+    "test"          : "npm run phantom && npm run wd && npm run cover"
   }
 }

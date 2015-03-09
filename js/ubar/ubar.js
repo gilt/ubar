@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 var
@@ -151,6 +152,11 @@ function renderOnBanner() {
  * @method getTimeinMoments
  */
 function getTimeinMoments(time_string) {
+  if (!time_string) {
+    console.log('Error: empty time_string in getTimeinMoments');
+    return moment.duration( 0, 'seconds');
+  }
+
   var timeString = time_string.split(" "),
       timeValue  = parseInt(timeString[0], 10),
       timeUnit   = timeString[1];
@@ -237,3 +243,4 @@ module.exports = {
   init : init,
   _bindOnBannerButtonEvents : bindOnBannerButtonEvents
 };
+})();
