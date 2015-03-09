@@ -1,39 +1,8 @@
 (function() {
-var device = require('./device');
+  var device = require('./device');
+  var moment = require('moment');
 
   'use strict';
-
-  /**
-   * Get deep link from config based on device type
-   *
-   * @private
-   * @method getAppDeepLink
-   *
-   * @param {Object} config  Ubar config object
-   *
-   * @return {String}
-  */
-  function getAppDeepLink (config) {
-    if (device.isWindowsMobile()) return config.windows_app_deep_link_url;
-    if (device.isAndroid()) return config.android_app_deep_link_url;
-    return config.ios_app_deep_link_url;
-  }
-
-  /**
-   * Get app store link from config based on device type
-   *
-   * @private
-   * @method getAppStoreUrl
-   *
-   * @param {Object} config  Ubar config object
-   *
-   * @return {String}
-   */
-  function getAppStoreUrl (config) {
-    if (device.isWindowsMobile()) return config.windows_app_store_url;
-    if (device.isAndroid()) return config.android_app_store_url;
-    return config.ios_app_store_url;
-  }
 
   /**
    * An object to send users out of the browser and into native apps
@@ -48,9 +17,9 @@ var device = require('./device');
    *
    */
   var Resolver = function (config) {
-    this.app_store_redirect = config.app_store_redirect.asMilliseconds();
-    this.app_deep_link_url  = getAppDeepLink(config);
-    this.app_store_url      = getAppStoreUrl(config);
+    this.app_store_redirect = moment.duration(config.app_store_redirect).asMilliseconds();
+    this.app_deep_link_url  = this.getAppDeepLink(config);
+    this.app_store_url      = this.getAppStoreUrl(config);
   };
 
   /**
@@ -69,6 +38,38 @@ var device = require('./device');
     ifrm.setAttribute('src', deepLinkToApp);
     document.body.appendChild(ifrm);
   };
+
+  /**
+   * Get deep link from config based on device type
+   *
+   * @public
+   * @method getAppDeepLink
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+  */
+  Resolver.prototype.getAppDeepLink = function getAppDeepLink (config) {
+    if (device.isWindowsMobile()) return config.windows_app_deep_link;
+    if (device.isAndroid()) return config.android_app_deep_link;
+    return config.ios_app_deep_link;
+  }
+
+  /**
+   * Get app store link from config based on device type
+   *
+   * @public
+   * @method getAppStoreUrl
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+   */
+  Resolver.prototype.getAppStoreUrl = function getAppStoreUrl (config) {
+    if (device.isWindowsMobile()) return config.windows_app_store_url;
+    if (device.isAndroid()) return config.android_app_store_url;
+    return config.ios_app_store_url;
+  }
 
   /**
    * Resets UBAR if User doesn't have the App
