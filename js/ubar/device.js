@@ -1,6 +1,32 @@
 (function() {
 'use strict';
 
+var userAgent;
+
+/**
+ * For testing only. Allows tests to set user agent globally for module.
+ *
+ * @protected
+ * @method _setUserAgent
+ *
+ * @param {String} userAgentString
+ */
+function _setUserAgent (userAgentString) {
+  userAgent = userAgentString;
+}
+
+/**
+ * Get user agent indirectly. Wrapper for testing purposes.
+ *
+ * @private
+ * @method getUserAgent
+ *
+ * @return {String}
+ */
+function getUserAgent () {
+  return userAgent ? userAgent : navigator.userAgent;
+}
+
 /**
  * Determine if device is ios based on user agent.
  *
@@ -10,7 +36,7 @@
  * @return {Boolean}
  */
 function isIOS () {
-  return navigator.userAgent.match(/iPhone|iPad|iPod/i) !== null;
+  return getUserAgent().match(/iPhone|iPad|iPod/i) !== null;
 }
 
 /**
@@ -22,7 +48,7 @@ function isIOS () {
  * @return {Boolean}
  */
 function isAndroid () {
-  return navigator.userAgent.match(/Android/i) !== null;
+  return getUserAgent().match(/Android/i) !== null;
 }
 
 /**
@@ -34,13 +60,13 @@ function isAndroid () {
  * @return {Boolean}
  */
 function isWindowsMobile () {
-  return navigator.userAgent.match(/IEMobile/i) !== null;
+  return getUserAgent().match(/IEMobile/i) !== null;
 }
 
 /**
  * Get device ios version based on user agent.
  * Only call if we know this is an ios device.
- * Otherwise this will throw and error.
+ * Otherwise this will throw an error and return 0.
  *
  * @private
  * @method getIOSVersion
@@ -48,13 +74,20 @@ function isWindowsMobile () {
  * @return {Float}
  */
 function getIOSVersion () {
-  return parseFloat(navigator.userAgent.match(/OS (\d+)_(\d+)/)[0].split(" ")[1].replace("_", "."), 10);
+  try {
+    return parseFloat(getUserAgent().match(/OS (\d+)_(\d+)/)[0].split(" ")[1].replace("_", "."), 10);
+  }
+  catch(err) {
+    console.log('Tring to get IOS version for non-IOS device. ', err.message);
+    return 0;
+  }
+
 }
 
 /**
  * Get device Android version based on user agent.
  * Only call if we know this is an Android device.
- * Otherwise this will throw and error.
+ * Otherwise this will throw an error and return 0.
  *
  * @private
  * @method getAndroidVersion
@@ -62,13 +95,19 @@ function getIOSVersion () {
  * @return {Float}
  */
 function getAndroidVersion () {
-  return parseFloat(navigator.userAgent.match(/Android (\d+).(\d+)/)[0].split(" ")[1], 10);
+  try {
+    return parseFloat(getUserAgent().match(/Android (\d+).(\d+)/)[0].split(" ")[1], 10);
+  }
+  catch(err) {
+    console.log('Tring to get Android version for non-Android device. ', err.message);
+    return 0;
+  }
 }
 
 /**
  * Get device windows mobile version based on user agent.
  * Only call if we know this is an windows mobile device.
- * Otherwise this will throw and error.
+ * Otherwise this will throw an error and return 0.
  *
  * @private
  * @method getWindowsMobileVersion
@@ -76,7 +115,13 @@ function getAndroidVersion () {
  * @return {Float}
  */
 function getWindowsMobileVersion () {
-  return parseFloat(navigator.userAgent.match(/(IEMobile\/)((\d+).(\d+))/)[0].split("/")[1], 10);
+  try {
+    return parseFloat(getUserAgent().match(/(IEMobile\/)((\d+).(\d+))/)[0].split("/")[1], 10);
+  }
+  catch(err) {
+    console.log('Tring to get WindowsMobile version for non-WindowMobile device. ', err.message);
+    return 0;
+  }
 }
 
 /**
@@ -136,7 +181,7 @@ function isSupportedWindowsMobile (version) {
  */
 function isAppSupported (config) {
   return config.ios_support       && isSupportedIOS(config.min_ios_support)        ||
-    config.android_support        && isSupportedAndroid(config.min_android_suport) ||
+    config.android_support        && isSupportedAndroid(config.min_android_support) ||
     config.windows_mobile_support && isSupportedWindowsMobile(config.min_windows_mobile_support);
 }
 
@@ -144,7 +189,15 @@ module.exports = {
   isAppSupported  : isAppSupported,
   isIOS           : isIOS,
   isAndroid       : isAndroid,
-  isWindowsMobile : isWindowsMobile
+  isWindowsMobile : isWindowsMobile,
+
+  _setUserAgent             : _setUserAgent,
+  _isSupportedIOS           : isSupportedIOS,
+  _isSupportedAndroid       : isSupportedAndroid,
+  _isSupportedWindowsMobile : isSupportedWindowsMobile,
+  _getIOSVersion            : getIOSVersion,
+  _getAndroidVersion        : getAndroidVersion,
+  _getWindowsMobileVersion  : getWindowsMobileVersion
 };
 })();
 

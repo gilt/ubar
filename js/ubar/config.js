@@ -159,7 +159,7 @@ var supported_devices = {
   ios_support                : true,
   min_ios_support            : 7,
   android_support            : false,
-  min_android_suport         : 4.3,
+  min_android_support        : 4.3,
   windows_mobile_support     : false,
   min_windows_mobile_support : Infinity // hmmmmm
 };
