@@ -1,8 +1,8 @@
 (function() {
+  'use strict';
+
   var device = require('./device');
   var moment = require('moment');
-
-  'use strict';
 
   /**
    * An object to send users out of the browser and into native apps
@@ -53,7 +53,7 @@
     if (device.isWindowsMobile()) return config.windows_app_deep_link;
     if (device.isAndroid()) return config.android_app_deep_link;
     return config.ios_app_deep_link;
-  }
+  };
 
   /**
    * Get app store link from config based on device type
@@ -69,7 +69,7 @@
     if (device.isWindowsMobile()) return config.windows_app_store_url;
     if (device.isAndroid()) return config.android_app_store_url;
     return config.ios_app_store_url;
-  }
+  };
 
   /**
    * Resets UBAR if User doesn't have the App

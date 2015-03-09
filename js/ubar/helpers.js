@@ -1,5 +1,5 @@
 (function() {
-'use strict';
+  'use strict';
 
   var moment = require('moment');
 
@@ -25,7 +25,7 @@
     }
 
     return moment.duration( timeValue, timeUnit );
-  };
+  }
 
   /**
    * Get Time in Seconds
@@ -37,8 +37,8 @@
     if (typeof time_string.asSeconds === 'function') {
       return time_string.asSeconds();
     }
-    return this.getTimeInMoments( time_string ).asSeconds();
-  };
+    return getTimeInMoments( time_string ).asSeconds();
+  }
 
   /**
    * isObject method for use in extend method.

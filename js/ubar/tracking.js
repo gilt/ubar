@@ -33,7 +33,7 @@
   */
   function _turnUbarOn ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   /**
@@ -47,7 +47,7 @@
   */
   function _turnUbarOff ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   /**
@@ -60,7 +60,7 @@
   */
   function _attemptToRedirectToAppStore ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   /**
@@ -73,7 +73,7 @@
   */
   function _attemptToRedirectToApp ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   /**
@@ -85,7 +85,7 @@
   */
   function _showReturningBanner ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   /**
@@ -98,7 +98,7 @@
   */
   function _showSendingBanner ( trackingLocationObject ) {
     return true;
-  };
+  }
 
 
   module.exports = {
