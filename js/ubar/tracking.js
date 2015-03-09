@@ -31,8 +31,8 @@
   * @param {Object} {location : 'where this was called'}
   *
   */
-  var _turnUbarOn = function (trackingLocationObject) {
-
+  function _turnUbarOn ( trackingLocationObject ) {
+    return true;
   };
 
 
@@ -45,8 +45,8 @@
   * @param {Object} {location : 'where this was called'}
   *
   */
-  var _turnUbarOff = function (trackingLocationObject) {
-
+  function _turnUbarOff ( trackingLocationObject ) {
+    return true;
   };
 
 
@@ -58,8 +58,8 @@
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
-  var _attemptToRedirectToAppStore = function (trackingLocationObject) {
-
+  function _attemptToRedirectToAppStore ( trackingLocationObject ) {
+    return true;
   };
 
 
@@ -71,8 +71,8 @@
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
-  var _attemptToRedirectToApp = function (trackingLocationObject) {
-
+  function _attemptToRedirectToApp ( trackingLocationObject ) {
+    return true;
   };
 
 
@@ -83,8 +83,8 @@
   * @method: _showReturningBanner
   * @param {Object} { location : 'where this was called'}
   */
-  var _showReturningBanner = function (trackingLocationObject) {
-
+  function _showReturningBanner ( trackingLocationObject ) {
+    return true;
   };
 
 
@@ -96,8 +96,8 @@
   * @method: _showSendingBanner
   * @param {Object} { location : 'where this was called'}
   */
-  var _showSendingBanner = function (trackingLocationObject) {
-
+  function _showSendingBanner ( trackingLocationObject ) {
+    return true;
   };
 
 
