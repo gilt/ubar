@@ -241,6 +241,7 @@ function init (user_config) {
 
 module.exports = {
   init : init,
-  _bindOnBannerButtonEvents : bindOnBannerButtonEvents
+  _bindOnBannerButtonEvents : bindOnBannerButtonEvents,
+  _getTimeinMoments : getTimeinMoments
 };
 })();

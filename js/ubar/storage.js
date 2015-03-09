@@ -2,13 +2,42 @@
   'use strict';
 
   var moment = require('moment');
+  var UbarHelpers = require('./helpers.js');
 
   var
     docCookies, // cookie getter and setter
     ubarStorage; // Strorage constructor
 
   /**
-   * Taken from Mozilla
+   * Class responsible for getting and setting UBAR cookies.
+   *
+   * @public
+   * @constructor
+   *
+   * @params {Object} config  Config object for ubar
+   */
+  ubarStorage = function (config) {
+    if (!config) {
+      console.log("Error: ubarStorage initialized with an empty config.");
+      this.UBAR_KEY = "";
+      this.REDIRECTED_NAME = "";
+      this.EXP_DURATION_REDIRECTED_MS = 0;
+      this.EXP_DURATION_DISABLED_MS = 0;
+      this.EXP_DURATION_ENABLED_MS = 0;
+      return;
+    }
+
+    var ubarHelpers = new UbarHelpers;
+
+    this.UBAR_KEY = config.device_preference_cookie;
+    this.REDIRECTED_NAME = config.redirected_cookie;
+    this.EXP_DURATION_REDIRECTED_MS = ubarHelpers.getTimeInSeconds(config.manage_window_time);
+    this.EXP_DURATION_DISABLED_MS = ubarHelpers.getTimeInSeconds(config.disabled_time);
+    this.EXP_DURATION_ENABLED_MS = ubarHelpers.getTimeInSeconds(config.enabled_time);
+  };
+
+  /**
+   * From Mozilla:
    * https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
    * https://developer.mozilla.org/User:fusionchess
    * This framework is released under the GNU Public License, version 3 or later.
@@ -24,7 +53,7 @@
    *  * docCookies.removeItem(name[, path[, domain]])
    *  * docCookies.hasItem(name)
   */
-  docCookies = {
+  ubarStorage.prototype.docCookies = {
     getItem: function (sKey) {
       if (!sKey) { return null; }
       return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
@@ -60,29 +89,13 @@
   };
 
   /**
-   * Class responsible for getting and setting UBAR cookies.
-   *
-   * @public
-   * @constructor
-   *
-   * @params {Object} config  Config object for ubar
-   */
-  ubarStorage = function (config) {
-    this.UBAR_KEY = config.device_preference_cookie;
-    this.REDIRECTED_NAME = config.redirected_cookie;
-    this.EXP_DURATION_REDIRECTED_MS = moment.duration(config.manage_window_time).asSeconds();
-    this.EXP_DURATION_DISABLED_MS = moment.duration(config.disabled_time).asSeconds();
-    this.EXP_DURATION_ENABLED_MS = moment.duration(config.enabled_time).asSeconds();
-  };
-
-  /**
    * Returns whether UBAR is enabled.
    *
    * @public
    * @method isEnabled
    */
   ubarStorage.prototype.isEnabled = function isEnabled () {
-    return docCookies.getItem(this.UBAR_KEY) === 'true';
+    return this.docCookies.getItem(this.UBAR_KEY) === 'true';
   };
 
   /**
@@ -92,7 +105,7 @@
    * @method isDisabled
    */
   ubarStorage.prototype.isDisabled = function isDisabled () {
-    return docCookies.getItem(this.UBAR_KEY) === 'false';
+    return this.docCookies.getItem(this.UBAR_KEY) === 'false';
   };
 
   /**
@@ -102,7 +115,7 @@
    * @method isUserRedirected
    */
   ubarStorage.prototype.isUserRedirected = function isUserRedirected () {
-    return docCookies.getItem(this.REDIRECTED_NAME) === 'true';
+    return this.docCookies.getItem(this.REDIRECTED_NAME) === 'true';
   };
 
   /**
@@ -113,7 +126,7 @@
    * @method setRedirected
    */
   ubarStorage.prototype.setRedirected = function setRedirected () {
-    docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS);
+    this.docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS);
   };
 
   /**
@@ -124,7 +137,7 @@
    * @method disableUbar
    */
   ubarStorage.prototype.disable = function disable () {
-    docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
+    this.docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
   };
 
   /**
@@ -135,7 +148,7 @@
    * @method enableUbar
    */
   ubarStorage.prototype.enable = function enable () {
-    docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
+    this.docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
   };
 
   /**
@@ -146,8 +159,8 @@
    * @method clear
    */
   ubarStorage.prototype.clear = function clear () {
-    docCookies.removeItem(this.UBAR_KEY);
-    docCookies.removeItem(this.REDIRECTED_NAME);
+    this.docCookies.removeItem(this.UBAR_KEY);
+    this.docCookies.removeItem(this.REDIRECTED_NAME);
   };
 
   module.exports = ubarStorage;
