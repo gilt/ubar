@@ -7,7 +7,7 @@
    * Get Time in Moments
    *
    * @public
-   * @method getTimeinMoments
+   * @method getTimeInMoments
    */
   function getTimeInMoments ( time_string ) {
     if (!time_string) {
@@ -31,7 +31,7 @@
    * Get Time in Seconds
    *
    * @public
-   * @method getTimeinMoments
+   * @method getTimeInSeconds
    */
   function getTimeInSeconds ( time_string ) {
     if (typeof time_string.asSeconds === 'function') {

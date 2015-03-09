@@ -152,10 +152,10 @@ function renderOnBanner() {
  * @method setConfigTime
  */
 function setConfigTime (config) {
-  config.enabled_time = ubarHelpers.getTimeinMoments( config.enabled_time );
-  config.disabled_time = ubarHelpers.getTimeinMoments( config.disabled_time );
-  config.manage_window_time = ubarHelpers.getTimeinMoments( config.manage_window_time );
-  config.app_store_redirect = ubarHelpers.getTimeinMoments( config.app_store_redirect );
+  config.enabled_time = ubarHelpers.getTimeInMoments( config.enabled_time );
+  config.disabled_time = ubarHelpers.getTimeInMoments( config.disabled_time );
+  config.manage_window_time = ubarHelpers.getTimeInMoments( config.manage_window_time );
+  config.app_store_redirect = ubarHelpers.getTimeInMoments( config.app_store_redirect );
 
   return config;
 }
