@@ -5,9 +5,8 @@
   var should = chai.should();
   var sinon = require('sinon');
 
-  var UbarHelpers = require('../js/ubar/helpers');
+  var ubarHelpers = require('../js/ubar/helpers');
   var config = require('../js/ubar/config');
-  var ubarHelpers = new UbarHelpers();
   var device = require('../js/ubar/device');
 
   function setUserAgent (string) {
