@@ -10,9 +10,13 @@
    * @method getTimeInMoments
    */
   function getTimeInMoments ( time_string ) {
+    var timeString, timeValue, timeUnit, defaultDuration;
+
+    defaultDuration = moment.duration( 0 );
+
     if (!time_string) {
       console.log('Error: empty time_string in getTimeinMoments');
-      return moment.duration( 0 );
+      return defaultDuration;
     }
 
     var timeString = time_string.trim().split(/\s+/),
@@ -21,7 +25,7 @@
 
     if ( timeString.length > 2 ) {
       console.log('Error: time_string has invalid parameters: ' + timeString);
-      return moment.duration( 0 );
+      return defaultDuration;
     }
 
     return moment.duration( timeValue, timeUnit );
