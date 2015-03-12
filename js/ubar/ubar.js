@@ -84,7 +84,7 @@ function bindOffBannerButtonEvents () {
     ev.preventDefault();
 
     ubarDom.remove();
-    ubarStorage.disable();
+    ubarStorage.clear();
   });
 }
 
