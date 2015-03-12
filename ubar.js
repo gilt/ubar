@@ -8,8 +8,8 @@
     bean = require('bean'),
 
     clearTestButton = document.querySelectorAll('.clear-test')[0],
-    falseTestButton = document.querySelectorAll('.ubar-true-test')[0],
-    trueTestButton = document.querySelectorAll('.ubar-false-test')[0];
+    trueTestButton = document.querySelectorAll('.ubar-true-test')[0],
+    falseTestButton = document.querySelectorAll('.ubar-false-test')[0];
 
     bean.on(clearTestButton, 'touchend', function() {
       storage.clear();
@@ -21,7 +21,7 @@
       alert('Ubar off!');
     });
 
-    bean.on(clearTestButton, 'touchend', function() {
+    bean.on(trueTestButton, 'touchend', function() {
       storage.enable();
       alert('Ubar on!');
     });
