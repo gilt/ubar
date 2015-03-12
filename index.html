@@ -11,14 +11,15 @@
   <body>
     <div class="test-button-wrapper">
       <h1>Welcome to Ubar!</h1>
-      <p>Click below to clear both 'ubar' and 'redirected' cookies. Refresh and ubar banner will appear.</p>
-      <button class="ubar-test-button clear-test">Click Me</button>
-      <p>Click below to set 'ubar' cookie to true. Refresh page and ubar banner will not appear.</p>
-      <button class="ubar-test-button ubar-true-test">Click Me</button>
-      <p>Click below to set 'ubar' cookie to false. Refresh page and ubar module will redirect you to the Gilt app.</p>
-      <button class="ubar-test-button ubar-false-test">Click Me</button>
-      <p>Click below to set 'ubar' cookie to true and 'redirected' cookie to true. Refresh page and ubar 'manage' banner will appear.</p>
-      <button class="ubar-test-button ubar-redirect-test">Click Me</button>
+      <button class="ubar-test-button" onclick="function () {location.reload();}">Reload page</button>
+      <p>Click below to clear both 'ubar' and 'redirected' cookies.<br>Refresh and ubar banner will appear.</p>
+      <button class="ubar-test-button clear-test">Clear cookies</button>
+      <p>Click below to set 'ubar' cookie to true.<br>Refresh page and ubar banner will not appear.</p>
+      <button class="ubar-test-button ubar-true-test">Ubar on</button>
+      <p>Click below to set 'ubar' cookie to false.<br>Refresh page and ubar module will redirect you to the Gilt app.</p>
+      <button class="ubar-test-button ubar-false-test">Ubar off</button>
+      <p>Click below to set 'ubar' cookie to true and 'redirected' cookie to true.<br>This simulates returns to the browser after being redirected to the app.<br>Refresh page and ubar 'manage' banner will appear.</p>
+      <button class="ubar-test-button ubar-redirect-test">Ubar redirected</button>
     </div>
   </body>
 </html>
