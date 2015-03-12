@@ -5,11 +5,13 @@
     defaultConfig = require('./ubar/config'),
     Storage = require('./ubar/storage'),
     storage = new Storage(defaultConfig),
-    bean = require('bean'),
+    bean = require('bean');
 
-    clearTestButton = document.querySelectorAll('.clear-test')[0],
-    trueTestButton = document.querySelectorAll('.ubar-true-test')[0],
-    falseTestButton = document.querySelectorAll('.ubar-false-test')[0];
+  function init () {
+    var
+      clearTestButton = document.querySelectorAll('.clear-test')[0],
+      trueTestButton = document.querySelectorAll('.ubar-true-test')[0],
+      falseTestButton = document.querySelectorAll('.ubar-false-test')[0];
 
     bean.on(clearTestButton, 'touchend', function() {
       storage.clear();
@@ -27,6 +29,9 @@
     });
 
     ubar.init();
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
 
 })();
 
