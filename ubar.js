@@ -11,7 +11,8 @@
     var
       clearTestButton = document.querySelectorAll('.clear-test')[0],
       trueTestButton = document.querySelectorAll('.ubar-true-test')[0],
-      falseTestButton = document.querySelectorAll('.ubar-false-test')[0];
+      falseTestButton = document.querySelectorAll('.ubar-false-test')[0],
+      redirectTestButton = document.querySelectorAll('.ubar-redirect-test')[0];
 
     bean.on(clearTestButton, 'touchend', function() {
       storage.clear();
@@ -26,6 +27,12 @@
     bean.on(trueTestButton, 'touchend', function() {
       storage.enable();
       alert('Ubar on!');
+    });
+
+    bean.on(redirectTestButton, 'touchend', function () {
+      storage.enable();
+      storage.setRedirected();
+      alert('Cookies on!');
     });
 
     ubar.init();
