@@ -42,8 +42,8 @@ var urlConfig = {
  *
  */
 var templateConfig = {
-  sending_template_path   : 'templates/ubar/ubar_returning.handlebars', // TODO switch these back
-  returning_template_path : 'templates/ubar/ubar_sending.handlebars'
+  sending_template_path   : 'templates/ubar/ubar_sending.handlebars',
+  returning_template_path : 'templates/ubar/ubar_returning.handlebars'
 };
 
 /**

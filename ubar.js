@@ -47,8 +47,8 @@ var urlConfig = {
  *
  */
 var templateConfig = {
-  sending_template_path   : 'templates/ubar/ubar_returning.handlebars', // TODO switch these back
-  returning_template_path : 'templates/ubar/ubar_sending.handlebars'
+  sending_template_path   : 'templates/ubar/ubar_sending.handlebars',
+  returning_template_path : 'templates/ubar/ubar_returning.handlebars'
 };
 
 /**
@@ -1176,8 +1176,7 @@ function renderOffBanner() {
  */
 function renderOnBanner() {
   ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
-    // bindOnBannerButtonEvents();
-    bindOffBannerButtonEvents(); // TODO set this back
+    bindOnBannerButtonEvents();
     ubarDom.show();
     ubar_tracking.showSendingBanner();
   });
