@@ -19,9 +19,9 @@
       return defaultDuration;
     }
 
-    var timeString = time_string.trim().split(/\s+/),
-        timeValue  = parseInt( timeString[0], 10 ),
-        timeUnit   = timeString[1];
+    timeString = time_string.trim().split(/\s+/);
+    timeValue  = parseInt( timeString[0], 10 );
+    timeUnit   = timeString[1];
 
     if ( timeString.length > 2 ) {
       console.log('Error: time_string has invalid parameters: ' + timeString);

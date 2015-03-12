@@ -38,9 +38,9 @@ gulp.task('bundle-js', function() {
 		return b.bundle();
 	});
 
-	return gulp.src(SOURCE_FILES)
+	return gulp.src(BASE_FILE)
 		.pipe(browserified)
-		.pipe(rename('ubar.js'))
+		.pipe(rename(DEST_FILE))
 		.pipe(gulp.dest(DEST_FOLDER));
 });
 
@@ -50,10 +50,10 @@ gulp.task('uglify-js', function() {
 		return b.bundle();
 	});
 
-	return gulp.src(SOURCE_FILES)
+	return gulp.src(BASE_FILE)
 		.pipe(browserified)
 		.pipe(uglify())
-		.pipe(rename('ubar.min.js'))
+		.pipe(rename(DEST_MINIFIED_FILE))
 		.pipe(gulp.dest(DEST_FOLDER));
 });
 

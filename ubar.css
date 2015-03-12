@@ -1,0 +1,294 @@
+body {
+  margin: 0;
+}
+.component-ubar {
+  border-bottom: 1px solid black;
+}
+.component-ubar.ubar-show {
+  display: block;
+}
+.component-ubar.ubar-hide {
+  display: none;
+}
+.component-ubar .ubar-close-button {
+  background: none;
+  border: none;
+  display: block;
+  font-size: 20px;
+  margin: 0;
+  padding: 0 0 0 15px;
+}
+@media (max-width: 479px), (min-width: 480px) and (max-width: 767px) {
+  .component-ubar .ubar-close-button {
+    padding: 5px 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 1024px) {
+  .component-ubar .ubar-close-button {
+    position: absolute;
+    top: 45px;
+  }
+}
+.component-ubar .ubar-copy {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 16px;
+  width: 100%;
+}
+@media (max-width: 479px) {
+  .component-ubar .ubar-copy {
+    display: block;
+  }
+}
+@media (min-width: 480px) and (max-width: 767px) {
+  .component-ubar .ubar-copy {
+    width: 265px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .component-ubar .ubar-copy {
+    margin-left: 30px;
+    width: 40%;
+  }
+}
+@media (min-width: 1024px) {
+  .component-ubar .ubar-copy {
+    margin-left: 30px;
+    width: 30%;
+  }
+}
+.component-ubar .app-icon {
+  -webkit-background-clip: border-box;
+  -moz-background-clip: border-box;
+  -ms-background-clip: border-box;
+  -o-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  border-radius: 15px;
+  -webkit-box-shadow: 0 0 1px #000000;
+  -moz-box-shadow: 0 0 1px #000000;
+  -ms-box-shadow: 0 0 1px #000000;
+  -o-box-shadow: 0 0 1px #000000;
+  box-shadow: 0 0 1px #000000;
+  background: #020202;
+  display: inline-block;
+  height: 65px;
+  padding: 10px;
+  vertical-align: bottom;
+  width: 65px;
+}
+@media (max-width: 479px) {
+  .component-ubar .app-icon {
+    height: 45px;
+    padding: 5px;
+    width: 45px;
+  }
+}
+@media (min-width: 480px) and (max-width: 767px) {
+  .component-ubar .app-icon {
+    height: 50px;
+    padding: 5px;
+    width: 50px;
+  }
+}
+.component-ubar .app-icon .svg-image {
+  height: 65px;
+  width: 65px;
+}
+@media (max-width: 479px) {
+  .component-ubar .app-icon .svg-image {
+    height: 45px;
+    width: 45px;
+  }
+}
+@media (min-width: 480px) and (max-width: 767px) {
+  .component-ubar .app-icon .svg-image {
+    height: 50px;
+    width: 50px;
+  }
+}
+.component-ubar .app-icon .letter {
+  fill: #ffffff;
+}
+.component-ubar .ubar-text-wrapper {
+  display: inline-block;
+  margin-left: 13px;
+  vertical-align: super;
+}
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 1024px) {
+  .component-ubar .ubar-text-wrapper {
+    padding-top: 25px;
+    vertical-align: top;
+  }
+}
+.component-ubar .ubar-banner-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 5px;
+  word-wrap: break-word;
+}
+.component-ubar .ubar-banner-desc {
+  font-weight: normal;
+  margin: 0;
+  padding: 5px 0 0;
+  word-wrap: break-word;
+}
+.component-ubar .ubar-actions {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+}
+@media (max-width: 479px) {
+  .component-ubar .ubar-actions {
+    padding: 0 16px 10px;
+  }
+}
+@media (min-width: 480px) and (max-width: 767px) {
+  .component-ubar .ubar-actions {
+    padding-top: 30px;
+    vertical-align: top;
+    max-width: 285px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 1024px) {
+  .component-ubar .ubar-actions {
+    display: inline-block;
+    padding-top: 45px;
+    vertical-align: top;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .component-ubar .ubar-actions {
+    width: 45%;
+  }
+}
+@media (min-width: 1024px) {
+  .component-ubar .ubar-actions {
+    width: 40%;
+  }
+}
+.component-ubar .ubar-button-wrapper {
+  width: 49%;
+  display: inline-block;
+  text-align: center;
+}
+.component-ubar .ubar-button {
+  color: #383838;
+  display: inline-block;
+  font-weight: normal;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  -webkit-background-clip: border-box;
+  -moz-background-clip: border-box;
+  -ms-background-clip: border-box;
+  -o-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  background-color: #f4f3f3;
+  background-image: -moz-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -ms-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#ebe9e9));
+  background-image: -webkit-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -o-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: linear-gradient(top, #fafafa, #ebe9e9);
+  color: #fff;
+  background-color: #de9502;
+  background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ec9f02), to(#c98702));
+  background-image: -webkit-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -o-linear-gradient(top, #ec9f02, #c98702);
+  background-image: linear-gradient(top, #ec9f02, #c98702);
+  background-repeat: repeat-x;
+  border-top-color: #f1a202;
+  border-right-color: transparent;
+  border-bottom-color: #c48402;
+  border-left-color: transparent;
+  box-sizing: border-box;
+  font-size: 13px;
+  margin: 0 auto;
+  padding: 10px;
+  text-align: center;
+  width: 130px;
+}
+.component-ubar .ubar-button.tint {
+  color: #fff;
+  background-color: #de9502;
+  background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ec9f02), to(#c98702));
+  background-image: -webkit-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -o-linear-gradient(top, #ec9f02, #c98702);
+  background-image: linear-gradient(top, #ec9f02, #c98702);
+  background-repeat: repeat-x;
+  border-top-color: #f1a202;
+  border-right-color: transparent;
+  border-bottom-color: #c48402;
+  border-left-color: transparent;
+}
+.component-ubar .ubar-button.tint:hover {
+  background-color: #e89c02;
+  background-image: -moz-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -ms-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f6a602), to(#d38e02));
+  background-image: -webkit-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -o-linear-gradient(top, #f6a602, #d38e02);
+  background-image: linear-gradient(top, #f6a602, #d38e02);
+  background-repeat: repeat-x;
+  border-top-color: #fba903;
+  border-bottom-color: #ce8a02;
+}
+.component-ubar .ubar-button.tint:disabled {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.component-ubar .ubar-button.tint:disabled:hover {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.component-ubar .ubar-button:hover {
+  background-color: #e89c02;
+  background-image: -moz-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -ms-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f6a602), to(#d38e02));
+  background-image: -webkit-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -o-linear-gradient(top, #f6a602, #d38e02);
+  background-image: linear-gradient(top, #f6a602, #d38e02);
+  background-repeat: repeat-x;
+  border-top-color: #fba903;
+  border-bottom-color: #ce8a02;
+}
+.component-ubar .ubar-button:disabled {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.component-ubar .ubar-button:disabled:hover {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+@media (min-width: 1024px), (min-width: 768px) and (max-width: 1023px) {
+  .component-ubar .ubar-button {
+    font-size: 16px;
+    width: 150px;
+  }
+}

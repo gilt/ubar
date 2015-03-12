@@ -7,7 +7,8 @@ var JS_DEST_MINIFIED_FILE = './ubar.min.js';
 
 // CSS configs
 var CSS_SOURCE_FILES = './css/ubar/*.less';
-var CSS_DEST_FOLDER = './css/ubar';
+var CSS_BASE_FILE = './css/ubar/ubar.less';
+var CSS_DEST_FOLDER = './';
 var CSS_DEST_FILE = 'ubar.css';
 
 // SPEC configs
@@ -25,6 +26,7 @@ module.exports = {
 
 	css : {
 		SOURCE_FILES 	: CSS_SOURCE_FILES,
+		BASE_FILE 		: CSS_BASE_FILE,
 		DEST_FILE   	: CSS_DEST_FILE,
 		DEST_FOLDER 	: CSS_DEST_FOLDER
 	},

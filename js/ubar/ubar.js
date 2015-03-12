@@ -139,7 +139,8 @@ function renderOffBanner() {
  */
 function renderOnBanner() {
   ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
-    bindOnBannerButtonEvents();
+    // bindOnBannerButtonEvents();
+    bindOffBannerButtonEvents(); // TODO set this back
     ubarDom.show();
     ubar_tracking.showSendingBanner();
   });
