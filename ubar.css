@@ -111,6 +111,72 @@ body {
   border-top-color: transparent;
   border-bottom-color: transparent;
 }
+.reload {
+  color: #383838;
+  display: inline-block;
+  font-weight: normal;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  text-align: center;
+  -webkit-background-clip: border-box;
+  -moz-background-clip: border-box;
+  -ms-background-clip: border-box;
+  -o-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  background-color: #f4f3f3;
+  background-image: -moz-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -ms-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#ebe9e9));
+  background-image: -webkit-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -o-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: linear-gradient(top, #fafafa, #ebe9e9);
+  background-repeat: repeat-x;
+}
+.reload.tint {
+  color: #fff;
+  background-color: #bde0eb;
+  background-image: -moz-linear-gradient(top, #c8e5ee, #add8e6);
+  background-image: -ms-linear-gradient(top, #c8e5ee, #add8e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#c8e5ee), to(#add8e6));
+  background-image: -webkit-linear-gradient(top, #c8e5ee, #add8e6);
+  background-image: -o-linear-gradient(top, #c8e5ee, #add8e6);
+  background-image: linear-gradient(top, #c8e5ee, #add8e6);
+  background-repeat: repeat-x;
+  border-top-color: #cce7f0;
+  border-right-color: transparent;
+  border-bottom-color: #a9d6e5;
+  border-left-color: transparent;
+}
+.reload.tint:hover {
+  background-color: #c5e4ed;
+  background-image: -moz-linear-gradient(top, #d0e9f1, #b5dce8);
+  background-image: -ms-linear-gradient(top, #d0e9f1, #b5dce8);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d0e9f1), to(#b5dce8));
+  background-image: -webkit-linear-gradient(top, #d0e9f1, #b5dce8);
+  background-image: -o-linear-gradient(top, #d0e9f1, #b5dce8);
+  background-image: linear-gradient(top, #d0e9f1, #b5dce8);
+  background-repeat: repeat-x;
+  border-top-color: #d4ebf2;
+  border-bottom-color: #b1dae7;
+}
+.reload.tint:disabled {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.reload.tint:disabled:hover {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
 .component-ubar {
   border-bottom: 1px solid black;
 }
