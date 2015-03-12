@@ -1,6 +1,109 @@
 body {
   margin: 0;
 }
+.ubar-test-button {
+  color: #383838;
+  display: inline-block;
+  font-weight: normal;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  text-align: center;
+  -webkit-background-clip: border-box;
+  -moz-background-clip: border-box;
+  -ms-background-clip: border-box;
+  -o-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  background-color: #f4f3f3;
+  background-image: -moz-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -ms-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fafafa), to(#ebe9e9));
+  background-image: -webkit-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: -o-linear-gradient(top, #fafafa, #ebe9e9);
+  background-image: linear-gradient(top, #fafafa, #ebe9e9);
+  color: #fff;
+  background-color: #de9502;
+  background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ec9f02), to(#c98702));
+  background-image: -webkit-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -o-linear-gradient(top, #ec9f02, #c98702);
+  background-image: linear-gradient(top, #ec9f02, #c98702);
+  background-repeat: repeat-x;
+  border-top-color: #f1a202;
+  border-right-color: transparent;
+  border-bottom-color: #c48402;
+  border-left-color: transparent;
+  font-size: 16px;
+}
+.ubar-test-button.tint {
+  color: #fff;
+  background-color: #de9502;
+  background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ec9f02), to(#c98702));
+  background-image: -webkit-linear-gradient(top, #ec9f02, #c98702);
+  background-image: -o-linear-gradient(top, #ec9f02, #c98702);
+  background-image: linear-gradient(top, #ec9f02, #c98702);
+  background-repeat: repeat-x;
+  border-top-color: #f1a202;
+  border-right-color: transparent;
+  border-bottom-color: #c48402;
+  border-left-color: transparent;
+}
+.ubar-test-button.tint:hover {
+  background-color: #e89c02;
+  background-image: -moz-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -ms-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f6a602), to(#d38e02));
+  background-image: -webkit-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -o-linear-gradient(top, #f6a602, #d38e02);
+  background-image: linear-gradient(top, #f6a602, #d38e02);
+  background-repeat: repeat-x;
+  border-top-color: #fba903;
+  border-bottom-color: #ce8a02;
+}
+.ubar-test-button.tint:disabled {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.ubar-test-button.tint:disabled:hover {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.ubar-test-button:hover {
+  background-color: #e89c02;
+  background-image: -moz-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -ms-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f6a602), to(#d38e02));
+  background-image: -webkit-linear-gradient(top, #f6a602, #d38e02);
+  background-image: -o-linear-gradient(top, #f6a602, #d38e02);
+  background-image: linear-gradient(top, #f6a602, #d38e02);
+  background-repeat: repeat-x;
+  border-top-color: #fba903;
+  border-bottom-color: #ce8a02;
+}
+.ubar-test-button:disabled {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.ubar-test-button:disabled:hover {
+  background-color: #aaa;
+  background-image: none;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
 .component-ubar {
   border-bottom: 1px solid black;
 }

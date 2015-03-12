@@ -1,15 +1,23 @@
 @import "helpers.less";
 
+// START - FOR TEST PAGE ONLY
+body {
+  margin: 0; // for testing
+}
+
+.ubar-test-button {
+  .buttonize;
+  .tintify;
+  font-size: 16px;
+}
+
+// END - FOR TEST PAGE ONLY
 
 @component-ubar-ipad-height : 100px;
 
 @ubar-image-ipad-size: 65px;
 @ubar-image-iphone-portrait-size: 45px;
 @ubar-image-iphone-landscape-size: 50px;
-
-body {
-  margin: 0; // for testing
-}
 
 .component-ubar {
   border-bottom: 1px solid black;

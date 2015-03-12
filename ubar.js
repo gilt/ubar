@@ -1,9 +1,36 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function() {
-  require('./ubar/ubar').init({ios_app_deep_link : 'www.gilt.com/'});
+  var
+    ubar = require('./ubar/ubar'),
+    defaultConfig = require('./ubar/config'),
+    Storage = require('./ubar/storage'),
+    storage = new Storage(defaultConfig),
+    bean = require('bean'),
+
+    clearTestButton = document.querySelectorAll('.clear-test')[0],
+    falseTestButton = document.querySelectorAll('.ubar-true-test')[0],
+    trueTestButton = document.querySelectorAll('.ubar-false-test')[0];
+
+    bean.on(clearTestButton, 'touchend', function() {
+      storage.clear();
+      alert('Cleared cookies!');
+    });
+
+    bean.on(falseTestButton, 'touchend', function() {
+      storage.disable();
+      alert('Ubar off!');
+    });
+
+    bean.on(clearTestButton, 'touchend', function() {
+      storage.enable();
+      alert('Ubar on!');
+    });
+
+    ubar.init();
+
 })();
 
-},{"./ubar/ubar":9}],2:[function(require,module,exports){
+},{"./ubar/config":2,"./ubar/storage":7,"./ubar/ubar":9,"bean":10}],2:[function(require,module,exports){
 (function() {
 'use strict';
 
