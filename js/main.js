@@ -6,6 +6,18 @@
     storage = new Storage(defaultConfig),
     bean = require('bean');
 
+  function setConfigValue () {
+    if (location.search) {
+      var params = location.search.replace('?', '').spilt('=');
+      var index = params.indexOf('timing_config');
+      if (index > -1) {
+        return { app_store_redirect : params[index+1] + ' seconds' };
+      } else {
+        return {};
+      }
+    }
+  }
+
   function init () {
     var
       clearTestButton = document.querySelectorAll('.clear-test')[0],
@@ -13,7 +25,9 @@
       falseTestButton = document.querySelectorAll('.ubar-false-test')[0],
       redirectTestButton = document.querySelectorAll('.ubar-redirect-test')[0],
       reload = document.querySelectorAll('.reload')[0],
-      eventSpace = document.querySelectorAll('.event-space')[0];
+      eventSpace = document.querySelectorAll('.event-space')[0],
+      selectTiming = document.querySelectorAll('.app-redirect-config')[0],
+      fallbackTimingTest = document.querySelectorAll('.ubar-timing-test')[0];
 
     bean.on(clearTestButton, 'touchend', function() {
       storage.clear();
@@ -40,7 +54,13 @@
       location.reload();
     });
 
-    ubar.init();
+    bean.on(fallbackTimingTest, 'touchend', function () {
+      debugger;
+
+      window.location = window.origin;
+    });
+
+    ubar.init(setConfigValue());
   }
 
   document.addEventListener("DOMContentLoaded", init);

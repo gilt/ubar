@@ -2,6 +2,7 @@ body {
   margin: 0;
 }
 .test-button-wrapper {
+  padding: 10px;
   text-align: center;
 }
 .ubar-test-button {

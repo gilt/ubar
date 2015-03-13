@@ -13,14 +13,27 @@
       <h1>Welcome to Ubar!</h1>
       <p class="event-space">Event: </p>
       <button class="ubar-test-button reload">Reload page</button>
-      <p>Click below to clear both 'ubar' and 'redirected' cookies.<br>Refresh and ubar banner will appear.</p>
+      <p>Click below to clear both 'ubar' and 'redirected' cookies. Refresh and ubar banner will appear.</p>
       <button class="ubar-test-button clear-test">Clear cookies</button>
-      <p>Click below to set 'ubar' cookie to true.<br>Refresh page and ubar banner will not appear.</p>
+      <p>Click below to set 'ubar' cookie to true. Refresh page and ubar banner will not appear.</p>
       <button class="ubar-test-button ubar-true-test">Ubar on</button>
-      <p>Click below to set 'ubar' cookie to false.<br>Refresh page and ubar module will redirect you to the Gilt app.</p>
+      <p>Click below to set 'ubar' cookie to false. Refresh page and ubar module will redirect you to the Gilt app.</p>
       <button class="ubar-test-button ubar-false-test">Ubar off</button>
-      <p>Click below to set 'ubar' cookie to true and 'redirected' cookie to true.<br>This simulates returns to the browser after being redirected to the app.<br>Refresh page and ubar 'manage' banner will appear.</p>
+      <p>Click below to set 'ubar' cookie to true and 'redirected' cookie to true. This simulates returns to the browser after being redirected to the app. Refresh page and ubar 'manage' banner will appear.</p>
       <button class="ubar-test-button ubar-redirect-test">Ubar redirected</button>
+
+      <p>Set time in seconds below to test redirect to app store funtionality. 2.0 is the default.</p>
+      <select class="app-redirect-config">
+        <option value="1.0">1.0</option>
+        <option value="1.2">1.2</option>
+        <option value="1.4">1.4</option>
+        <option value="1.6">1.6</option>
+        <option value="1.8">1.8</option>
+        <option value="2.0">2.0</option>
+        <option value="2.2">2.2</option>
+        <option value="3.0">3.0</option>
+      </select>
+      <button class="ubar-test-button ubar-timing-test">Test app store redirect</button>
     </div>
   </body>
 </html>
