@@ -56,7 +56,8 @@
     });
 
     bean.on(fallbackTimingTest, 'touchend', function () {
-      location.href = location.host + location.pathname + "?timing_config=" + selectTiming.options[selectTiming.selectedIndex].value;
+      var newPath = location.host + location.pathname + "?timing_config=" + selectTiming.options[selectTiming.selectedIndex].value;
+      location.href = newPath;
     });
 
     ubar.init(setConfigValue());
