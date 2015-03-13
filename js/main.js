@@ -8,7 +8,7 @@
 
   function setConfigValue () {
     if (location.search) {
-      var params = location.search.replace('?', '').spilt('=');
+      var params = location.search.replace('?', '').split('=');
       var index = params.indexOf('timing_config');
       if (index > -1) {
         return { app_store_redirect : params[index+1] + ' seconds' };
