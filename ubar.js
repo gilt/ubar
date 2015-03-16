@@ -5,69 +5,148 @@
     defaultConfig = require('./ubar/config'),
     Storage = require('./ubar/storage'),
     storage = new Storage(defaultConfig),
-    bean = require('bean');
+    bean = require('bean'),
+    helpers = require('./ubar/helpers'),
+    cookieValues = {};
 
-  function setConfigValue () {
+  function setConfigValuesFromUrl () {
+    var paramsArray, key, value;
     if (location.search) {
-      var params = location.search.replace('?', '').split('=');
-      var index = params.indexOf('timing_config');
-      if (index > -1) {
-        return { app_store_redirect : params[index+1] + ' seconds' };
-      } else {
-        return {};
+      var paramsArray = decodeURIComponent(window.location.search.substring(1)).split('&');
+      for (var i = 0; i < paramsArray.length; i++) {
+        key = paramsArray[i].split('=')[0];
+        value = paramsArray[i].split('=')[1].replace('+', ' ');
+        if (key in defaultConfig) {
+          defaultConfig[key] = value;
+        }
+        if (key in cookieValues) {
+          if (value === 'true') value = true;
+          if (value === 'false') value = false;
+          if (value === 'undefined') value = undefined;
+          cookieValues[key] = value;
+        }
       }
     }
   }
 
-  function init () {
-    var
-      clearTestButton = document.querySelectorAll('.clear-test')[0],
-      trueTestButton = document.querySelectorAll('.ubar-true-test')[0],
-      falseTestButton = document.querySelectorAll('.ubar-false-test')[0],
-      redirectTestButton = document.querySelectorAll('.ubar-redirect-test')[0],
-      reload = document.querySelectorAll('.reload')[0],
-      eventSpace = document.querySelectorAll('.event-space')[0],
-      selectTiming = document.querySelectorAll('.app-redirect-config')[0],
-      fallbackTimingTest = document.querySelectorAll('.ubar-timing-test')[0];
+  function getStorageCookieValues () {
+    cookieValues.ubar_redirect_cookie = storage.isUserRedirected() ? true : undefined;
+    if (storage.isEnabled()) {
+      cookieValues.ubar_cookie = true;
+    } else if (storage.isDisabled()) {
+      cookieValues.ubar_cookie = false;
+    } else {
+      cookieValues.ubar_cookie = undefined;
+    }
+  }
 
-    bean.on(clearTestButton, 'touchend', function() {
-      storage.clear();
-      eventSpace.innerHTML = 'Event: Cleared cookies!';
-    });
-
-    bean.on(falseTestButton, 'touchend', function() {
+  // its funky...
+  function setCookiesFromConfig () {
+    storage.clear();
+    if (cookieValues.ubar_cookie === true) {
+      storage.enable();
+    } else if (cookieValues.ubar_cookie === false) {
       storage.disable();
-      eventSpace.innerHTML = 'Event: Ubar off!';
+    }
+
+    if (storage.ubar_redirect_cookie === true) storage.setRedirected();
+  }
+
+  function setPageCookieValues () {
+    var
+      cookieSelects = document.querySelectorAll('select.cookie'),
+      dataKey,
+      el;
+
+    for (var i = 0; i < cookieSelects.length; i++) {
+      el = cookieSelects[i];
+      dataKey = el.getAttribute('name');
+
+      for (var j = 0; j < el.options.length; j++) {
+        if (compareDataAttrAndConfig(el.options[j].value, cookieValues[dataKey])) {
+          el.selectedIndex = j;
+          break;
+        }
+      }
+    }
+  }
+
+  function setPageInputUrls () {
+    var
+      inputs = document.querySelectorAll('input.url_config'),
+      dataKey,
+      el;
+
+    for (var i = 0; i < inputs.length; i++) {
+      dataKey = inputs[i].getAttribute('name');
+      if (defaultConfig[dataKey]) {
+        inputs[i].value = defaultConfig[dataKey];
+      }
+    }
+  }
+
+  function setSelectConfigs () {
+    var
+      configSelects = document.querySelectorAll('select.select_config'),
+      dataKey,
+      el,
+      elValue,
+      configValue;
+
+    for (var i = 0; i < configSelects.length; i++) {
+      el = configSelects[i];
+      dataKey = el.getAttribute('name');
+
+      for (var j = 0; j < el.options.length; j++) {
+        if (compareDataAttrAndConfig(el.options[j].value, defaultConfig[dataKey])) {
+          el.selectedIndex = j;
+          break;
+        }
+      }
+    }
+  }
+
+  function compareDataAttrAndConfig (data, config) {
+    if (typeof config === 'number') {
+      data = parseFloat(data, 10);
+    } else if (typeof config === 'boolean') {
+      config = config.toString();
+    } else if (data === 'undefined') {
+      data = undefined;
+    }
+    return data === config;
+  }
+
+  function setConfigs () {
+    getStorageCookieValues();
+    setConfigValuesFromUrl();
+    setCookiesFromConfig();
+  }
+
+  function setPageValues () {
+    setPageCookieValues();
+    setPageInputUrls();
+    setSelectConfigs();
+  }
+
+  function init () {
+    var refreshButton = document.querySelectorAll('.refresh-button')[0];
+
+    setConfigs();
+    setPageValues();
+
+    bean.on(refreshButton, 'touchend click', function () {
+      location.href = location.origin + location.pathname;
     });
 
-    bean.on(trueTestButton, 'touchend', function() {
-      storage.enable();
-      eventSpace.innerHTML = 'Event: Ubar on!';
-    });
-
-    bean.on(redirectTestButton, 'touchend', function () {
-      storage.enable();
-      storage.setRedirected();
-      eventSpace.innerHTML = 'Event: Cookies on!';
-    });
-
-    bean.on(reload, 'touchend', function () {
-      location.reload();
-    });
-
-    bean.on(fallbackTimingTest, 'touchend', function () {
-      var newPath = location.origin + location.pathname + "?timing_config=" + selectTiming.options[selectTiming.selectedIndex].value;
-      location.href = newPath;
-    });
-
-    ubar.init(setConfigValue());
+    ubar.init(defaultConfig);
   }
 
   document.addEventListener("DOMContentLoaded", init);
 
 })();
 
-},{"./ubar/config":2,"./ubar/storage":7,"./ubar/ubar":9,"bean":10}],2:[function(require,module,exports){
+},{"./ubar/config":2,"./ubar/helpers":5,"./ubar/storage":7,"./ubar/ubar":9,"bean":10}],2:[function(require,module,exports){
 (function() {
 'use strict';
 
@@ -215,7 +294,7 @@ var trackingLocations = {
  *
 */
 var redirect_interval = {
-  app_store_redirect : '2 seconds'
+  app_store_redirect : '2.0 seconds'
 };
 
 /**

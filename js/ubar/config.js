@@ -145,7 +145,7 @@ var trackingLocations = {
  *
 */
 var redirect_interval = {
-  app_store_redirect : '2 seconds'
+  app_store_redirect : '2.0 seconds'
 };
 
 /**

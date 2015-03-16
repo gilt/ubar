@@ -11,29 +11,146 @@
   <body>
     <div class="test-button-wrapper">
       <h1>Welcome to Ubar!</h1>
-      <p class="event-space">Event: </p>
-      <button class="ubar-test-button reload">Reload page</button>
-      <p>Click below to clear both 'ubar' and 'redirected' cookies. Refresh and ubar banner will appear.</p>
-      <button class="ubar-test-button clear-test">Clear cookies</button>
-      <p>Click below to set 'ubar' cookie to true. Refresh page and ubar banner will not appear.</p>
-      <button class="ubar-test-button ubar-true-test">Ubar on</button>
-      <p>Click below to set 'ubar' cookie to false. Refresh page and ubar module will redirect you to the Gilt app.</p>
-      <button class="ubar-test-button ubar-false-test">Ubar off</button>
-      <p>Click below to set 'ubar' cookie to true and 'redirected' cookie to true. This simulates returns to the browser after being redirected to the app. Refresh page and ubar 'manage' banner will appear.</p>
-      <button class="ubar-test-button ubar-redirect-test">Ubar redirected</button>
-
-      <p>Set time in seconds below to test redirect to app store funtionality. 2.0 is the default.</p>
-      <select class="app-redirect-config">
-        <option value="1.0">1.0</option>
-        <option value="1.2">1.2</option>
-        <option value="1.4">1.4</option>
-        <option value="1.6">1.6</option>
-        <option value="1.8">1.8</option>
-        <option selected value="2.0">2.0</option>
-        <option value="2.2">2.2</option>
-        <option value="3.0">3.0</option>
-      </select>
-      <button class="ubar-test-button ubar-timing-test">Test app store redirect</button>
+      <button class="ubar-test-button refresh-button">Refresh without params</button>
+      <form>
+        <h3>Cookie Values</h3>
+        <div>
+          <p>Value of ubar cookie</p>
+          <select data-key="ubar_cookie" name="ubar_cookie" class="cookie">
+            <option value="true">true</option>
+            <option value="false">false</option>
+            <option value="undefined">undefined</option>
+          </select>
+        </div>
+        <div>
+          <p>Value of ubar redirect cookie</p>
+          <select data-key="ubar_redirect_cookie" name="ubar_redirect_cookie" class="cookie">
+            <option value="true">true</option>
+            <option value="undefined">undefined</option>
+          </select>
+        </div>
+        <br>
+        <h3>URL Configs</h3>
+        IOS app store url: <input class="url_config" type="text" name="ios_app_store_url" data-name="ios_app_store_url" value=""><br>
+        IOS app deeplink: <input class="url_config" type="text" name="ios_app_deep_link" data-name="ios_app_deep_link" value=""><br>
+        Android app store url: <input class="url_config" type="text" name="android_app_store_url" data-name="android_app_store_url" value=""><br>
+        Android app deeplink: <input class="url_config" type="text" name="android_app_deep_link" data-name="android_app_deep_link" value=""><br>
+        Windows app store url: <input class="url_config" type="text" name="windows_app_store_url" data-name="windows_app_store_url" value=""><br>
+        Windows app deeplink: <input class="url_config" type="text" name="windows_app_deep_link" data-name="windows_app_deep_link" value=""><br>
+        <h3>Timing Configs</h3>
+        <div data-name="enabled_time">
+          <p>Ubar cookie 'true' expiration:</p>
+          Time: <select class="select_config" name="enabled_time">
+            <option value="10 seconds">10 seconds</option>
+            <option value="30 seconds">30 seconds</option>
+            <option value="60 seconds">60 seconds</option>
+            <option value="2 minutes">2</option>
+            <option value="1 week">1 week</option>
+            <option value="2 weeks">2 weeks</option>
+            <option value="1 year">1 year</option>
+          </select>
+        </div>
+        <div data-name="disabled_time">
+          <p>Ubar cookie 'false' expiration:</p>
+          Time: <select class="select_config" name="disabled_time">
+            <option value="10 seconds">10 seconds</option>
+            <option value="30 seconds">30 seconds</option>
+            <option value="60 seconds">60 seconds</option>
+            <option value="2 minutes">2</option>
+            <option value="1 week">1 week</option>
+            <option value="2 weeks">2 weeks</option>
+          </select>
+        </div>
+        <div data-name="manage_window_time">
+          <p>Ubar redirected 'on' expiration:</p>
+          Time: <select class="select_config" name="manage_window_time">
+            <option value="10 seconds">10 seconds</option>
+            <option value="30 seconds">30 seconds</option>
+            <option value="60 seconds">60 seconds</option>
+            <option value="2 minutes">2 minutes</option>
+            <option value="4 minutes">4 minutes</option>
+          </select>
+        </div>
+        <div data-name="app_store_redirect">
+          <p>Redirect to app store interval:</p>
+          Time: <select class="select_config" name="app_store_redirect">
+            <option value="0.4 seconds">0.4 seconds</option>
+            <option value="0.6 seconds">0.6 seconds</option>
+            <option value="0.8 seconds">0.8 seconds</option>
+            <option value="1.0 seconds">1.0 seconds</option>
+            <option value="1.2 seconds">1.2 seconds</option>
+            <option value="1.4 seconds">1.4 seconds</option>
+            <option value="1.6 seconds">1.6 seconds</option>
+            <option value="1.8 seconds">1.8 seconds</option>
+            <option value="2.0 seconds">2.0 seconds</option>
+            <option value="2.2 seconds">2.2 seconds</option>
+            <option value="3.0 seconds">3.0 seconds</option>
+            <option value="4.0 seconds">4.0 seconds</option>
+            <option value="5.0 seconds">5.0 seconds</option>
+          </select>
+        </div>
+        <br>
+        <h3>Supported Devices</h3>
+        <div data-name="ios_support">
+          <p>Support IOS:</p>
+          <select class="select_config" name="ios_support">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+        <div data-name="min_ios_support">
+          <p>Minimum version of IOS to support:</p>
+          <select class="select_config" name="min_ios_support">
+            <option value="0">Any</option>
+            <option value="5.0">5.0</option>
+            <option value="5.1">5.1</option>
+            <option value="6.0">8.0</option>
+            <option value="6.1">6.1</option>
+            <option value="7.0">7.0</option>
+            <option value="7.1">7.1</option>
+            <option value="8.0">8.0</option>
+            <option value="8.2">8.2</option>
+          </select>
+        </div>
+        <div data-name="android_support">
+          <p>Support Android:</p>
+          <select class="select_config" name="android_support">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+        <div data-name="min_android_support">
+          <p>Minimum version of Android to support:</p>
+          <select class="select_config" name="min_android_support">
+            <option value="0">Any</option>
+            <option value="2.3">2.3</option>
+            <option value="4.0">4.0</option>
+            <option value="4.1">4.1</option>
+            <option value="4.2">4.2</option>
+            <option value="4.3">4.3</option>
+            <option value="5.0">5.0</option>
+          </select>
+        </div>
+        <div data-name="windows_mobile_support">
+          <p>Support Windows phone:</p>
+          <select class="select_config" name="windows_mobile_support">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+        <div data-name="min_windows_mobile_support">
+          <p>Minimum version of Windows phone to support:</p>
+          <select class="select_config" name="min_windows_mobile_support">
+            <option value="0">Any</option>
+            <option value="7.0">7.0</option>
+            <option value="8.0">8.0</option>
+            <option value="9.0">9.0</option>
+            <option value="10.0">10.0</option>
+            <option value="Infinity">Infinity</option>
+          </select>
+        </div>
+        <button class="ubar-test-button test-submit">Submit</button>
+      </form>
     </div>
   </body>
 </html>
