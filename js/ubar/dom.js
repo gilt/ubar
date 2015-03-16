@@ -1,32 +1,33 @@
 (function() {
 'use strict';
 
-var
-  handlebars = require('handlebars'),
-  when = require('when'),
-  request = require('reqwest');
+  var
+    handlebars = require('handlebars'),
+    when = require('when'),
+    request = require('reqwest');
 
-var templateCache = {};
+  var templateCache = {};
 
-handlebars.templates = handlebars.templates || {};
+  handlebars.templates = handlebars.templates || {};
 
-function loadTemplate (templateUrl) {
-  if (!templateCache[templateUrl]) {
-    templateCache[templateUrl] = request({
-      url : templateUrl,
-      dataType : 'text'
-    }).then(function (xhr) {
-      return compileTemplate(templateUrl, xhr.responseText)({});
-    });
+  function loadTemplate (templateUrl) {
+
+    if (!templateCache[templateUrl]) {
+      templateCache[templateUrl] = request({
+        url : templateUrl,
+        dataType : 'text'
+      }).then(function (xhr) {
+        return compileTemplate(templateUrl, JSON.parse(xhr).responseText)({});
+      });
+    }
+
+    return templateCache[templateUrl];
   }
 
-  return templateCache[templateUrl];
-}
-
-function compileTemplate (templateUrl, templateString) {
-  handlebars.templates[templateUrl] = handlebars.compile(templateString);
-  return handlebars.templates[templateUrl];
-}
+  function compileTemplate (templateUrl, templateString) {
+    handlebars.templates[templateUrl] = handlebars.compile(templateString);
+    return handlebars.templates[templateUrl];
+  }
 
   /**
    * View class responsible for rendering the UBAR banners
@@ -75,7 +76,8 @@ function compileTemplate (templateUrl, templateString) {
    */
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
-      this.banner.parentElement.remove();
+      document.body.removeChild(this.banner.parentElement);
+      this.banner.parentElement = undefined;
       this.banner = undefined;
     }
   };
@@ -107,4 +109,5 @@ function compileTemplate (templateUrl, templateString) {
   };
 
   module.exports = UbarDom;
+
 })();

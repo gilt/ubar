@@ -1,3 +1,3 @@
 var gulp  = require('gulp');
 
-gulp.task('test', ['js']);
+gulp.task('test', ['mochify-phantomjs']);
