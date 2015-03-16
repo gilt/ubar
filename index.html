@@ -9,38 +9,52 @@
     <script src="ubar.js"></script>
   </head>
   <body>
-    <div class="test-button-wrapper">
+    <div class="test-page">
       <h1>Welcome to Ubar!</h1>
-      <button class="ubar-test-button refresh-button">Refresh without params</button>
       <form>
+        <a class="ubar-test-button refresh-button">Refresh w/o params</a>
+        <button class="ubar-test-button test-submit">Submit</button>
         <h3>Cookie Values</h3>
-        <div>
-          <p>Value of ubar cookie</p>
+        <div class="config-wrapper">
+          <p>Value of 'ubar' cookie:</p>
           <select data-key="ubar_cookie" name="ubar_cookie" class="cookie">
             <option value="true">true</option>
             <option value="false">false</option>
             <option value="undefined">undefined</option>
           </select>
         </div>
-        <div>
-          <p>Value of ubar redirect cookie</p>
+        <div class="config-wrapper">
+          <p>Value of 'ubar redirect' cookie:</p>
           <select data-key="ubar_redirect_cookie" name="ubar_redirect_cookie" class="cookie">
             <option value="true">true</option>
             <option value="undefined">undefined</option>
           </select>
         </div>
-        <br>
         <h3>URL Configs</h3>
-        IOS app store url: <input class="url_config" type="text" name="ios_app_store_url" data-name="ios_app_store_url" value=""><br>
-        IOS app deeplink: <input class="url_config" type="text" name="ios_app_deep_link" data-name="ios_app_deep_link" value=""><br>
-        Android app store url: <input class="url_config" type="text" name="android_app_store_url" data-name="android_app_store_url" value=""><br>
-        Android app deeplink: <input class="url_config" type="text" name="android_app_deep_link" data-name="android_app_deep_link" value=""><br>
-        Windows app store url: <input class="url_config" type="text" name="windows_app_store_url" data-name="windows_app_store_url" value=""><br>
-        Windows app deeplink: <input class="url_config" type="text" name="windows_app_deep_link" data-name="windows_app_deep_link" value=""><br>
+        <div class="text-configs">
+          <div>
+            IOS app store url: <input class="url_config" type="text" name="ios_app_store_url" data-name="ios_app_store_url" value="">
+          </div>
+          <div>
+            IOS app deeplink: <input class="url_config" type="text" name="ios_app_deep_link" data-name="ios_app_deep_link" value="">
+          </div>
+          <div>
+            Android app store url: <input class="url_config" type="text" name="android_app_store_url" data-name="android_app_store_url" value="">
+          </div>
+          <div>
+            Android app deeplink: <input class="url_config" type="text" name="android_app_deep_link" data-name="android_app_deep_link" value="">
+          </div>
+          <div>
+            Windows app store url: <input class="url_config" type="text" name="windows_app_store_url" data-name="windows_app_store_url" value="">
+          </div>
+          <div>
+            Windows app deeplink: <input class="url_config" type="text" name="windows_app_deep_link" data-name="windows_app_deep_link" value="">
+          </div>
+        </div>
         <h3>Timing Configs</h3>
-        <div data-name="enabled_time">
+        <div class="config-wrapper">
           <p>Ubar cookie 'true' expiration:</p>
-          Time: <select class="select_config" name="enabled_time">
+          <select class="select_config" name="enabled_time">
             <option value="10 seconds">10 seconds</option>
             <option value="30 seconds">30 seconds</option>
             <option value="60 seconds">60 seconds</option>
@@ -50,9 +64,9 @@
             <option value="1 year">1 year</option>
           </select>
         </div>
-        <div data-name="disabled_time">
+        <div class="config-wrapper">
           <p>Ubar cookie 'false' expiration:</p>
-          Time: <select class="select_config" name="disabled_time">
+          <select class="select_config" name="disabled_time">
             <option value="10 seconds">10 seconds</option>
             <option value="30 seconds">30 seconds</option>
             <option value="60 seconds">60 seconds</option>
@@ -61,9 +75,9 @@
             <option value="2 weeks">2 weeks</option>
           </select>
         </div>
-        <div data-name="manage_window_time">
+        <div class="config-wrapper">
           <p>Ubar redirected 'on' expiration:</p>
-          Time: <select class="select_config" name="manage_window_time">
+          <select class="select_config" name="manage_window_time">
             <option value="10 seconds">10 seconds</option>
             <option value="30 seconds">30 seconds</option>
             <option value="60 seconds">60 seconds</option>
@@ -71,9 +85,9 @@
             <option value="4 minutes">4 minutes</option>
           </select>
         </div>
-        <div data-name="app_store_redirect">
+        <div class="config-wrapper">
           <p>Redirect to app store interval:</p>
-          Time: <select class="select_config" name="app_store_redirect">
+          <select class="select_config" name="app_store_redirect">
             <option value="0.4 seconds">0.4 seconds</option>
             <option value="0.6 seconds">0.6 seconds</option>
             <option value="0.8 seconds">0.8 seconds</option>
@@ -91,14 +105,14 @@
         </div>
         <br>
         <h3>Supported Devices</h3>
-        <div data-name="ios_support">
+        <div class="config-wrapper">
           <p>Support IOS:</p>
           <select class="select_config" name="ios_support">
             <option value="true">true</option>
             <option value="false">false</option>
           </select>
         </div>
-        <div data-name="min_ios_support">
+        <div class="config-wrapper">
           <p>Minimum version of IOS to support:</p>
           <select class="select_config" name="min_ios_support">
             <option value="0">Any</option>
@@ -112,14 +126,14 @@
             <option value="8.2">8.2</option>
           </select>
         </div>
-        <div data-name="android_support">
+        <div class="config-wrapper">
           <p>Support Android:</p>
           <select class="select_config" name="android_support">
             <option value="true">true</option>
             <option value="false">false</option>
           </select>
         </div>
-        <div data-name="min_android_support">
+        <div class="config-wrapper">
           <p>Minimum version of Android to support:</p>
           <select class="select_config" name="min_android_support">
             <option value="0">Any</option>
@@ -131,15 +145,15 @@
             <option value="5.0">5.0</option>
           </select>
         </div>
-        <div data-name="windows_mobile_support">
-          <p>Support Windows phone:</p>
+        <div class="config-wrapper">
+          <p>Support Windows:</p>
           <select class="select_config" name="windows_mobile_support">
             <option value="true">true</option>
             <option value="false">false</option>
           </select>
         </div>
-        <div data-name="min_windows_mobile_support">
-          <p>Minimum version of Windows phone to support:</p>
+        <div class="config-wrapper">
+          <p>Minimum version of Windows to support:</p>
           <select class="select_config" name="min_windows_mobile_support">
             <option value="0">Any</option>
             <option value="7.0">7.0</option>
@@ -149,7 +163,7 @@
             <option value="Infinity">Infinity</option>
           </select>
         </div>
-        <button class="ubar-test-button test-submit">Submit</button>
+        <button class="ubar-test-button test-submit test-submit-last">Submit</button>
       </form>
     </div>
   </body>
