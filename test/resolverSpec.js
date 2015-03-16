@@ -13,8 +13,6 @@
 
   var sinonSandbox;
 
-
-
   describe('ubar_storage ', function () {
 
     beforeEach(function () {
