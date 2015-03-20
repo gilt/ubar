@@ -6,27 +6,17 @@
     when = require('when'),
     request = require('reqwest');
 
-  var templateCache = {};
-
-  handlebars.templates = handlebars.templates || {};
-
   function loadTemplate (templateUrl) {
-
-    if (!templateCache[templateUrl]) {
-      templateCache[templateUrl] = request({
+    return request({
         url : templateUrl,
         dataType : 'text'
       }).then(function (xhr) {
-        return compileTemplate(templateUrl, JSON.parse(xhr).responseText)({});
+        return compileTemplate(JSON.parse(xhr).responseText)({});
       });
-    }
-
-    return templateCache[templateUrl];
   }
 
-  function compileTemplate (templateUrl, templateString) {
-    handlebars.templates[templateUrl] = handlebars.compile(templateString);
-    return handlebars.templates[templateUrl];
+  function compileTemplate (templateString) {
+    return handlebars.compile(templateString);
   }
 
   /**
