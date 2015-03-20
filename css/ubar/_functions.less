@@ -1,0 +1,45 @@
+@import "_settings.less";
+
+.browser-prefix(@prop, @args) {
+  -webkit-@{prop}: @args;
+  -moz-@{prop}: @args;
+  -ms-@{prop}: @args;
+  -o-@{prop}: @args;
+  @{prop}: @args;
+}
+
+.background-clip(@mode: border-box) {
+  .browser-prefix(background-clip, @mode);
+}
+
+.border-radius(@radius: 0) {
+  .background-clip();
+  .browser-prefix(border-radius, @radius);
+}
+
+.box-shadow(@boxShadow: 0 0 0 #000) {
+  .browser-prefix(box-shadow, @boxShadow);
+}
+
+
+.buttonize (@background) {
+  background: @background;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: normal;
+  font-size: @button-font-size;
+  line-height: 1;
+  padding : @button-padding;
+  text-align: center;
+  .border-radius(@button-radius);
+
+}
+.buttonize (@background) when (lightness(@background) >= 50%) {
+  border: 1px solid @primary;
+  color : @primary;
+}
+.buttonize (@background) when (lightness(@background) < 50%) {
+  border-bottom: 2px solid darken(@accent, 5%);
+  color: @inverse;
+}

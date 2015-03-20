@@ -1,17 +1,15 @@
-// START - FOR TEST PAGE ONLY
-@import "testpage.less";
-// END - FOR TEST PAGE ONLY
+@import "_settings.less";
+@import "_functions.less";
 
-@import "helpers.less";
-
-@component-ubar-ipad-height : 100px;
-
-@ubar-image-ipad-size: 65px;
-@ubar-image-iphone-portrait-size: 45px;
-@ubar-image-iphone-landscape-size: 50px;
 
 .component-ubar {
-  border-bottom: 1px solid black;
+
+  border-bottom: 1px solid @secondary;
+  font-family: @typeface;
+  font-size: @base-font-size;
+  height: @component-height;
+  padding: 10px 0 0;
+  width: 100%;
 
   &.ubar-show {
     display: block;
@@ -24,166 +22,65 @@
   .ubar-close-button {
     background: none;
     border: none;
-    display: block;
-    font-size: 20px;
-    margin: 0;
-    padding: 0 0 0 15px;
-
-    @media @viewport-tiny,
-           @viewport-narrow {
-      padding: 5px 10px;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-
-    @media @viewport-medium,
-           @viewport-wide {
-      position: absolute;
-      top: 45px;
-    }
+    color: @secondary;
+    font-size: @title-font-size;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 
   .ubar-copy {
-    box-sizing: border-box;
-    display: inline-block;
-    padding: 16px;
-    width: 100%;
 
-    @media @viewport-tiny {
-      display: block;
+    .app-icon {
+      background: url(@icon-image) center center no-repeat;
+      background-clip: border-box;
+      display: inline-block;
+      float: left;
+      height: @icon-size;
+      margin: 0 10px 0;
+      width: @icon-size;
+      .border-radius(@icon-radius);
+      .browser-prefix(background-size, cover);
     }
 
-    @media @viewport-narrow {
-      width: 265px;
-    }
+    .ubar-text-wrapper {
 
-    @media @viewport-medium {
-      margin-left: 30px;
-      width: 40%;
-    }
+      display: inline-block;
 
-    @media @viewport-wide {
-      margin-left: 30px;
-      width: 30%;
-    }
-  }
-
-  .app-icon {
-    .border-radius(15px);
-    .box-shadow( 0 0 1px #000);
-    background: #020202;
-    display: inline-block;
-    height: @ubar-image-ipad-size;
-    padding: 10px;
-    vertical-align: bottom;
-    width: @ubar-image-ipad-size;
-
-    @media @viewport-tiny{
-      height: @ubar-image-iphone-portrait-size;
-      padding: 5px;
-      width: @ubar-image-iphone-portrait-size;
-    }
-    @media @viewport-narrow{
-      height: @ubar-image-iphone-landscape-size;
-      padding: 5px;
-      width: @ubar-image-iphone-landscape-size;
-    }
-    .svg-image{
-      height: @ubar-image-ipad-size;
-      width: @ubar-image-ipad-size;
-      @media @viewport-tiny{
-
-        height: @ubar-image-iphone-portrait-size;
-        width: @ubar-image-iphone-portrait-size;
+      .ubar-banner-title {
+        color: @primary;
+        font-size: @title-font-size;
+        margin: 0;
+        padding: 2px 0;
       }
-      @media @viewport-narrow{
-        height: @ubar-image-iphone-landscape-size;
-        width: @ubar-image-iphone-landscape-size;
+
+      .ubar-banner-desc {
+        color: @secondary;
+        margin: 0;
+        padding: 0px 0px 5px;
       }
+
     }
 
-    .letter{
-      fill : #ffffff;
-    }
-
-  }
-
-  .ubar-text-wrapper {
-    display: inline-block;
-    margin-left: 13px;
-    vertical-align: super;
-
-    @media @viewport-medium,
-           @viewport-wide {
-      padding-top: 25px;
-      vertical-align: top;
-    }
-  }
-  .ubar-banner-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-    padding-bottom: 5px;
-    word-wrap: break-word;
-  }
-
-  .ubar-banner-desc {
-    font-weight: normal;
-    margin: 0;
-    padding: 5px 0 0;
-    word-wrap: break-word;
   }
 
   .ubar-actions {
-    box-sizing: border-box;
-    display: inline-block;
-    width: 100%;
 
-    @media @viewport-tiny {
-      padding: 0 16px 10px;
-    }
-    @media @viewport-narrow {
-      padding-top: 30px;
-      vertical-align: top;
-      max-width: 285px;
-    }
+    .ubar-button-wrapper {
 
-    @media @viewport-medium,
-           @viewport-wide {
       display: inline-block;
-      padding-top: 45px;
-      vertical-align: top;
+      float: left;
+      margin: 0 10px 0 0;
+
+      .ubar-inverse-button{
+        .buttonize(@inverse);
+      }
+
+      .ubar-button {
+        .buttonize(@accent);
+      }
 
     }
 
-    @media @viewport-medium {
-      width: 45%;
-    }
-    @media @viewport-wide {
-      width: 40%;
-    }
-  }
-
-  .ubar-button-wrapper {
-    width: 49%;
-    display: inline-block;
-    text-align: center;
-  }
-  .ubar-button {
-    .buttonize;
-    .tintify;
-    box-sizing: border-box;
-    font-size: 13px;
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
-    width: 130px;
-
-    @media @viewport-wide,
-           @viewport-medium {
-      font-size: 16px;
-      width: 150px;
-    }
   }
 }
