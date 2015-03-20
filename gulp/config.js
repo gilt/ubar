@@ -11,6 +11,8 @@ var CSS_BASE_FILE = './css/ubar/ubar.less';
 var CSS_DEST_FOLDER = './';
 var CSS_DEST_FILE = 'ubar.css';
 
+var CSS_PAGE_BASE_FILE = './css/page/page.less';
+
 // SPEC configs
 var SPEC_SOURCE_FOLDER = './test/';
 var SPEC_SOURCE_FILES = SPEC_SOURCE_FOLDER + '*.js';
@@ -28,7 +30,8 @@ module.exports = {
 		SOURCE_FILES 	: CSS_SOURCE_FILES,
 		BASE_FILE 		: CSS_BASE_FILE,
 		DEST_FILE   	: CSS_DEST_FILE,
-		DEST_FOLDER 	: CSS_DEST_FOLDER
+		DEST_FOLDER 	: CSS_DEST_FOLDER,
+		PAGE_FILE       : CSS_PAGE_BASE_FILE
 	},
 
 	spec : {
