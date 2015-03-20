@@ -2,7 +2,6 @@
 
   var chai = require('chai');
   var should = chai.should();
-  var expect = chai.expect();
 
   var sinon = require('sinon');
   var server;
@@ -21,7 +20,7 @@
       this.server = sinon.fakeServer.create();
 
       this.server.respondWith("GET", defaultConfig.sending_template_path,
-        [ 200, { "Content-Type": "text" }, JSON.stringify({ 'responseText' : '<div class="component-ubar ubar-hide"></div>' }) ]);
+        [ 200, { "Content-Type": "text" }, JSON.stringify({ 'responseText' : templateHtml }) ]);
 
       // Wait until banner is rendered before continuing with any tests
       ubarDom.renderBanner(defaultConfig.sending_template_path).then(function() {
@@ -34,10 +33,6 @@
     afterEach(function () {
       this.server.restore();
     });
-
-    // it("renderBanner function", function () {
-    //   ubarDom.renderBanner().should.eventually.equal("foo").notify(done);
-    // });
 
     it("show function", function () {
       ubarDom.show();
