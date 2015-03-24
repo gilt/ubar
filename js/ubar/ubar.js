@@ -72,12 +72,13 @@ function create (
 
       ubarStorage.disable();
       ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
+
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      resolver.redirectToApp();
+      redirect(CONFIG.tracking_returning_banner);
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
@@ -160,6 +161,19 @@ function create (
     return config;
   }
 
+  /**
+   * Renders the on banner and binds events
+   *
+   * @private
+   * @method renderOnBanner
+   */
+  function renderOnBanner() {
+    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+      bindOnBannerButtonEvents();
+      ubarDom.show();
+      ubar_tracking.showSendingBanner();
+    });
+  }
 
   /* Initialize UBAR with parameters set in config.js
    *
