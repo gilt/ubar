@@ -1,4 +1,7 @@
 (function() {
+  /*
+    For testing only. No need to do UMD syntax :)
+  */
   var
     ubar = require('./ubar/ubar'),
     defaultConfig = require('./ubar/config'),

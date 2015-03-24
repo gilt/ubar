@@ -16,9 +16,11 @@ var source = require('vinyl-source-stream');
 var transform = require('vinyl-transform');
 var debug = require('gulp-debug');
 var rename = require('gulp-rename');
+var print = require('gulp-print');
 
 var SOURCE_FILES = require('../config').js.SOURCE_FILES;
 var BASE_FILE = require('../config').js.BASE_FILE;
+// var BASE_FILE = './js/main.js';
 var DEST_FOLDER = require('../config').js.DEST_FOLDER;
 var DEST_FILE = require('../config').js.DEST_FILE;
 var DEST_MINIFIED_FILE = require('../config').js.DEST_MINIFIED_FILE;
@@ -31,7 +33,6 @@ gulp.task('lint-js', function() {
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-
 gulp.task('bundle-js', function() {
 	var browserified = transform(function(filename) {
 		var b = browserify(filename);
@@ -40,6 +41,7 @@ gulp.task('bundle-js', function() {
 
 	return gulp.src(BASE_FILE)
 		.pipe(browserified)
+		.pipe(print())
 		.pipe(rename(DEST_FILE))
 		.pipe(gulp.dest(DEST_FOLDER));
 });
