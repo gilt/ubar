@@ -1,7 +1,7 @@
 {
   "name": "ubar",
   "group": "ubar",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "Unidirectional Browser App Resolver",
   "repository": [
     {
@@ -9,7 +9,7 @@
       "url": "git@github.com:gilt/ubar.git"
     }
   ],
-  "maintainers": [
+  "contributors": [
     {
       "name": "Archana Kumar",
       "email": "akumar@gilt.com"
@@ -26,6 +26,20 @@
       "name": "Gregory Mazurek",
       "email": "gmazurek@gilt.com"
     }
+  ],
+  "author": {
+    "name": "Gilt Groupe",
+    "email": "info@gilt.com",
+    "url": "http://gilt.com/"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/gilt/gilt-swig/blob/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "open to app"
   ],
   "dependencies": {
     "bean": "^1.0.15",
