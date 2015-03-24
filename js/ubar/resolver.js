@@ -1,8 +1,7 @@
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var device = require('./device');
-  var moment = require('moment');
+function create (device, moment) {
 
   /**
    * An object to send users out of the browser and into native apps
@@ -144,6 +143,28 @@
     self.redirectToApp(deeplink);
   };
 
-  module.exports = Resolver;
-})();
+  return Resolver;
+}
 
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['./device', 'moment'], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('./device'), require('moment'));
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_device || ubar_device,
+    exports.moment      || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_resolver' /* moduleName */));
