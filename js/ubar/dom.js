@@ -1,23 +1,28 @@
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var
-    handlebars = require('handlebars'),
-    when = require('when'),
-    request = require('reqwest');
+function create (handlebars, when, request) {
+
+  var templateCache = {};
+
+  handlebars.templates = handlebars.templates || {};
 
   function loadTemplate (templateUrl) {
-    return request({
+    if (!templateCache[templateUrl]) {
+      templateCache[templateUrl] = request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (resp) {
-        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
-        return compileTemplate(content)({});
+      }).then(function (xhr) {
+        return compileTemplate(templateUrl, xhr.responseText)({});
       });
+    }
+
+    return templateCache[templateUrl];
   }
 
-  function compileTemplate (templateString) {
-    return handlebars.compile(templateString);
+  function compileTemplate (templateUrl, templateString) {
+    handlebars.templates[templateUrl] = handlebars.compile(templateString);
+    return handlebars.templates[templateUrl];
   }
 
   /**
@@ -98,6 +103,39 @@
     this.banner.classList.add(this.UBAR_SHOW_CLASS);
   };
 
-  module.exports = UbarDom;
+  return UbarDom;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(
+    moduleName,
+    ['handlebars',
+     'when',
+     'reqwest'],
+    create
+  );
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(
+    require('handlebars'),
+    require('when'),
+    require('reqwest')
+  );
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.handlebars || handlebars,
+    exports.when       || when,
+    exports.reqwest    || reqwest
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_dom' /* moduleName */));
