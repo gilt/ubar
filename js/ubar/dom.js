@@ -1,10 +1,7 @@
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var
-    handlebars = require('handlebars'),
-    when = require('when'),
-    request = require('reqwest');
+function create (handlebars, when, request) {
 
   function loadTemplate (templateUrl) {
     return request({
@@ -98,6 +95,39 @@
     this.banner.classList.add(this.UBAR_SHOW_CLASS);
   };
 
-  module.exports = UbarDom;
+  return UbarDom;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(
+    moduleName,
+    ['handlebars',
+     'when',
+     'reqwest'],
+    create
+  );
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(
+    require('handlebars'),
+    require('when'),
+    require('reqwest')
+  );
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.handlebars || handlebars,
+    exports.when       || when,
+    exports.reqwest    || reqwest
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_dom' /* moduleName */));

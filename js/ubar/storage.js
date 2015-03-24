@@ -1,8 +1,7 @@
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var moment = require('moment');
-  var ubarHelpers = require('./helpers.js');
+function create (ubarHelpers) {
 
   var
     docCookies, // cookie getter and setter
@@ -161,6 +160,27 @@
     this.docCookies.removeItem(this.REDIRECTED_NAME);
   };
 
-  module.exports = ubarStorage;
+  return ubarStorage;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['./helpers'], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('./helpers'));
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_helpers || ubar_helpers
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_storage' /* moduleName */));
