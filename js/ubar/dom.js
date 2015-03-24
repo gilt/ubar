@@ -3,8 +3,6 @@
 
 function create (handlebars, when, request) {
 
-  var templateCache = {};
-
   handlebars.templates = handlebars.templates || {};
 
   function loadTemplate (templateUrl) {
