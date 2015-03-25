@@ -103,12 +103,12 @@ function create () {
 
 
   return {
-      turnUbarOn: _turnUbarOn,
-      turnUbarOff: _turnUbarOff,
-      attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
-      attemptToRedirectToApp: _attemptToRedirectToAppStore,
-      showReturningBanner: _showReturningBanner,
-      showSendingBanner: _showSendingBanner
+    turnUbarOn: _turnUbarOn,
+    turnUbarOff: _turnUbarOff,
+    attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
+    attemptToRedirectToApp: _attemptToRedirectToAppStore,
+    showReturningBanner: _showReturningBanner,
+    showSendingBanner: _showSendingBanner
   };
 }
 
