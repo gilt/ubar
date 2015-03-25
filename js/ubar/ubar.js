@@ -237,7 +237,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_helpers  || ubar_helpers,
     exports.ubar_resolver || ubar_resolver,
     exports.ubar_tracking || ubar_tracking,
-    exports._             || _,
+    exports._             || bean,
     exports.when          || when,
     exports.moment        || moment
   );

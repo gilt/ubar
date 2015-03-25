@@ -1,9 +1,11 @@
 // JS configs
 var JS_BASE_FILE = './js/main.js';
+var JS_MODULE_BASE_FILE = './js/ubar/ubar.js';
 var JS_SOURCE_FILES = './js/ubar/*.js';
 var JS_DEST_FOLDER = './';
 var JS_DEST_FILE = './ubar.js';
 var JS_DEST_MINIFIED_FILE = './ubar.min.js';
+var JS_MODULE_ONLY = './ubar.module.js';
 
 // CSS configs
 var CSS_SOURCE_FILES = './css/ubar/*.less';
@@ -17,13 +19,23 @@ var CSS_PAGE_BASE_FILE = './css/page/page.less';
 var SPEC_SOURCE_FOLDER = './test/';
 var SPEC_SOURCE_FILES = SPEC_SOURCE_FOLDER + '*.js';
 
+var external_dependencies = [
+	'handlebars',
+	'moment',
+	'when',
+	'bean',
+	'reqwest'
+];
+
 module.exports = {
 	js : {
 		BASE_FILE    		: JS_BASE_FILE,
+		BASE_MODULE_FILE 	: JS_MODULE_BASE_FILE,
 		SOURCE_FILES 		: JS_SOURCE_FILES,
 		DEST_FILE    		: JS_DEST_FILE,
 		DEST_MINIFIED_FILE 	: JS_DEST_MINIFIED_FILE,
-		DEST_FOLDER  		: JS_DEST_FOLDER
+		DEST_MODULE_FILE	: JS_MODULE_ONLY,
+		DEST_FOLDER  		: JS_DEST_FOLDER,
 	},
 
 	css : {
@@ -37,6 +49,8 @@ module.exports = {
 	spec : {
 		SOURCE_FILES  : SPEC_SOURCE_FILES,
 		SOURCE_FOLDER : SPEC_SOURCE_FOLDER
-	}
+	},
+
+	ext_deps : external_dependencies
 
 };
