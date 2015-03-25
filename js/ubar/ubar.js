@@ -158,6 +158,19 @@ function create (
     return config;
   }
 
+  /**
+   * Renders the on banner and binds events
+   *
+   * @private
+   * @method renderOnBanner
+   */
+  function renderOnBanner() {
+    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+      bindOnBannerButtonEvents();
+      ubarDom.show();
+      ubar_tracking.showSendingBanner();
+    });
+  }
 
   /* Initialize UBAR with parameters set in config.js
    *
