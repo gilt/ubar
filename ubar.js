@@ -1,5 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function() {
+  /*
+    For testing only. No need to do UMD syntax :)
+  */
   var
     ubar = require('./ubar/ubar'),
     defaultConfig = require('./ubar/config'),
@@ -42,6 +45,7 @@
 
   // its funky...
   function setCookiesFromConfig () {
+    storage.clear();
     if (cookieValues.ubar_cookie === true) {
       storage.enable();
     } else if (cookieValues.ubar_cookie === false) {
@@ -146,422 +150,466 @@
 })();
 
 },{"./ubar/config":2,"./ubar/helpers":5,"./ubar/storage":7,"./ubar/ubar":9,"bean":10}],2:[function(require,module,exports){
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var ubarHelpers = require('./helpers.js');
+function create (ubarHelpers) {
 
-/**
- * Urls:
- *
- * ios_app_store_url: This is the url for the iOS app store
- * for your app.
- *
- * ios_app_deep_link: This is the prefix for your iOS deep-link
- * routing.
- *
- * android_app_store_url: This is the url for the android app store
- * for your app.
- *
- * andorid_app_deep_link: This is the prefix for your dandroid deep-link
- * routing.
- *
- */
-var urlConfig = {
-  ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
-  ios_app_deep_link     : 'gilt://',
-  android_app_store_url : 'https://www.android.com',
-  android_app_deep_link : 'gilt://',
-  windows_app_store_url : 'https://www.microsoft.com/en-us/mobile/',
-  windows_app_deep_link : 'gilt://'
-};
+  /**
+   * Urls:
+   *
+   * ios_app_store_url: This is the url for the iOS app store
+   * for your app.
+   *
+   * ios_app_deep_link: This is the prefix for your iOS deep-link
+   * routing.
+   *
+   * android_app_store_url: This is the url for the android app store
+   * for your app.
+   *
+   * andorid_app_deep_link: This is the prefix for your dandroid deep-link
+   * routing.
+   *
+   */
+  var urlConfig = {
+    ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+    ios_app_deep_link     : 'gilt://',
+    android_app_store_url : 'https://www.android.com',
+    android_app_deep_link : 'gilt://',
+    windows_app_store_url : 'https://www.microsoft.com/en-us/mobile/',
+    windows_app_deep_link : 'gilt://'
+  };
 
-/**
- * Templates:
- *
- * sending_template_path: This is the initial template rendered
- * for the state where a user has not yet elected to opt
- * into the UBAR redirection.
- *
- * returning_template_path: This is the template rendered
- * for the state where a user has already opted into the UBAR
- * redirection. You can use this template for allowing a user
- * to manager her state.
- *
- */
-var templateConfig = {
-  sending_template_path   : 'templates/ubar/ubar_sending.handlebars',
-  returning_template_path : 'templates/ubar/ubar_returning.handlebars'
-};
+  /**
+   * Templates:
+   *
+   * sending_template_path: This is the initial template rendered
+   * for the state where a user has not yet elected to opt
+   * into the UBAR redirection.
+   *
+   * returning_template_path: This is the template rendered
+   * for the state where a user has already opted into the UBAR
+   * redirection. You can use this template for allowing a user
+   * to manager her state.
+   *
+   */
+  var templateConfig = {
+    sending_template_path   : 'templates/ubar/ubar_sending.handlebars',
+    returning_template_path : 'templates/ubar/ubar_returning.handlebars'
+  };
 
-/**
- * Timing:
- *
- * Disabled sets the amount of time the banner will
- * not appear to the user. It's essentially the same
- * as if the user said "ignore."
- *
- * Enabled sets the amount of time the redirection
- * will take place. This exists once a user elects
- * to participate in ubar.
- *
- * Redirected sets the amount of time the user has
- * on the web before being redirected again. Imagine
- * the user is redirected but wants to manager her
- * settings. She has this amount of time do so before
- * being redirected again.
- *
- */
-var timingConfig = {
-  enabled_time       : '1 year',
-  disabled_time      : '2 weeks',
-  manage_window_time : '60 seconds'
-};
+  /**
+   * Timing:
+   *
+   * Disabled sets the amount of time the banner will
+   * not appear to the user. It's essentially the same
+   * as if the user said "ignore."
+   *
+   * Enabled sets the amount of time the redirection
+   * will take place. This exists once a user elects
+   * to participate in ubar.
+   *
+   * Redirected sets the amount of time the user has
+   * on the web before being redirected again. Imagine
+   * the user is redirected but wants to manager her
+   * settings. She has this amount of time do so before
+   * being redirected again.
+   *
+   */
+  var timingConfig = {
+    enabled_time       : '1 year',
+    disabled_time      : '2 weeks',
+    manage_window_time : '60 seconds'
+  };
 
-/**
- * Class Names:
- *
- * These are all of the HTML classes that need to appear
- * in the templates for UBAR to function correctly. If
- * you make changes to the class names in your default templates,
- * please make those changes here as well.
- *
- */
-var classNames = {
-  component_class    : 'component-ubar',
-  on_button_class    : 'ubar-on-button',
-  install_class      : 'ubar-install-app-button',
-  off_class          : 'ubar-off-button',
-  open_in_app_class  : 'ubar-open-in-app-button',
-  close_button_class : 'ubar-close-banner-button',
-  ubar_show_class    : 'ubar-show',
-  ubar_hide_class    : 'ubar-hide'
-};
+  /**
+   * Class Names:
+   *
+   * These are all of the HTML classes that need to appear
+   * in the templates for UBAR to function correctly. If
+   * you make changes to the class names in your default templates,
+   * please make those changes here as well.
+   *
+   */
+  var classNames = {
+    component_class    : 'component-ubar',
+    on_button_class    : 'ubar-on-button',
+    install_class      : 'ubar-install-app-button',
+    off_class          : 'ubar-off-button',
+    open_in_app_class  : 'ubar-open-in-app-button',
+    close_button_class : 'ubar-close-banner-button',
+    ubar_show_class    : 'ubar-show',
+    ubar_hide_class    : 'ubar-hide'
+  };
 
-/**
- * Cookie Names:
- *
- * These are all the cookie names which will keep track of
- * a devices UBAR preferences and state.
- *
- * ubar_preference_key is whether UBAR is on, off, or unset.
- *
- * redirected_key is if the device has been redirect in the
- * last X min (where X is another config value).
- *
-*/
-var cookieNames = {
-  device_preference_cookie : 'ubar',
-  redirected_cookie        : 'ubar_redirected'
-};
+  /**
+   * Cookie Names:
+   *
+   * These are all the cookie names which will keep track of
+   * a devices UBAR preferences and state.
+   *
+   * ubar_preference_key is whether UBAR is on, off, or unset.
+   *
+   * redirected_key is if the device has been redirect in the
+   * last X min (where X is another config value).
+   *
+  */
+  var cookieNames = {
+    device_preference_cookie : 'ubar',
+    redirected_cookie        : 'ubar_redirected'
+  };
 
-/**
- * Tracking Locations:
- *
- * If you take advantage of the event tracking API
- * included with tracking.js, these are the values
- * that you will be passing. To see where they are
- * implemented, see ubar.js.
- *
- * tracking_sending_banner: this is the event when
- * the ubar banner appears but the user has not
- * yet opted in.
- *
- * tracking_returning_banner: this is the event when
- * the user sees the banner after already opting in.
- *
- * tracking_account_location and tracking_site_location
- * are Gilt-specific and so they may not apply to you.
- * tracking_account_location refers to an option on the
- *
- */
-var trackingLocations = {
-  tracking_sending_banner        : 'sending banner',
-  tracking_returning_banner      : 'returning banner',
-  tracking_account_location      : 'account',
-  tracking_immediate_redirection : 'user immediately redirected'
-};
+  /**
+   * Tracking Locations:
+   *
+   * If you take advantage of the event tracking API
+   * included with tracking.js, these are the values
+   * that you will be passing. To see where they are
+   * implemented, see ubar.js.
+   *
+   * tracking_sending_banner: this is the event when
+   * the ubar banner appears but the user has not
+   * yet opted in.
+   *
+   * tracking_returning_banner: this is the event when
+   * the user sees the banner after already opting in.
+   *
+   * tracking_account_location and tracking_site_location
+   * are Gilt-specific and so they may not apply to you.
+   * tracking_account_location refers to an option on the
+   *
+   */
+  var trackingLocations = {
+    tracking_sending_banner        : 'sending banner',
+    tracking_returning_banner      : 'returning banner',
+    tracking_account_location      : 'account',
+    tracking_immediate_redirection : 'user immediately redirected'
+  };
 
-/**
- * Redirect Interval:
- *
- * app_store_redirect is the amount of time we suspect it
- * should take for a user to have been redirected to
- * the iOS App Store and the minimum amount of time
- * before which a user could possibly return to the
- * website. For example,
- *
-*/
-var redirect_interval = {
-  app_store_redirect : '2.0 seconds'
-};
+  /**
+   * Redirect Interval:
+   *
+   * app_store_redirect is the amount of time we suspect it
+   * should take for a user to have been redirected to
+   * the iOS App Store and the minimum amount of time
+   * before which a user could possibly return to the
+   * website. For example,
+   *
+  */
+  var redirect_interval = {
+    app_store_redirect : '2.0 seconds'
+  };
 
-/**
- * Supported Devices:
- *
- * Only show UBAR if we are on a device that supports the app we
- * want to link to. Otherwise allow mobile/responsive web expereince.
- *
- */
-var supported_devices = {
-  ios_support                : true,
-  min_ios_support            : 7,
-  android_support            : false,
-  min_android_support        : 4.3,
-  windows_mobile_support     : false,
-  min_windows_mobile_support : Infinity // hmmmmm
-};
+  /**
+   * Supported Devices:
+   *
+   * Only show UBAR if we are on a device that supports the app we
+   * want to link to. Otherwise allow mobile/responsive web expereince.
+   *
+   */
+  var supported_devices = {
+    ios_support                : true,
+    min_ios_support            : 7,
+    android_support            : false,
+    min_android_support        : 4.3,
+    windows_mobile_support     : false,
+    min_windows_mobile_support : Infinity // hmmmmm
+  };
 
-/**
- * Default Config:
- *
- * We concatenate all of the configs into one defaultConfig
- * so that consumers can override the individual keys
- * above if needed when init-ing UBAR. We break up the
- * individual configs above for documentation purposes
- * and ease of understanding only.
- *
-*/
-var defaultConfig = ubarHelpers.extend(urlConfig,
-                      templateConfig,
-                      timingConfig,
-                      classNames,
-                      cookieNames,
-                      trackingLocations,
-                      redirect_interval,
-                      supported_devices);
+  /**
+   * Default Config:
+   *
+   * We concatenate all of the configs into one defaultConfig
+   * so that consumers can override the individual keys
+   * above if needed when init-ing UBAR. We break up the
+   * individual configs above for documentation purposes
+   * and ease of understanding only.
+   *
+  */
+  var defaultConfig = ubarHelpers.extend(urlConfig,
+                        templateConfig,
+                        timingConfig,
+                        classNames,
+                        cookieNames,
+                        trackingLocations,
+                        redirect_interval,
+                        supported_devices);
 
-module.exports = defaultConfig;
+  return defaultConfig;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['./ubar_helpers'], create);
 
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('./helpers'));
 
-},{"./helpers.js":5}],3:[function(require,module,exports){
-(function() {
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(exports.ubar_helpers || ubar_helpers);
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_config' /* moduleName */));
+
+},{"./helpers":5}],3:[function(require,module,exports){
+(function(exports, moduleName) {
 'use strict';
 
-var userAgent;
+function create () {
 
-/**
- * For testing only. Allows tests to set user agent globally for module.
- *
- * @protected
- * @method _setUserAgent
- *
- * @param {String} userAgentString
- */
-function _setUserAgent (userAgentString) {
-  userAgent = userAgentString;
-}
+  var userAgent;
 
-/**
- * Get user agent indirectly. Wrapper for testing purposes.
- *
- * @private
- * @method getUserAgent
- *
- * @return {String}
- */
-function getUserAgent () {
-  return userAgent ? userAgent : navigator.userAgent;
-}
-
-/**
- * Determine if device is ios based on user agent.
- *
- * @private
- * @method isIOS
- *
- * @return {Boolean}
- */
-function isIOS () {
-  return getUserAgent().match(/iPhone|iPad|iPod/i) !== null;
-}
-
-/**
- * Determine if device is android based on user agent.
- *
- * @private
- * @method isAndroid
- *
- * @return {Boolean}
- */
-function isAndroid () {
-  return getUserAgent().match(/Android/i) !== null;
-}
-
-/**
- * Determine if device is windows mobile based on user agent.
- *
- * @private
- * @method isWindowsMobile
- *
- * @return {Boolean}
- */
-function isWindowsMobile () {
-  return getUserAgent().match(/IEMobile/i) !== null;
-}
-
-/**
- * Get device ios version based on user agent.
- * Only call if we know this is an ios device.
- * Otherwise this will throw an error and return 0.
- *
- * @private
- * @method getIOSVersion
- *
- * @return {Float}
- */
-function getIOSVersion () {
-  try {
-    return parseFloat(getUserAgent().match(/OS (\d+)_(\d+)/)[0].split(" ")[1].replace("_", "."), 10);
-  }
-  catch(err) {
-    console.log('Tring to get IOS version for non-IOS device. ', err.message);
-    return 0;
+  /**
+   * For testing only. Allows tests to set user agent globally for module.
+   *
+   * @protected
+   * @method _setUserAgent
+   *
+   * @param {String} userAgentString
+   */
+  function _setUserAgent (userAgentString) {
+    userAgent = userAgentString;
   }
 
-}
-
-/**
- * Get device Android version based on user agent.
- * Only call if we know this is an Android device.
- * Otherwise this will throw an error and return 0.
- *
- * @private
- * @method getAndroidVersion
- *
- * @return {Float}
- */
-function getAndroidVersion () {
-  try {
-    return parseFloat(getUserAgent().match(/Android (\d+).(\d+)/)[0].split(" ")[1], 10);
+  /**
+   * Get user agent indirectly. Wrapper for testing purposes.
+   *
+   * @private
+   * @method getUserAgent
+   *
+   * @return {String}
+   */
+  function getUserAgent () {
+    return userAgent ? userAgent : navigator.userAgent;
   }
-  catch(err) {
-    console.log('Tring to get Android version for non-Android device. ', err.message);
-    return 0;
+
+  /**
+   * Determine if device is ios based on user agent.
+   *
+   * @private
+   * @method isIOS
+   *
+   * @return {Boolean}
+   */
+  function isIOS () {
+    return getUserAgent().match(/iPhone|iPad|iPod/i) !== null;
   }
-}
 
-/**
- * Get device windows mobile version based on user agent.
- * Only call if we know this is an windows mobile device.
- * Otherwise this will throw an error and return 0.
- *
- * @private
- * @method getWindowsMobileVersion
- *
- * @return {Float}
- */
-function getWindowsMobileVersion () {
-  try {
-    return parseFloat(getUserAgent().match(/(IEMobile\/)((\d+).(\d+))/)[0].split("/")[1], 10);
+  /**
+   * Determine if device is android based on user agent.
+   *
+   * @private
+   * @method isAndroid
+   *
+   * @return {Boolean}
+   */
+  function isAndroid () {
+    return getUserAgent().match(/Android/i) !== null;
   }
-  catch(err) {
-    console.log('Tring to get WindowsMobile version for non-WindowMobile device. ', err.message);
-    return 0;
+
+  /**
+   * Determine if device is windows mobile based on user agent.
+   *
+   * @private
+   * @method isWindowsMobile
+   *
+   * @return {Boolean}
+   */
+  function isWindowsMobile () {
+    return getUserAgent().match(/IEMobile/i) !== null;
   }
+
+  /**
+   * Get device ios version based on user agent.
+   * Only call if we know this is an ios device.
+   * Otherwise this will throw an error and return 0.
+   *
+   * @private
+   * @method getIOSVersion
+   *
+   * @return {Float}
+   */
+  function getIOSVersion () {
+    try {
+      return parseFloat(getUserAgent().match(/OS (\d+)_(\d+)/)[0].split(" ")[1].replace("_", "."), 10);
+    }
+    catch(err) {
+      console.log('Tring to get IOS version for non-IOS device. ', err.message);
+      return 0;
+    }
+
+  }
+
+  /**
+   * Get device Android version based on user agent.
+   * Only call if we know this is an Android device.
+   * Otherwise this will throw an error and return 0.
+   *
+   * @private
+   * @method getAndroidVersion
+   *
+   * @return {Float}
+   */
+  function getAndroidVersion () {
+    try {
+      return parseFloat(getUserAgent().match(/Android (\d+).(\d+)/)[0].split(" ")[1], 10);
+    }
+    catch(err) {
+      console.log('Tring to get Android version for non-Android device. ', err.message);
+      return 0;
+    }
+  }
+
+  /**
+   * Get device windows mobile version based on user agent.
+   * Only call if we know this is an windows mobile device.
+   * Otherwise this will throw an error and return 0.
+   *
+   * @private
+   * @method getWindowsMobileVersion
+   *
+   * @return {Float}
+   */
+  function getWindowsMobileVersion () {
+    try {
+      return parseFloat(getUserAgent().match(/(IEMobile\/)((\d+).(\d+))/)[0].split("/")[1], 10);
+    }
+    catch(err) {
+      console.log('Tring to get WindowsMobile version for non-WindowMobile device. ', err.message);
+      return 0;
+    }
+  }
+
+  /**
+   * Determine if device is ios and ios version greater than
+   * or equal to current minimum ios the app supports.
+   *
+   * @private
+   * @method isSupportedIOS
+   *
+   * @param version {Float} supported ios version
+   *
+   * @return {Boolean}
+   */
+  function isSupportedIOS (version) {
+    return isIOS() && getIOSVersion() >= version;
+  }
+
+  /**
+   * Determine if device is android and android version greater than
+   * or equal to current minimum ios the app supports.
+   *
+   * @private
+   * @method isSupportedAndroid
+   *
+   * @param version {Float} supported android version
+   *
+   * @return {Boolean}
+   */
+  function isSupportedAndroid (version) {
+    return isAndroid() && getAndroidVersion() >= version;
+  }
+
+  /**
+   * Determine if device is window mobile and windows mobile version greater than
+   * or equal to current minimum ios the app supports.
+   *
+   * @private
+   * @method isSupportedWindowsMobile
+   *
+   * @param version {Float} supported windows mobile version
+   *
+   * @return {Boolean}
+   */
+  function isSupportedWindowsMobile (version) {
+    return isWindowsMobile() && getWindowsMobileVersion() >= version;
+  }
+
+  /**
+   * Determine it this device supports the app we want to direct it to
+   *
+   * @public
+   * @method isAppSupported
+   *
+   * @param {Object} config  Ubar config containing device configs
+   *
+   * @return {Boolean}
+   */
+  function isAppSupported (config) {
+    return config.ios_support       && isSupportedIOS(config.min_ios_support)        ||
+      config.android_support        && isSupportedAndroid(config.min_android_support) ||
+      config.windows_mobile_support && isSupportedWindowsMobile(config.min_windows_mobile_support);
+  }
+
+  return  {
+    isAppSupported  : isAppSupported,
+    isIOS           : isIOS,
+    isAndroid       : isAndroid,
+    isWindowsMobile : isWindowsMobile,
+    _setUserAgent             : _setUserAgent,
+    _isSupportedIOS           : isSupportedIOS,
+    _isSupportedAndroid       : isSupportedAndroid,
+    _isSupportedWindowsMobile : isSupportedWindowsMobile,
+    _getIOSVersion            : getIOSVersion,
+    _getAndroidVersion        : getAndroidVersion,
+    _getWindowsMobileVersion  : getWindowsMobileVersion
+  };
 }
 
-/**
- * Determine if device is ios and ios version greater than
- * or equal to current minimum ios the app supports.
- *
- * @private
- * @method isSupportedIOS
- *
- * @param version {Float} supported ios version
- *
- * @return {Boolean}
- */
-function isSupportedIOS (version) {
-  return isIOS() && getIOSVersion() >= version;
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, [], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create();
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create();
 }
 
-/**
- * Determine if device is android and android version greater than
- * or equal to current minimum ios the app supports.
- *
- * @private
- * @method isSupportedAndroid
- *
- * @param version {Float} supported android version
- *
- * @return {Boolean}
- */
-function isSupportedAndroid (version) {
-  return isAndroid() && getAndroidVersion() >= version;
-}
-
-/**
- * Determine if device is window mobile and windows mobile version greater than
- * or equal to current minimum ios the app supports.
- *
- * @private
- * @method isSupportedWindowsMobile
- *
- * @param version {Float} supported windows mobile version
- *
- * @return {Boolean}
- */
-function isSupportedWindowsMobile (version) {
-  return isWindowsMobile() && getWindowsMobileVersion() >= version;
-}
-
-/**
- * Determine it this device supports the app we want to direct it to
- *
- * @public
- * @method isAppSupported
- *
- * @param {Object} config  Ubar config containing device configs
- *
- * @return {Boolean}
- */
-function isAppSupported (config) {
-  return config.ios_support       && isSupportedIOS(config.min_ios_support)        ||
-    config.android_support        && isSupportedAndroid(config.min_android_support) ||
-    config.windows_mobile_support && isSupportedWindowsMobile(config.min_windows_mobile_support);
-}
-
-module.exports = {
-  isAppSupported  : isAppSupported,
-  isIOS           : isIOS,
-  isAndroid       : isAndroid,
-  isWindowsMobile : isWindowsMobile,
-
-  _setUserAgent             : _setUserAgent,
-  _isSupportedIOS           : isSupportedIOS,
-  _isSupportedAndroid       : isSupportedAndroid,
-  _isSupportedWindowsMobile : isSupportedWindowsMobile,
-  _getIOSVersion            : getIOSVersion,
-  _getAndroidVersion        : getAndroidVersion,
-  _getWindowsMobileVersion  : getWindowsMobileVersion
-};
-})();
+}(typeof exports === 'object' && exports || this, 'ubar_device' /* moduleName */));
 
 
 },{}],4:[function(require,module,exports){
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var
-    handlebars = require('handlebars'),
-    when = require('when'),
-    request = require('reqwest');
+function create (handlebars, when, request) {
+
+  var templateCache = {};
+
+  handlebars.templates = handlebars.templates || {};
 
   function loadTemplate (templateUrl) {
-    return request({
+    if (!templateCache[templateUrl]) {
+      templateCache[templateUrl] = request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (resp) {
-        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
-        return compileTemplate(content)({});
+      }).then(function (xhr) {
+        return compileTemplate(templateUrl, xhr.responseText)({});
       });
+    }
+
+    return templateCache[templateUrl];
   }
 
-  function compileTemplate (templateString) {
-    return handlebars.compile(templateString);
+  function compileTemplate (templateUrl, templateString) {
+    handlebars.templates[templateUrl] = handlebars.compile(templateString);
+    return handlebars.templates[templateUrl];
   }
 
   /**
@@ -611,7 +659,7 @@ module.exports = {
    */
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
-      document.body.removeChild(this.banner.parentElement);
+      this.banner.parentElement.remove();
       this.banner = undefined;
     }
   };
@@ -642,15 +690,48 @@ module.exports = {
     this.banner.classList.add(this.UBAR_SHOW_CLASS);
   };
 
-  module.exports = UbarDom;
+  return UbarDom;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(
+    moduleName,
+    ['handlebars',
+     'when',
+     'reqwest'],
+    create
+  );
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(
+    require('handlebars'),
+    require('when'),
+    require('reqwest')
+  );
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.handlebars || handlebars,
+    exports.when       || when,
+    exports.reqwest    || reqwest
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_dom' /* moduleName */));
 
 },{"handlebars":31,"reqwest":44,"when":62}],5:[function(require,module,exports){
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var moment = require('moment');
+function create (moment) {
 
   /**
    * Get Time in Moments
@@ -726,22 +807,42 @@ module.exports = {
     return obj;
   }
 
-
-  module.exports = {
+  return {
     getTimeInMoments: getTimeInMoments,
     getTimeInSeconds: getTimeInSeconds,
     isObject: isObject,
     extend: extend
   };
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['moment'], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('moment'));
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.moment || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_helpers' /* moduleName */));
+
 
 },{"moment":43}],6:[function(require,module,exports){
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var device = require('./device');
-  var moment = require('moment');
+function create (device, moment) {
 
   /**
    * An object to send users out of the browser and into native apps
@@ -883,16 +984,37 @@ module.exports = {
     self.redirectToApp(deeplink);
   };
 
-  module.exports = Resolver;
-})();
+  return Resolver;
+}
 
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['./device', 'moment'], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('./device'), require('moment'));
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_device || ubar_device,
+    exports.moment      || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_resolver' /* moduleName */));
 
 },{"./device":3,"moment":43}],7:[function(require,module,exports){
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var moment = require('moment');
-  var ubarHelpers = require('./helpers.js');
+function create (ubarHelpers) {
 
   var
     docCookies, // cookie getter and setter
@@ -1051,15 +1173,37 @@ module.exports = {
     this.docCookies.removeItem(this.REDIRECTED_NAME);
   };
 
-  module.exports = ubarStorage;
+  return ubarStorage;
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['./helpers'], create);
 
-},{"./helpers.js":5,"moment":43}],8:[function(require,module,exports){
-(function() {
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('./helpers'));
 
-  'use strict';
-  // var moment = require('moment');
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_helpers || ubar_helpers
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_storage' /* moduleName */));
+
+},{"./helpers":5}],8:[function(require,module,exports){
+(function(exports, moduleName) {
+
+'use strict';
+
+function create () {
 
   /**
   * Tracking:
@@ -1159,7 +1303,7 @@ module.exports = {
   }
 
 
-  module.exports = {
+  return {
       turnUbarOn: _turnUbarOn,
       turnUbarOff: _turnUbarOff,
       attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
@@ -1167,31 +1311,52 @@ module.exports = {
       showReturningBanner: _showReturningBanner,
       showSendingBanner: _showSendingBanner
   };
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, [], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create();
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create();
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_tracking' /* moduleName */));
 
 },{}],9:[function(require,module,exports){
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var
-    ubar_config = require('./config.js'),
-    UbarStorage = require('./storage.js'),
-    UbarDom = require('./dom.js'),
-    device = require('./device.js'),
-    ubarHelpers = require('./helpers.js'),
-    Resolver = require('./resolver.js'),
-    ubar_tracking = require('./tracking.js'),
-    bean = require('bean'),
-    moment = require('moment'),
+function create (
+  ubar_config,
+  UbarStorage,
+  UbarDom,
+  device,
+  ubarHelpers,
+  Resolver,
+  ubar_tracking,
+  bean,
+  moment
+) {
 
+  var
     CONFIG = {},
     ubarStorage, // storage instance
     ubarDom, // dom instance
     resolver; // app deeplink resolver/handler
 
   /**
-   * Binds the events of Ubar ON Banner Buttons
+   * Binds the events of Uber ON Banner Buttons
    *
    * @private
    * @method bindOnBannerButtonEvents
@@ -1206,6 +1371,7 @@ module.exports = {
       ev.preventDefault();
 
       ubarStorage.enable();
+
       ubar_tracking.turnUbarOn({ location : CONFIG.tracking_sending_banner});
 
       redirect(CONFIG.tracking_sending_banner);
@@ -1226,7 +1392,7 @@ module.exports = {
   }
 
   /**
-   * Binds the events of Ubar OFF Banner Buttons
+   * Binds the events of Uber OFF Banner Buttons
    *
    * @private
    * @method bindOffBannerButtonEvents
@@ -1240,9 +1406,9 @@ module.exports = {
     bean.on(offButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      ubarDom.remove();
       ubarStorage.disable();
-      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_returning_banner });
+      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
+
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
@@ -1255,7 +1421,7 @@ module.exports = {
       ev.preventDefault();
 
       ubarDom.remove();
-      ubarStorage.disable();
+      ubarStorage.clear();
     });
   }
 
@@ -1275,14 +1441,17 @@ module.exports = {
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
+        ubarStorage.clear();
         ubar_tracking.attemptToRedirectToAppStore({ location: location });
       };
 
     ubarStorage.setRedirected();
-    ubarDom.remove();
+
     ubar_tracking.attemptToRedirectToApp({ location: location });
 
     resolver.redirectWithFallback(successCallback, failureCallback);
+
+    ubarDom.remove();
   }
 
   /**
@@ -1339,13 +1508,13 @@ module.exports = {
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
     if (device.isAppSupported(CONFIG)) {
+
       ubarStorage = new UbarStorage( CONFIG );
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
 
-      // TODO: preload ubar off banner template here
-
       if (ubarStorage.isEnabled()) {
+
         ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);
 
       } else if (!ubarStorage.isDisabled()) {
@@ -1354,15 +1523,68 @@ module.exports = {
     }
   }
 
-  module.exports = {
+  return {
     init : init,
-    _bindOnBannerButtonEvents : bindOnBannerButtonEvents,
-    _renderOnBanner : renderOnBanner
+    _bindOnBannerButtonEvents : bindOnBannerButtonEvents
   };
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(
+    moduleName,
+    ['./config',
+     './storage',
+     './dom',
+     './device',
+     './helpers',
+     './resolver',
+     './tracking',
+     'bean',
+     'when',
+     'moment'],
+    create
+  );
 
-},{"./config.js":2,"./device.js":3,"./dom.js":4,"./helpers.js":5,"./resolver.js":6,"./storage.js":7,"./tracking.js":8,"bean":10,"moment":43}],10:[function(require,module,exports){
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(
+    require('./config'),
+    require('./storage'),
+    require('./dom'),
+    require('./device'),
+    require('./helpers'),
+    require('./resolver'),
+    require('./tracking'),
+    require('bean'),
+    require('when'),
+    require('moment')
+  );
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_config   || ubar_config,
+    exports.ubar_storage  || ubar_storage,
+    exports.ubar_dom      || ubar_dom,
+    exports.ubar_device   || ubar_device,
+    exports.ubar_helpers  || ubar_helpers,
+    exports.ubar_resolver || ubar_resolver,
+    exports.ubar_tracking || ubar_tracking,
+    exports._             || _,
+    exports.when          || when,
+    exports.moment        || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar' /* moduleName */));
+
+},{"./config":2,"./device":3,"./dom":4,"./helpers":5,"./resolver":6,"./storage":7,"./tracking":8,"bean":10,"moment":43,"when":62}],10:[function(require,module,exports){
 /*!
   * Bean - copyright (c) Jacob Thornton 2011-2012
   * https://github.com/fat/bean
@@ -2502,7 +2724,7 @@ exports["default"] = Handlebars;
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
 
-var VERSION = "3.0.0";
+var VERSION = "3.0.1";
 exports.VERSION = VERSION;var COMPILER_REVISION = 6;
 exports.COMPILER_REVISION = COMPILER_REVISION;
 var REVISION_CHANGES = {
@@ -2648,7 +2870,7 @@ function registerDefaultHelpers(instance) {
           if(context.hasOwnProperty(key)) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
-            // an itermediate keys array. 
+            // an itermediate keys array.
             if (priorKey) {
               execIteration(priorKey, i-1);
             }
@@ -3567,7 +3789,7 @@ function transformLiteralToPath(sexpr) {
     var literal = sexpr.path;
     // Casting to string here to make false and 0 literal values play nicely with the rest
     // of the system.
-    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.log);
+    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.loc);
   }
 }
 },{"../exception":27,"../utils":30,"./ast":17}],21:[function(require,module,exports){
@@ -4779,7 +5001,7 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: return $$[$0-1]; 
+case 1: return $$[$0-1];
 break;
 case 2:this.$ = new yy.Program($$[$0], null, {}, yy.locInfo(this._$));
 break;
@@ -4819,7 +5041,7 @@ case 18:
     program.chained = true;
 
     this.$ = { strip: $$[$0-2].strip, program: program, chain: true };
-  
+
 break;
 case 19:this.$ = $$[$0];
 break;
@@ -4861,7 +5083,7 @@ case 37:this.$ = yy.preparePath(true, $$[$0], this._$);
 break;
 case 38:this.$ = yy.preparePath(false, $$[$0], this._$);
 break;
-case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
+case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2];
 break;
 case 40:this.$ = [{part: $$[$0]}];
 break;
@@ -5210,22 +5432,22 @@ case 0:
                                      this.begin("mu");
                                    }
                                    if(yy_.yytext) return 14;
-                                 
+
 break;
 case 1:return 14;
 break;
 case 2:
                                    this.popState();
                                    return 14;
-                                 
+
 break;
 case 3:
                                   yy_.yytext = yy_.yytext.substr(5, yy_.yyleng-9);
                                   this.popState();
                                   return 16;
-                                 
+
 break;
-case 4: return 14; 
+case 4: return 14;
 break;
 case 5:
   this.popState();
@@ -5236,13 +5458,13 @@ case 6:return 59;
 break;
 case 7:return 62;
 break;
-case 8: return 17; 
+case 8: return 17;
 break;
 case 9:
                                   this.popState();
                                   this.begin('raw');
                                   return 21;
-                                 
+
 break;
 case 10:return 53;
 break;
@@ -5717,7 +5939,7 @@ WhitespaceControl.prototype.MustacheStatement = function(mustache) {
   return mustache.strip;
 };
 
-WhitespaceControl.prototype.PartialStatement = 
+WhitespaceControl.prototype.PartialStatement =
     WhitespaceControl.prototype.CommentStatement = function(node) {
   /* istanbul ignore next */
   var strip = node.strip || {};
@@ -6130,21 +6352,23 @@ function indexOf(array, value) {
 
 exports.indexOf = indexOf;
 function escapeExpression(string) {
-  // don't escape SafeStrings, since they're already safe
-  if (string && string.toHTML) {
-    return string.toHTML();
-  } else if (string == null) {
-    return "";
-  } else if (!string) {
-    return string + '';
+  if (typeof string !== 'string') {
+    // don't escape SafeStrings, since they're already safe
+    if (string && string.toHTML) {
+      return string.toHTML();
+    } else if (string == null) {
+      return '';
+    } else if (!string) {
+      return string + '';
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = '' + string;
   }
 
-  // Force a string conversion as this will be done by the append regardless and
-  // the regex test will do this transparently behind the scenes, causing issues if
-  // an object's to string has escaped characters in it.
-  string = "" + string;
-
-  if(!possible.test(string)) { return string; }
+  if (!possible.test(string)) { return string; }
   return string.replace(badChars, escapeChar);
 }
 
@@ -12079,7 +12303,7 @@ module.exports = amdefine;
 
     function timedOut() {
       self._timedOut = true
-      self.request.abort()      
+      self.request.abort()
     }
 
     function error(resp, msg, t) {

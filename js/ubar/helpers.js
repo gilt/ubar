@@ -1,7 +1,7 @@
-(function() {
-  'use strict';
+(function(exports, moduleName) {
+'use strict';
 
-  var moment = require('moment');
+function create (moment) {
 
   /**
    * Get Time in Moments
@@ -77,12 +77,33 @@
     return obj;
   }
 
-
-  module.exports = {
+  return {
     getTimeInMoments: getTimeInMoments,
     getTimeInSeconds: getTimeInSeconds,
     isObject: isObject,
     extend: extend
   };
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, ['moment'], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(require('moment'));
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.moment || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_helpers' /* moduleName */));
+

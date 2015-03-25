@@ -1,17 +1,19 @@
-(function() {
+(function(exports, moduleName) {
 'use strict';
 
-  var
-    ubar_config = require('./config.js'),
-    UbarStorage = require('./storage.js'),
-    UbarDom = require('./dom.js'),
-    device = require('./device.js'),
-    ubarHelpers = require('./helpers.js'),
-    Resolver = require('./resolver.js'),
-    ubar_tracking = require('./tracking.js'),
-    bean = require('bean'),
-    moment = require('moment'),
+function create (
+  ubar_config,
+  UbarStorage,
+  UbarDom,
+  device,
+  ubarHelpers,
+  Resolver,
+  ubar_tracking,
+  bean,
+  moment
+) {
 
+  var
     CONFIG = {},
     ubarStorage, // storage instance
     ubarDom, // dom instance
@@ -33,6 +35,7 @@
       ev.preventDefault();
 
       ubarStorage.enable();
+
       ubar_tracking.turnUbarOn({ location : CONFIG.tracking_sending_banner});
 
       redirect(CONFIG.tracking_sending_banner);
@@ -155,6 +158,19 @@
     return config;
   }
 
+  /**
+   * Renders the on banner and binds events
+   *
+   * @private
+   * @method renderOnBanner
+   */
+  function renderOnBanner() {
+    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+      bindOnBannerButtonEvents();
+      ubarDom.show();
+      ubar_tracking.showSendingBanner();
+    });
+  }
 
   /* Initialize UBAR with parameters set in config.js
    *
@@ -181,10 +197,63 @@
     }
   }
 
-  module.exports = {
+  return {
     init : init,
-    _bindOnBannerButtonEvents : bindOnBannerButtonEvents,
-    _renderOnBanner : renderOnBanner
+    _bindOnBannerButtonEvents : bindOnBannerButtonEvents
   };
+}
 
-})();
+if (typeof define === 'function' && define.amd) {
+  define(
+    moduleName,
+    ['./config',
+     './storage',
+     './dom',
+     './device',
+     './helpers',
+     './resolver',
+     './tracking',
+     'bean',
+     'when',
+     'moment'],
+    create
+  );
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create(
+    require('./config'),
+    require('./storage'),
+    require('./dom'),
+    require('./device'),
+    require('./helpers'),
+    require('./resolver'),
+    require('./tracking'),
+    require('bean'),
+    require('when'),
+    require('moment')
+  );
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create(
+    exports.ubar_config   || ubar_config,
+    exports.ubar_storage  || ubar_storage,
+    exports.ubar_dom      || ubar_dom,
+    exports.ubar_device   || ubar_device,
+    exports.ubar_helpers  || ubar_helpers,
+    exports.ubar_resolver || ubar_resolver,
+    exports.ubar_tracking || ubar_tracking,
+    exports._             || bean,
+    exports.when          || when,
+    exports.moment        || moment
+  );
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar' /* moduleName */));
