@@ -18,7 +18,7 @@
     resolver; // app deeplink resolver/handler
 
   /**
-   * Binds the events of Uber ON Banner Buttons
+   * Binds the events of Ubar ON Banner Buttons
    *
    * @private
    * @method bindOnBannerButtonEvents
@@ -33,7 +33,6 @@
       ev.preventDefault();
 
       ubarStorage.enable();
-
       ubar_tracking.turnUbarOn({ location : CONFIG.tracking_sending_banner});
 
       redirect(CONFIG.tracking_sending_banner);
@@ -54,7 +53,7 @@
   }
 
   /**
-   * Binds the events of Uber OFF Banner Buttons
+   * Binds the events of Ubar OFF Banner Buttons
    *
    * @private
    * @method bindOffBannerButtonEvents
@@ -68,21 +67,22 @@
     bean.on(offButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubarDom.remove();
       ubarStorage.disable();
-      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
+      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_returning_banner });
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      resolver.redirectToApp();
+      redirect(CONFIG.tracking_returning_banner);
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
       ubarDom.remove();
-      ubarStorage.clear();
+      ubarStorage.disable();
     });
   }
 
@@ -102,17 +102,14 @@
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
-        ubarStorage.clear();
         ubar_tracking.attemptToRedirectToAppStore({ location: location });
       };
 
     ubarStorage.setRedirected();
-
+    ubarDom.remove();
     ubar_tracking.attemptToRedirectToApp({ location: location });
 
     resolver.redirectWithFallback(successCallback, failureCallback);
-
-    ubarDom.remove();
   }
 
   /**
@@ -172,6 +169,8 @@
       ubarStorage = new UbarStorage( CONFIG );
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
+
+      // TODO: preload ubar off banner template here
 
       if (ubarStorage.isEnabled()) {
         ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);

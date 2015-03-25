@@ -10,8 +10,9 @@
     return request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (xhr) {
-        return compileTemplate(JSON.parse(xhr).responseText)({});
+      }).then(function (resp) {
+        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+        return compileTemplate(content)({});
       });
   }
 
@@ -67,7 +68,6 @@
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
       document.body.removeChild(this.banner.parentElement);
-      this.banner.parentElement = undefined;
       this.banner = undefined;
     }
   };

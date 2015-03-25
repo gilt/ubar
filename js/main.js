@@ -41,7 +41,6 @@
 
   // its funky...
   function setCookiesFromConfig () {
-    storage.clear();
     if (cookieValues.ubar_cookie === true) {
       storage.enable();
     } else if (cookieValues.ubar_cookie === false) {
