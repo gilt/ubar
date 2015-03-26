@@ -22,9 +22,9 @@ function create (ubarHelpers) {
   var urlConfig = {
     ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
     ios_app_deep_link     : 'gilt://',
-    android_app_store_url : 'https://www.android.com',
+    android_app_store_url : 'https://play.google.com/store/apps/details?id=com.gilt.android&hl=en',
     android_app_deep_link : 'gilt://',
-    windows_app_store_url : 'https://www.microsoft.com/en-us/mobile/',
+    windows_app_store_url : 'http://www.windowsphone.com/en-us/store/app/gilt/fff0a9b7-074c-4a43-805d-cb6c81e319f8',
     windows_app_deep_link : 'gilt://'
   };
 
