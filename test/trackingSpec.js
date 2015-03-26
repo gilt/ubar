@@ -1,10 +1,10 @@
 (function() {
 
   var chai = require('chai');
-  var moment = require('moment');
   var should = chai.should();
 
   var ubarTracking = require('../js/ubar/tracking');
+  var subscribe = require('../js/ubar/pubsub').subscribe;
 
 
   describe("ubarTracking ", function () {
@@ -15,34 +15,88 @@
     afterEach(function () {
     });
 
-    it("_turnUbarOn is a no-op", function () {
-      ubarTracking.turnUbarOn().should.equal(true);
-      ubarTracking.turnUbarOn().should.not.equal(false);
+    it("turnUbarOn publishes an event with key: turnedUbarOn", function () {
+      var test = false;
+
+      subscribe('turnedUbarOn', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.turnUbarOn();
+
+      test.should.equal(true);
     });
 
-    it("_turnUbarOff is a no-op", function () {
-      ubarTracking.turnUbarOff().should.equal(true);
-      ubarTracking.turnUbarOff().should.not.equal(false);
+    it("turnUbarOff publishes an event with key: turnedUbarOff", function () {
+      var test = false;
+
+      subscribe('turnedUbarOff', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.turnUbarOff();
+
+      test.should.equal(true);
     });
 
-    it("_attemptToRedirectToAppStore is a no-op", function () {
-      ubarTracking.attemptToRedirectToAppStore().should.equal(true);
-      ubarTracking.attemptToRedirectToAppStore().should.not.equal(false);
+    it("attemptToRedirectToAppStore publishes an event with key: attemptedToRedirectToAppStore", function () {
+      var test = false;
+
+      subscribe('attemptedToRedirectToAppStore', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.attemptToRedirectToAppStore();
+
+      test.should.equal(true);
     });
 
-    it("_attemptToRedirectToApp is a no-op", function () {
-      ubarTracking.attemptToRedirectToApp().should.equal(true);
-      ubarTracking.attemptToRedirectToApp().should.not.equal(false);
+    it("attemptToRedirectToApp publishes an event with key: attemptedToRedirectToApp", function () {
+      var test = false;
+
+      subscribe('attemptedToRedirectToApp', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.attemptToRedirectToApp();
+
+      test.should.equal(true);
     });
 
-    it("_showReturningBanner is a no-op", function () {
-      ubarTracking.showReturningBanner().should.equal(true);
-      ubarTracking.showReturningBanner().should.not.equal(false);
+    it("showReturningBanner publishes an event with key: showedReturningBanner", function () {
+      var test = false;
+
+      subscribe('showedReturningBanner', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.showReturningBanner();
+
+      test.should.equal(true);
     });
 
-    it("_showSendingBanner is a no-op", function () {
-      ubarTracking.showSendingBanner().should.equal(true);
-      ubarTracking.showSendingBanner().should.not.equal(false);
+    it("showSendngBanner publishes an event with key: showedSendingBanner", function () {
+      var test = false;
+
+      subscribe('showedSendingBanner', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.showSendingBanner();
+
+      test.should.equal(true);
     });
   });
 

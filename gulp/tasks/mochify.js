@@ -21,4 +21,4 @@ gulp.task('mochify-cover', function () {
     .bundle();
 });
 
-gulp.task('mochify', ['mochify-phantomjs' /*, 'mochify-wd'*/ ,'mochify-cover']);
+gulp.task('mochify', ['mochify-phantomjs' /*, 'mochify-wd','mochify-cover' */ ]);

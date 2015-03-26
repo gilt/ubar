@@ -225,19 +225,90 @@ if (typeof define === 'function' && define.amd) {
 ;(function(exports, moduleName) {
 'use strict';
 
+/**
+ * A very simple publisher subscriber system for exposing potential tracking events
+*/
+function create () {
+  var topics = {};
+
+  /**
+   * Add a listener to a topic.
+   *
+   * @public
+   * @method subscribe
+   *
+   * @param {String}  topic name
+   * @param {Function}
+  */
+  function subscribe (topic, listener) {
+    if (topic === '' || topic === undefined) return;
+    if (!topics.hasOwnProperty(topic)) topics[topic] = [];
+
+    topics[topic].push(listener);
+  }
+
+  /**
+   * Call all listeners for a given topic with some data.
+   *
+   * @public
+   * @method publish
+   *
+   * @param {String}  topic name. If topic does not exist, return.
+   * @param {Any}  Passes data to listener functions. If data is undefined, pass empty object.
+  */
+  function publish (topic, data) {
+    if (!topics.hasOwnProperty(topic)) return;
+
+    for (var i = 0; i < topics[topic].length; i++) {
+      if (typeof topics[topic][i] === 'function') {
+        topics[topic][i](data != undefined ? data : {});
+      }
+    }
+  }
+
+  return {
+    subscribe : subscribe,
+    publish : publish
+  };
+}
+
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, [], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create();
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create();
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_pubsub' /* moduleName */));
+
+;(function(exports, moduleName) {
+'use strict';
+
 function create (handlebars, when, request) {
 
   function loadTemplate (templateUrl) {
     return request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (xhr) {
-        return compileTemplate(JSON.parse(xhr).responseText)({});
+      }).then(function (resp) {
+        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+        return compileTemplate(content);
       });
   }
 
   function compileTemplate (templateString) {
-    return handlebars.compile(templateString);
+    return handlebars.compile(templateString)({});
   }
 
   /**
@@ -288,7 +359,6 @@ function create (handlebars, when, request) {
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
       document.body.removeChild(this.banner.parentElement);
-      this.banner.parentElement = undefined;
       this.banner = undefined;
     }
   };
@@ -824,7 +894,7 @@ if (typeof define === 'function' && define.amd) {
 
 'use strict';
 
-function create () {
+function create (pubsub) {
 
   /**
   * Tracking:
@@ -844,10 +914,9 @@ function create () {
   *
   */
 
-
   /**
   * Called when the user elects to opt into the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOn'.
   *
   * @public
   * @method: _turnUbarOn
@@ -855,13 +924,13 @@ function create () {
   *
   */
   function _turnUbarOn ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOn', trackingLocationObject);
   }
 
 
   /**
   * Called when the user elects to opt out of the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOff'.
   *
   * @public
   * @method: _turnUbarOff
@@ -869,58 +938,60 @@ function create () {
   *
   */
   function _turnUbarOff ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOff', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
   * user to the appstore to download your app.
+  * Publish event with key 'attemptedToRedirectToAppStore'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToAppStore ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToAppStore', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
-  * user into the app.
+  * user into the app. Publish event with key 'attemptedToRedirectToApp'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToApp ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToApp', trackingLocationObject);
   }
 
 
   /**
   * Called when the returning banner is displayed to the user.
+  * Publish event with key 'showedReturningBanner'.
   *
   * @public
   * @method: _showReturningBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showReturningBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedReturningBanner', trackingLocationObject);
   }
 
 
   /**
   * Called when the initial sending banner is displayed to the
-  * user
+  * user. Publish event with key 'showedSendingBanner'.
   *
   * @public
   * @method: _showSendingBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showSendingBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedSendingBanner', trackingLocationObject);
   }
 
 
@@ -928,28 +999,30 @@ function create () {
     turnUbarOn: _turnUbarOn,
     turnUbarOff: _turnUbarOff,
     attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
-    attemptToRedirectToApp: _attemptToRedirectToAppStore,
+    attemptToRedirectToApp: _attemptToRedirectToApp,
     showReturningBanner: _showReturningBanner,
     showSendingBanner: _showSendingBanner
   };
 }
 
 if (typeof define === 'function' && define.amd) {
-  define(moduleName, [], create);
+  define(moduleName, ['./pubsub'], create);
 
 } else if (typeof module === 'object' && module.exports) {
   /*
     Using CommonJS syntax, we have to explicitly require each
     module because browserify uses static module analysis.
   */
-  module.exports = create();
+  module.exports = create(require('./pubsub'));
 
 } else {
   /*
     Gilt build syntax. 'exports' variable could be window here
     or an empty object, as in Gilt's case
   */
-  exports[moduleName] = create();
+  exports[moduleName] = create(
+    exports.pubsub || pubsub
+  );
 }
 
 }(typeof exports === 'object' && exports || this, 'ubar_tracking' /* moduleName */));
@@ -1168,6 +1241,7 @@ function create (
   UbarStorage,
   UbarDom,
   device,
+  pubsub,
   ubarHelpers,
   Resolver,
   ubar_tracking,
@@ -1182,7 +1256,7 @@ function create (
     resolver; // app deeplink resolver/handler
 
   /**
-   * Binds the events of Uber ON Banner Buttons
+   * Binds the events of Ubar ON Banner Buttons
    *
    * @private
    * @method bindOnBannerButtonEvents
@@ -1218,7 +1292,7 @@ function create (
   }
 
   /**
-   * Binds the events of Uber OFF Banner Buttons
+   * Binds the events of Ubar OFF Banner Buttons
    *
    * @private
    * @method bindOffBannerButtonEvents
@@ -1232,9 +1306,9 @@ function create (
     bean.on(offButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubarDom.remove();
       ubarStorage.disable();
-      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
-
+      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_returning_banner });
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
@@ -1247,7 +1321,7 @@ function create (
       ev.preventDefault();
 
       ubarDom.remove();
-      ubarStorage.clear();
+      ubarStorage.disable();
     });
   }
 
@@ -1267,17 +1341,14 @@ function create (
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
-        ubarStorage.clear();
         ubar_tracking.attemptToRedirectToAppStore({ location: location });
       };
 
     ubarStorage.setRedirected();
-
+    ubarDom.remove();
     ubar_tracking.attemptToRedirectToApp({ location: location });
 
     resolver.redirectWithFallback(successCallback, failureCallback);
-
-    ubarDom.remove();
   }
 
   /**
@@ -1323,26 +1394,13 @@ function create (
     return config;
   }
 
-  /**
-   * Renders the on banner and binds events
-   *
-   * @private
-   * @method renderOnBanner
-   */
-  function renderOnBanner() {
-    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
-      bindOnBannerButtonEvents();
-      ubarDom.show();
-      ubar_tracking.showSendingBanner();
-    });
-  }
-
   /* Initialize UBAR with parameters set in config.js
    *
    * @public
    * @method init
    */
   function init (user_config) {
+
     // TODO : user ubar = on param
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
@@ -1351,8 +1409,14 @@ function create (
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
 
+      // TODO: preload ubar off banner template here
+
       if (ubarStorage.isEnabled()) {
-        ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);
+        if (ubarStorage.isUserRedirected()) {
+          renderOffBanner();
+        } else {
+          redirect(CONFIG.tracking_immediate_redirection);
+        }
 
       } else if (!ubarStorage.isDisabled()) {
         renderOnBanner();
@@ -1362,8 +1426,8 @@ function create (
 
   return {
     init : init,
-    _bindOnBannerButtonEvents : bindOnBannerButtonEvents,
-    _renderOnBanner : renderOnBanner
+    subscribe : pubsub.subscribe,
+    _bindOnBannerButtonEvents : bindOnBannerButtonEvents
   };
 }
 
@@ -1374,6 +1438,7 @@ if (typeof define === 'function' && define.amd) {
      './storage',
      './dom',
      './device',
+     './pubsub',
      './helpers',
      './resolver',
      './tracking',
@@ -1393,6 +1458,7 @@ if (typeof define === 'function' && define.amd) {
     require('./storage'),
     require('./dom'),
     require('./device'),
+    require('./pubsub'),
     require('./helpers'),
     require('./resolver'),
     require('./tracking'),
@@ -1411,6 +1477,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_storage  || ubar_storage,
     exports.ubar_dom      || ubar_dom,
     exports.ubar_device   || ubar_device,
+    exports.ubar_pubsub   || ubar_pubsub,
     exports.ubar_helpers  || ubar_helpers,
     exports.ubar_resolver || ubar_resolver,
     exports.ubar_tracking || ubar_tracking,

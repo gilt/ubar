@@ -2,7 +2,7 @@
 
 'use strict';
 
-function create () {
+function create (pubsub) {
 
   /**
   * Tracking:
@@ -22,10 +22,9 @@ function create () {
   *
   */
 
-
   /**
   * Called when the user elects to opt into the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOn'.
   *
   * @public
   * @method: _turnUbarOn
@@ -33,13 +32,13 @@ function create () {
   *
   */
   function _turnUbarOn ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOn', trackingLocationObject);
   }
 
 
   /**
   * Called when the user elects to opt out of the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOff'.
   *
   * @public
   * @method: _turnUbarOff
@@ -47,58 +46,60 @@ function create () {
   *
   */
   function _turnUbarOff ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOff', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
   * user to the appstore to download your app.
+  * Publish event with key 'attemptedToRedirectToAppStore'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToAppStore ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToAppStore', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
-  * user into the app.
+  * user into the app. Publish event with key 'attemptedToRedirectToApp'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToApp ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToApp', trackingLocationObject);
   }
 
 
   /**
   * Called when the returning banner is displayed to the user.
+  * Publish event with key 'showedReturningBanner'.
   *
   * @public
   * @method: _showReturningBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showReturningBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedReturningBanner', trackingLocationObject);
   }
 
 
   /**
   * Called when the initial sending banner is displayed to the
-  * user
+  * user. Publish event with key 'showedSendingBanner'.
   *
   * @public
   * @method: _showSendingBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showSendingBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedSendingBanner', trackingLocationObject);
   }
 
 
@@ -106,28 +107,30 @@ function create () {
     turnUbarOn: _turnUbarOn,
     turnUbarOff: _turnUbarOff,
     attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
-    attemptToRedirectToApp: _attemptToRedirectToAppStore,
+    attemptToRedirectToApp: _attemptToRedirectToApp,
     showReturningBanner: _showReturningBanner,
     showSendingBanner: _showSendingBanner
   };
 }
 
 if (typeof define === 'function' && define.amd) {
-  define(moduleName, [], create);
+  define(moduleName, ['./pubsub'], create);
 
 } else if (typeof module === 'object' && module.exports) {
   /*
     Using CommonJS syntax, we have to explicitly require each
     module because browserify uses static module analysis.
   */
-  module.exports = create();
+  module.exports = create(require('./pubsub'));
 
 } else {
   /*
     Gilt build syntax. 'exports' variable could be window here
     or an empty object, as in Gilt's case
   */
-  exports[moduleName] = create();
+  exports[moduleName] = create(
+    exports.pubsub || pubsub
+  );
 }
 
 }(typeof exports === 'object' && exports || this, 'ubar_tracking' /* moduleName */));

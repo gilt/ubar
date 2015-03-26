@@ -28,6 +28,7 @@ var DEST_MODULE_FILE = require('../config').js.DEST_MODULE_FILE;
 var DEST_MINIFIED_FILE = require('../config').js.DEST_MINIFIED_FILE;
 
 var EXTRNAL_DEPENDANCIES = require('../config').ext_deps;
+var SOURCE_MAP = require('../config').source_map;
 
 
 gulp.task('lint-js', function() {
@@ -51,22 +52,9 @@ gulp.task('bundle-js', function() {
 });
 
 gulp.task('bundle-module-only', function () {
-	/*
-	this order is super important as it gets added to exports
-	sequnetially in the Gilt build.
-	*/
-	return gulp.src([
-		'js/ubar/device.js',
-		'js/ubar/dom.js',
-		'js/ubar/helpers.js',
-		'js/ubar/resolver.js',
-		'js/ubar/storage.js',
-		'js/ubar/tracking.js',
-		'js/ubar/config.js',
-		'js/ubar/ubar.js',
-		])
+	return gulp.src(SOURCE_MAP)
 		.pipe(print())
-		.pipe(concat('ubar.module.js', {newLine: ';'}))
+		.pipe(concat(DEST_MODULE_FILE, {newLine: ';'}))
 		.pipe(gulp.dest(DEST_FOLDER));
 });
 
@@ -84,4 +72,4 @@ gulp.task('uglify-js', function() {
 });
 
 
-gulp.task('js', ['lint-js', 'bundle-js', 'uglify-js']);
+gulp.task('js', ['lint-js', 'bundle-js', 'uglify-js', 'bundle-module-only']);
