@@ -1,3 +1,3 @@
 var gulp  = require('gulp');
 
-gulp.task('default', ['js', 'less', 'test', 'watch', 'watch-tests', 'run']);
+gulp.task('default', ['js', 'less', 'less-page', 'test', 'watch', 'watch-tests', 'run']);

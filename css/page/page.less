@@ -1,1 +1,209 @@
 @import "_reset.less";
+
+html, body, div, header, nav, footer, h1, h2, h3, h4, h5, p, a {
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+h2{
+  font-family: Georgia,"Times New Roman",Times,serif;
+  font-style: italic;
+  color: #383838;
+  font-weight: 500;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p{
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  color: #737373;
+  font-size: 16px;
+  line-height: 200%;
+  padding-bottom: 15px;
+}
+
+a{
+  color: #db9302;
+  text-decoration: none;
+  &:hover{
+    text-decoration: underline;
+  }
+}
+.container{
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.three-columns{
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+
+  @media (max-device-width : 667px) {
+
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+
+  }
+
+  -webkit-box-align: stretch;
+  -moz-box-align: stretch;
+  box-align: stretch;
+
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  box-direction: normal;
+
+  -webkit-box-pack: start;
+  -moz-box-pack: start;
+  box-pack: start;
+
+  div{
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+
+    -webkit-box-ordinal-group: 1;
+    -moz-box-ordinal-group: 1;
+    box-ordinal-group: 1;
+  }
+}
+
+
+.header{
+  padding: 15px 0;
+  border-bottom: solid 1px #CCCCCC;
+  .logo{
+    font-weight: bold;
+    color: #101010;
+    font-size: 25px;
+    display: inline;
+    margin-right: 10px;
+  }
+  .nav{
+    display: inline-block;
+    float: right;
+    ul{
+      display: inline-block;
+      margin: 10px 0;
+      li{
+        list-style-type: none;
+        display: inline;
+        padding: 0 10px;
+        a{
+           color: #777777;
+           text-transform: uppercase;
+           font-weight: 100;
+           &:hover{
+            color: #383838;
+            text-decoration: none;
+           }
+        }
+      }
+    }
+  }
+
+}
+
+.panel{
+  padding: 40px 0;
+}
+
+.box{
+  background: #F6F6F6;
+  padding: 10px;
+  margin: 10px;
+}
+
+.input-group{
+  display: block;
+  font-size: 14px;
+  color: #737373;
+}
+
+.horizontal-line{
+  margin: 20px 0;
+  border-bottom: solid 1px #CCC;
+}
+
+input[type="text"], input[type="number"], input[type="url"], textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  background-color: #FFFFFF;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #cccccc;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.75);
+  display: block;
+  font-family: inherit;
+  font-size: 0.77778rem;
+  height: 2.05556rem;
+  margin: 0 0 0.88889rem 0;
+  padding: 0.44444rem;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: border-color 0.15s linear, background 0.15s linear;
+  -moz-transition: border-color 0.15s linear, background 0.15s linear;
+  -ms-transition: border-color 0.15s linear, background 0.15s linear;
+  -o-transition: border-color 0.15s linear, background 0.15s linear;
+  transition: border-color 0.15s linear, background 0.15s linear;
+}
+select {
+  background-color: #FFFFFF;
+  border-radius: 0;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #cccccc;
+  color: rgba(0, 0, 0, 0.75);
+  font-family: inherit;
+  font-size: 0.77778rem;
+  line-height: normal;
+  padding: 0.44444rem;
+  border-radius: 0;
+  height: 2.05556rem;
+  width: 100%;
+}
+
+.button{
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid;
+  border-color: #c98702;
+  color: #c98702;
+  cursor: pointer;
+  float: right;
+  font-size: 15px;
+  font-weight: 700;
+  margin-left: 5px;
+  margin-top: 19px;
+  padding: 10px 14px;
+  &.expand-button{
+    width: 100%;
+  }
+}
+
+.footer{
+  width: 100%;
+  padding: 10px 0;
+  border-top: solid 1px #CCC;
+  margin-top: 60px;
+}
