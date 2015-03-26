@@ -148,7 +148,7 @@
 
 })();
 
-},{"./ubar/config":2,"./ubar/helpers":5,"./ubar/storage":7,"./ubar/ubar":9,"bean":10}],2:[function(require,module,exports){
+},{"./ubar/config":2,"./ubar/helpers":5,"./ubar/storage":8,"./ubar/ubar":10,"bean":11}],2:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -718,7 +718,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_dom' /* moduleName */));
 
-},{"handlebars":31,"reqwest":44,"when":62}],5:[function(require,module,exports){
+},{"handlebars":32,"reqwest":45,"when":63}],5:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -829,7 +829,79 @@ if (typeof define === 'function' && define.amd) {
 }(typeof exports === 'object' && exports || this, 'ubar_helpers' /* moduleName */));
 
 
-},{"moment":43}],6:[function(require,module,exports){
+},{"moment":44}],6:[function(require,module,exports){
+(function(exports, moduleName) {
+'use strict';
+
+/**
+ * A very simple publisher subscriber system for exposing potential tracking events
+*/
+function create () {
+  var topics = {};
+
+  /**
+   * Add a listener to a topic.
+   *
+   * @public
+   * @method subscribe
+   *
+   * @param {String}  topic name
+   * @param {Function}
+  */
+  function subscribe (topic, listener) {
+    if (topic === '' || topic === undefined) return;
+    if (!topics.hasOwnProperty(topic)) topics[topic] = [];
+
+    topics[topic].push(listener);
+  }
+
+  /**
+   * Call all listeners for a given topic with some data.
+   *
+   * @public
+   * @method publish
+   *
+   * @param {String}  topic name. If topic does not exist, return.
+   * @param {Any}  Passes data to listener functions. If data is undefined, pass empty object.
+  */
+  function publish (topic, data) {
+    if (!topics.hasOwnProperty(topic)) return;
+
+    for (var i = 0; i < topics[topic].length; i++) {
+      if (typeof topics[topic][i] === 'function') {
+        topics[topic][i](data != undefined ? data : {});
+      }
+    }
+  }
+
+  return {
+    subscribe : subscribe,
+    publish : publish
+  };
+}
+
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, [], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create();
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create();
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_pubsub' /* moduleName */));
+
+
+},{}],7:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1001,7 +1073,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_resolver' /* moduleName */));
 
-},{"./device":3,"moment":43}],7:[function(require,module,exports){
+},{"./device":3,"moment":44}],8:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1189,12 +1261,12 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_storage' /* moduleName */));
 
-},{"./helpers":5}],8:[function(require,module,exports){
+},{"./helpers":5}],9:[function(require,module,exports){
 (function(exports, moduleName) {
 
 'use strict';
 
-function create () {
+function create (pubsub) {
 
   /**
   * Tracking:
@@ -1214,10 +1286,9 @@ function create () {
   *
   */
 
-
   /**
   * Called when the user elects to opt into the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOn'.
   *
   * @public
   * @method: _turnUbarOn
@@ -1225,13 +1296,13 @@ function create () {
   *
   */
   function _turnUbarOn ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOn', trackingLocationObject);
   }
 
 
   /**
   * Called when the user elects to opt out of the
-  * UBAR feature.
+  * UBAR feature. Publish event with key 'ubarTurnedOff'.
   *
   * @public
   * @method: _turnUbarOff
@@ -1239,58 +1310,60 @@ function create () {
   *
   */
   function _turnUbarOff ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('turnedUbarOff', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
   * user to the appstore to download your app.
+  * Publish event with key 'attemptedToRedirectToAppStore'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToAppStore ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToAppStore', trackingLocationObject);
   }
 
 
   /**
   * Called when an attempt has been made to redirect the
-  * user into the app.
+  * user into the app. Publish event with key 'attemptedToRedirectToApp'.
   *
   * @public
   * @method: _attemptToRedirectToAppStore
   * @param {Object} { location : 'where this was called'}
   */
   function _attemptToRedirectToApp ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('attemptedToRedirectToApp', trackingLocationObject);
   }
 
 
   /**
   * Called when the returning banner is displayed to the user.
+  * Publish event with key 'showedReturningBanner'.
   *
   * @public
   * @method: _showReturningBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showReturningBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedReturningBanner', trackingLocationObject);
   }
 
 
   /**
   * Called when the initial sending banner is displayed to the
-  * user
+  * user. Publish event with key 'showedSendingBanner'.
   *
   * @public
   * @method: _showSendingBanner
   * @param {Object} { location : 'where this was called'}
   */
   function _showSendingBanner ( trackingLocationObject ) {
-    return true;
+    pubsub.publish('showedSendingBanner', trackingLocationObject);
   }
 
 
@@ -1298,33 +1371,35 @@ function create () {
     turnUbarOn: _turnUbarOn,
     turnUbarOff: _turnUbarOff,
     attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
-    attemptToRedirectToApp: _attemptToRedirectToAppStore,
+    attemptToRedirectToApp: _attemptToRedirectToApp,
     showReturningBanner: _showReturningBanner,
     showSendingBanner: _showSendingBanner
   };
 }
 
 if (typeof define === 'function' && define.amd) {
-  define(moduleName, [], create);
+  define(moduleName, ['./pubsub'], create);
 
 } else if (typeof module === 'object' && module.exports) {
   /*
     Using CommonJS syntax, we have to explicitly require each
     module because browserify uses static module analysis.
   */
-  module.exports = create();
+  module.exports = create(require('./pubsub'));
 
 } else {
   /*
     Gilt build syntax. 'exports' variable could be window here
     or an empty object, as in Gilt's case
   */
-  exports[moduleName] = create();
+  exports[moduleName] = create(
+    exports.pubsub || pubsub
+  );
 }
 
 }(typeof exports === 'object' && exports || this, 'ubar_tracking' /* moduleName */));
 
-},{}],9:[function(require,module,exports){
+},{"./pubsub":6}],10:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1333,6 +1408,7 @@ function create (
   UbarStorage,
   UbarDom,
   device,
+  pubsub,
   ubarHelpers,
   Resolver,
   ubar_tracking,
@@ -1517,6 +1593,7 @@ function create (
 
   return {
     init : init,
+    subscribe : pubsub.subscribe,
     _bindOnBannerButtonEvents : bindOnBannerButtonEvents
   };
 }
@@ -1528,6 +1605,7 @@ if (typeof define === 'function' && define.amd) {
      './storage',
      './dom',
      './device',
+     './pubsub',
      './helpers',
      './resolver',
      './tracking',
@@ -1547,6 +1625,7 @@ if (typeof define === 'function' && define.amd) {
     require('./storage'),
     require('./dom'),
     require('./device'),
+    require('./pubsub'),
     require('./helpers'),
     require('./resolver'),
     require('./tracking'),
@@ -1565,6 +1644,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_storage  || ubar_storage,
     exports.ubar_dom      || ubar_dom,
     exports.ubar_device   || ubar_device,
+    exports.ubar_pubsub   || ubar_pubsub,
     exports.ubar_helpers  || ubar_helpers,
     exports.ubar_resolver || ubar_resolver,
     exports.ubar_tracking || ubar_tracking,
@@ -1576,7 +1656,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar' /* moduleName */));
 
-},{"./config":2,"./device":3,"./dom":4,"./helpers":5,"./resolver":6,"./storage":7,"./tracking":8,"bean":10,"moment":43,"when":62}],10:[function(require,module,exports){
+},{"./config":2,"./device":3,"./dom":4,"./helpers":5,"./pubsub":6,"./resolver":7,"./storage":8,"./tracking":9,"bean":11,"moment":44,"when":63}],11:[function(require,module,exports){
 /*!
   * Bean - copyright (c) Jacob Thornton 2011-2012
   * https://github.com/fat/bean
@@ -2319,9 +2399,9 @@ if (typeof define === 'function' && define.amd) {
   return bean
 });
 
-},{}],11:[function(require,module,exports){
-
 },{}],12:[function(require,module,exports){
+
+},{}],13:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2549,7 +2629,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":13}],13:[function(require,module,exports){
+},{"_process":14}],14:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2609,7 +2689,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (global){
 "use strict";
 /*globals Handlebars: true */
@@ -2662,7 +2742,7 @@ Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./handlebars.runtime":15,"./handlebars/compiler/ast":17,"./handlebars/compiler/base":18,"./handlebars/compiler/compiler":20,"./handlebars/compiler/javascript-compiler":22}],15:[function(require,module,exports){
+},{"./handlebars.runtime":16,"./handlebars/compiler/ast":18,"./handlebars/compiler/base":19,"./handlebars/compiler/compiler":21,"./handlebars/compiler/javascript-compiler":23}],16:[function(require,module,exports){
 (function (global){
 "use strict";
 /*globals Handlebars: true */
@@ -2711,12 +2791,12 @@ Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./handlebars/base":16,"./handlebars/exception":27,"./handlebars/runtime":28,"./handlebars/safe-string":29,"./handlebars/utils":30}],16:[function(require,module,exports){
+},{"./handlebars/base":17,"./handlebars/exception":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],17:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
 
-var VERSION = "3.0.0";
+var VERSION = "3.0.1";
 exports.VERSION = VERSION;var COMPILER_REVISION = 6;
 exports.COMPILER_REVISION = COMPILER_REVISION;
 var REVISION_CHANGES = {
@@ -2955,7 +3035,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":27,"./utils":30}],17:[function(require,module,exports){
+},{"./exception":28,"./utils":31}],18:[function(require,module,exports){
 "use strict";
 var AST = {
   Program: function(statements, blockParams, strip, locInfo) {
@@ -3098,7 +3178,7 @@ var AST = {
 // Must be exported as an object rather than the root of the module as the jison lexer
 // must modify the object to operate properly.
 exports["default"] = AST;
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 var parser = require("./parser")["default"];
 var AST = require("./ast")["default"];
@@ -3127,7 +3207,7 @@ function parse(input, options) {
 }
 
 exports.parse = parse;
-},{"../utils":30,"./ast":17,"./helpers":21,"./parser":23,"./whitespace-control":26}],19:[function(require,module,exports){
+},{"../utils":31,"./ast":18,"./helpers":22,"./parser":24,"./whitespace-control":27}],20:[function(require,module,exports){
 "use strict";
 var isArray = require("../utils").isArray;
 
@@ -3282,7 +3362,7 @@ CodeGen.prototype = {
 };
 
 exports["default"] = CodeGen;
-},{"../utils":30,"source-map":32}],20:[function(require,module,exports){
+},{"../utils":31,"source-map":33}],21:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 var isArray = require("../utils").isArray;
@@ -3781,10 +3861,10 @@ function transformLiteralToPath(sexpr) {
     var literal = sexpr.path;
     // Casting to string here to make false and 0 literal values play nicely with the rest
     // of the system.
-    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.log);
+    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.loc);
   }
 }
-},{"../exception":27,"../utils":30,"./ast":17}],21:[function(require,module,exports){
+},{"../exception":28,"../utils":31,"./ast":18}],22:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 
@@ -3904,7 +3984,7 @@ exports.prepareRawBlock = prepareRawBlock;function prepareBlock(openBlock, progr
 }
 
 exports.prepareBlock = prepareBlock;
-},{"../exception":27}],22:[function(require,module,exports){
+},{"../exception":28}],23:[function(require,module,exports){
 "use strict";
 var COMPILER_REVISION = require("../base").COMPILER_REVISION;
 var REVISION_CHANGES = require("../base").REVISION_CHANGES;
@@ -4978,7 +5058,7 @@ function strictLookup(requireTerminal, compiler, parts, type) {
 }
 
 exports["default"] = JavaScriptCompiler;
-},{"../base":16,"../exception":27,"../utils":30,"./code-gen":19}],23:[function(require,module,exports){
+},{"../base":17,"../exception":28,"../utils":31,"./code-gen":20}],24:[function(require,module,exports){
 "use strict";
 /* jshint ignore:start */
 /* istanbul ignore next */
@@ -5537,7 +5617,7 @@ function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Pa
 return new Parser;
 })();exports["default"] = handlebars;
 /* jshint ignore:end */
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 var Visitor = require("./visitor")["default"];
 
@@ -5678,7 +5758,7 @@ PrintVisitor.prototype.Hash = function(hash) {
 PrintVisitor.prototype.HashPair = function(pair) {
   return pair.key + '=' + this.accept(pair.value);
 };
-},{"./visitor":25}],25:[function(require,module,exports){
+},{"./visitor":26}],26:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 var AST = require("./ast")["default"];
@@ -5802,7 +5882,7 @@ Visitor.prototype = {
 };
 
 exports["default"] = Visitor;
-},{"../exception":27,"./ast":17}],26:[function(require,module,exports){
+},{"../exception":28,"./ast":18}],27:[function(require,module,exports){
 "use strict";
 var Visitor = require("./visitor")["default"];
 
@@ -6015,7 +6095,7 @@ function omitLeft(body, i, multiple) {
 }
 
 exports["default"] = WhitespaceControl;
-},{"./visitor":25}],27:[function(require,module,exports){
+},{"./visitor":26}],28:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -6047,7 +6127,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -6268,7 +6348,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":16,"./exception":27,"./utils":30}],29:[function(require,module,exports){
+},{"./base":17,"./exception":28,"./utils":31}],30:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -6280,7 +6360,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function() {
 };
 
 exports["default"] = SafeString;
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var escape = {
@@ -6344,21 +6424,23 @@ function indexOf(array, value) {
 
 exports.indexOf = indexOf;
 function escapeExpression(string) {
-  // don't escape SafeStrings, since they're already safe
-  if (string && string.toHTML) {
-    return string.toHTML();
-  } else if (string == null) {
-    return "";
-  } else if (!string) {
-    return string + '';
+  if (typeof string !== 'string') {
+    // don't escape SafeStrings, since they're already safe
+    if (string && string.toHTML) {
+      return string.toHTML();
+    } else if (string == null) {
+      return '';
+    } else if (!string) {
+      return string + '';
+    }
+
+    // Force a string conversion as this will be done by the append regardless and
+    // the regex test will do this transparently behind the scenes, causing issues if
+    // an object's to string has escaped characters in it.
+    string = '' + string;
   }
 
-  // Force a string conversion as this will be done by the append regardless and
-  // the regex test will do this transparently behind the scenes, causing issues if
-  // an object's to string has escaped characters in it.
-  string = "" + string;
-
-  if(!possible.test(string)) { return string; }
+  if (!possible.test(string)) { return string; }
   return string.replace(badChars, escapeChar);
 }
 
@@ -6382,7 +6464,7 @@ exports.blockParams = blockParams;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 // USAGE:
 // var handlebars = require('handlebars');
 
@@ -6410,7 +6492,7 @@ if (typeof require !== 'undefined' && require.extensions) {
   require.extensions[".hbs"] = extension;
 }
 
-},{"../dist/cjs/handlebars":14,"../dist/cjs/handlebars/compiler/printer":24,"../dist/cjs/handlebars/compiler/visitor":25,"fs":11}],32:[function(require,module,exports){
+},{"../dist/cjs/handlebars":15,"../dist/cjs/handlebars/compiler/printer":25,"../dist/cjs/handlebars/compiler/visitor":26,"fs":12}],33:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -6420,7 +6502,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":38,"./source-map/source-map-generator":39,"./source-map/source-node":40}],33:[function(require,module,exports){
+},{"./source-map/source-map-consumer":39,"./source-map/source-map-generator":40,"./source-map/source-node":41}],34:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6519,7 +6601,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":41,"amdefine":42}],34:[function(require,module,exports){
+},{"./util":42,"amdefine":43}],35:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6663,7 +6745,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":35,"amdefine":42}],35:[function(require,module,exports){
+},{"./base64":36,"amdefine":43}],36:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6707,7 +6789,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":42}],36:[function(require,module,exports){
+},{"amdefine":43}],37:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6789,7 +6871,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":42}],37:[function(require,module,exports){
+},{"amdefine":43}],38:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -6877,7 +6959,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":41,"amdefine":42}],38:[function(require,module,exports){
+},{"./util":42,"amdefine":43}],39:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7454,7 +7536,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":33,"./base64-vlq":34,"./binary-search":36,"./util":41,"amdefine":42}],39:[function(require,module,exports){
+},{"./array-set":34,"./base64-vlq":35,"./binary-search":37,"./util":42,"amdefine":43}],40:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7856,7 +7938,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":33,"./base64-vlq":34,"./mapping-list":37,"./util":41,"amdefine":42}],40:[function(require,module,exports){
+},{"./array-set":34,"./base64-vlq":35,"./mapping-list":38,"./util":42,"amdefine":43}],41:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8272,7 +8354,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":39,"./util":41,"amdefine":42}],41:[function(require,module,exports){
+},{"./source-map-generator":40,"./util":42,"amdefine":43}],42:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8593,7 +8675,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":42}],42:[function(require,module,exports){
+},{"amdefine":43}],43:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
@@ -8896,7 +8978,7 @@ function amdefine(module, requireFn) {
 module.exports = amdefine;
 
 }).call(this,require('_process'),"/node_modules/handlebars/node_modules/source-map/node_modules/amdefine/amdefine.js")
-},{"_process":13,"path":12}],43:[function(require,module,exports){
+},{"_process":14,"path":13}],44:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.9.0
@@ -11943,7 +12025,7 @@ module.exports = amdefine;
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /*!
   * Reqwest! A general purpose XHR connection manager
   * license MIT (c) Dustin Diaz 2014
@@ -12560,7 +12642,7 @@ module.exports = amdefine;
   return reqwest
 });
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12579,7 +12661,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":46,"./env":58,"./makePromise":60}],46:[function(require,module,exports){
+},{"./Scheduler":47,"./env":59,"./makePromise":61}],47:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12661,7 +12743,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12689,7 +12771,7 @@ define(function() {
 	return TimeoutError;
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12746,7 +12828,7 @@ define(function() {
 
 
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13037,7 +13119,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../apply":48,"../state":61}],50:[function(require,module,exports){
+},{"../apply":49,"../state":62}],51:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13199,7 +13281,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13228,7 +13310,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13250,7 +13332,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../state":61}],53:[function(require,module,exports){
+},{"../state":62}],54:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13317,7 +13399,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13343,7 +13425,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13423,7 +13505,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../TimeoutError":47,"../env":58}],56:[function(require,module,exports){
+},{"../TimeoutError":48,"../env":59}],57:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13511,7 +13593,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../env":58,"../format":59}],57:[function(require,module,exports){
+},{"../env":59,"../format":60}],58:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13551,7 +13633,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -13628,7 +13710,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":13}],59:[function(require,module,exports){
+},{"_process":14}],60:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13686,7 +13768,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -14617,7 +14699,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 }).call(this,require('_process'))
-},{"_process":13}],61:[function(require,module,exports){
+},{"_process":14}],62:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -14654,7 +14736,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 
 /**
@@ -14885,4 +14967,4 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./lib/Promise":45,"./lib/TimeoutError":47,"./lib/apply":48,"./lib/decorators/array":49,"./lib/decorators/flow":50,"./lib/decorators/fold":51,"./lib/decorators/inspect":52,"./lib/decorators/iterate":53,"./lib/decorators/progress":54,"./lib/decorators/timed":55,"./lib/decorators/unhandledRejection":56,"./lib/decorators/with":57}]},{},[1]);
+},{"./lib/Promise":46,"./lib/TimeoutError":48,"./lib/apply":49,"./lib/decorators/array":50,"./lib/decorators/flow":51,"./lib/decorators/fold":52,"./lib/decorators/inspect":53,"./lib/decorators/iterate":54,"./lib/decorators/progress":55,"./lib/decorators/timed":56,"./lib/decorators/unhandledRejection":57,"./lib/decorators/with":58}]},{},[1]);

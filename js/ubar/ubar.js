@@ -6,6 +6,7 @@ function create (
   UbarStorage,
   UbarDom,
   device,
+  pubsub,
   ubarHelpers,
   Resolver,
   ubar_tracking,
@@ -190,6 +191,7 @@ function create (
 
   return {
     init : init,
+    subscribe : pubsub.subscribe,
     _bindOnBannerButtonEvents : bindOnBannerButtonEvents
   };
 }
@@ -201,6 +203,7 @@ if (typeof define === 'function' && define.amd) {
      './storage',
      './dom',
      './device',
+     './pubsub',
      './helpers',
      './resolver',
      './tracking',
@@ -220,6 +223,7 @@ if (typeof define === 'function' && define.amd) {
     require('./storage'),
     require('./dom'),
     require('./device'),
+    require('./pubsub'),
     require('./helpers'),
     require('./resolver'),
     require('./tracking'),
@@ -238,6 +242,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_storage  || ubar_storage,
     exports.ubar_dom      || ubar_dom,
     exports.ubar_device   || ubar_device,
+    exports.ubar_pubsub   || ubar_pubsub,
     exports.ubar_helpers  || ubar_helpers,
     exports.ubar_resolver || ubar_resolver,
     exports.ubar_tracking || ubar_tracking,

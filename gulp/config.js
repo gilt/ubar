@@ -27,6 +27,22 @@ var external_dependencies = [
 	'reqwest'
 ];
 
+/*
+this order is super important as it gets added to exports
+sequnetially in the Gilt build.
+*/
+var source_map = [
+	'js/ubar/device.js',
+	'js/ubar/pubsub.js',
+	'js/ubar/dom.js',
+	'js/ubar/helpers.js',
+	'js/ubar/resolver.js',
+	'js/ubar/storage.js',
+	'js/ubar/tracking.js',
+	'js/ubar/config.js',
+	'js/ubar/ubar.js',
+];
+
 module.exports = {
 	js : {
 		BASE_FILE    		: JS_BASE_FILE,
@@ -51,6 +67,6 @@ module.exports = {
 		SOURCE_FOLDER : SPEC_SOURCE_FOLDER
 	},
 
-	ext_deps : external_dependencies
-
+	ext_deps : external_dependencies,
+	source_map : source_map
 };
