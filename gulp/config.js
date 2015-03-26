@@ -1,17 +1,19 @@
+var MODULE_NAME = 'ubar';
+
 // JS configs
 var JS_BASE_FILE = './js/main.js';
-var JS_MODULE_BASE_FILE = './js/ubar/ubar.js';
-var JS_SOURCE_FILES = './js/ubar/*.js';
+var JS_MODULE_BASE_FILE = './js/' + MODULE_NAME + '/' + MODULE_NAME + '.js';
+var JS_SOURCE_FILES = './js/' + MODULE_NAME + '/*.js';
 var JS_DEST_FOLDER = './';
-var JS_DEST_FILE = './ubar.js';
-var JS_DEST_MINIFIED_FILE = './ubar.min.js';
-var JS_MODULE_ONLY = './ubar.module.js';
+var JS_DEST_FILE = './' + MODULE_NAME + '.js';
+var JS_DEST_MINIFIED_FILE = './' + MODULE_NAME + '.min.js';
+var JS_MODULE_ONLY = './' + MODULE_NAME + '.module.js';
 
 // CSS configs
-var CSS_SOURCE_FILES = './css/ubar/*.less';
-var CSS_BASE_FILE = './css/ubar/ubar.less';
+var CSS_SOURCE_FILES = './css/' + MODULE_NAME + '/*.less';
+var CSS_BASE_FILE = './css/' + MODULE_NAME + '/' + MODULE_NAME + '.less';
 var CSS_DEST_FOLDER = './';
-var CSS_DEST_FILE = 'ubar.css';
+var CSS_DEST_FILE = '' + MODULE_NAME + '.css';
 
 var CSS_PAGE_BASE_FILE = './css/page/page.less';
 
@@ -32,15 +34,15 @@ this order is super important as it gets added to exports
 sequnetially in the Gilt build.
 */
 var source_map = [
-	'js/ubar/device.js',
-	'js/ubar/pubsub.js',
-	'js/ubar/dom.js',
-	'js/ubar/helpers.js',
-	'js/ubar/resolver.js',
-	'js/ubar/storage.js',
-	'js/ubar/tracking.js',
-	'js/ubar/config.js',
-	'js/ubar/ubar.js',
+	'js/' + MODULE_NAME + '/device.js',
+	'js/' + MODULE_NAME + '/pubsub.js',
+	'js/' + MODULE_NAME + '/dom.js',
+	'js/' + MODULE_NAME + '/helpers.js',
+	'js/' + MODULE_NAME + '/resolver.js',
+	'js/' + MODULE_NAME + '/storage.js',
+	'js/' + MODULE_NAME + '/tracking.js',
+	'js/' + MODULE_NAME + '/config.js',
+	'js/' + MODULE_NAME + '/' + MODULE_NAME + '.js',
 ];
 
 module.exports = {
