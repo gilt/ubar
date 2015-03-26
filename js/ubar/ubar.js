@@ -122,6 +122,8 @@ function create (
    *
    * @private
    * @method renderOffBanner
+   *
+   * @return  {Promise}       Resolves to rendered template
    */
   function renderOffBanner() {
     return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
@@ -136,6 +138,8 @@ function create (
    *
    * @private
    * @method renderOnBanner
+   *
+   * @return  {Promise}       Resolves to rendered template
    */
   function renderOnBanner() {
     return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
