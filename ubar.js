@@ -45,7 +45,6 @@
 
   // its funky...
   function setCookiesFromConfig () {
-    storage.clear();
     if (cookieValues.ubar_cookie === true) {
       storage.enable();
     } else if (cookieValues.ubar_cookie === false) {
@@ -590,26 +589,18 @@ if (typeof define === 'function' && define.amd) {
 
 function create (handlebars, when, request) {
 
-  var templateCache = {};
-
-  handlebars.templates = handlebars.templates || {};
-
   function loadTemplate (templateUrl) {
-    if (!templateCache[templateUrl]) {
-      templateCache[templateUrl] = request({
+    return request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (xhr) {
-        return compileTemplate(templateUrl, xhr.responseText)({});
+      }).then(function (resp) {
+        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+        return compileTemplate(content);
       });
-    }
-
-    return templateCache[templateUrl];
   }
 
-  function compileTemplate (templateUrl, templateString) {
-    handlebars.templates[templateUrl] = handlebars.compile(templateString);
-    return handlebars.templates[templateUrl];
+  function compileTemplate (templateString) {
+    return handlebars.compile(templateString)({});
   }
 
   /**
@@ -659,7 +650,7 @@ function create (handlebars, when, request) {
    */
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
-      this.banner.parentElement.remove();
+      document.body.removeChild(this.banner.parentElement);
       this.banner = undefined;
     }
   };
@@ -1304,12 +1295,12 @@ function create () {
 
 
   return {
-      turnUbarOn: _turnUbarOn,
-      turnUbarOff: _turnUbarOff,
-      attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
-      attemptToRedirectToApp: _attemptToRedirectToAppStore,
-      showReturningBanner: _showReturningBanner,
-      showSendingBanner: _showSendingBanner
+    turnUbarOn: _turnUbarOn,
+    turnUbarOff: _turnUbarOff,
+    attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
+    attemptToRedirectToApp: _attemptToRedirectToAppStore,
+    showReturningBanner: _showReturningBanner,
+    showSendingBanner: _showSendingBanner
   };
 }
 
@@ -1356,7 +1347,7 @@ function create (
     resolver; // app deeplink resolver/handler
 
   /**
-   * Binds the events of Uber ON Banner Buttons
+   * Binds the events of Ubar ON Banner Buttons
    *
    * @private
    * @method bindOnBannerButtonEvents
@@ -1392,7 +1383,7 @@ function create (
   }
 
   /**
-   * Binds the events of Uber OFF Banner Buttons
+   * Binds the events of Ubar OFF Banner Buttons
    *
    * @private
    * @method bindOffBannerButtonEvents
@@ -1406,9 +1397,9 @@ function create (
     bean.on(offButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubarDom.remove();
       ubarStorage.disable();
-      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_sending_banner });
-
+      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_returning_banner });
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
@@ -1421,7 +1412,7 @@ function create (
       ev.preventDefault();
 
       ubarDom.remove();
-      ubarStorage.clear();
+      ubarStorage.disable();
     });
   }
 
@@ -1441,17 +1432,14 @@ function create (
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
-        ubarStorage.clear();
         ubar_tracking.attemptToRedirectToAppStore({ location: location });
       };
 
     ubarStorage.setRedirected();
-
+    ubarDom.remove();
     ubar_tracking.attemptToRedirectToApp({ location: location });
 
     resolver.redirectWithFallback(successCallback, failureCallback);
-
-    ubarDom.remove();
   }
 
   /**
@@ -1497,6 +1485,19 @@ function create (
     return config;
   }
 
+  /**
+   * Renders the on banner and binds events
+   *
+   * @private
+   * @method renderOnBanner
+   */
+  function renderOnBanner() {
+    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+      bindOnBannerButtonEvents();
+      ubarDom.show();
+      ubar_tracking.showSendingBanner();
+    });
+  }
 
   /* Initialize UBAR with parameters set in config.js
    *
@@ -1508,13 +1509,13 @@ function create (
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
     if (device.isAppSupported(CONFIG)) {
-
       ubarStorage = new UbarStorage( CONFIG );
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
 
-      if (ubarStorage.isEnabled()) {
+      // TODO: preload ubar off banner template here
 
+      if (ubarStorage.isEnabled()) {
         ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);
 
       } else if (!ubarStorage.isDisabled()) {
@@ -1576,7 +1577,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_helpers  || ubar_helpers,
     exports.ubar_resolver || ubar_resolver,
     exports.ubar_tracking || ubar_tracking,
-    exports._             || _,
+    exports._             || bean,
     exports.when          || when,
     exports.moment        || moment
   );
@@ -2724,7 +2725,7 @@ exports["default"] = Handlebars;
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
 
-var VERSION = "3.0.1";
+var VERSION = "3.0.0";
 exports.VERSION = VERSION;var COMPILER_REVISION = 6;
 exports.COMPILER_REVISION = COMPILER_REVISION;
 var REVISION_CHANGES = {
@@ -2870,7 +2871,7 @@ function registerDefaultHelpers(instance) {
           if(context.hasOwnProperty(key)) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
-            // an itermediate keys array.
+            // an itermediate keys array. 
             if (priorKey) {
               execIteration(priorKey, i-1);
             }
@@ -3789,7 +3790,7 @@ function transformLiteralToPath(sexpr) {
     var literal = sexpr.path;
     // Casting to string here to make false and 0 literal values play nicely with the rest
     // of the system.
-    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.loc);
+    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.log);
   }
 }
 },{"../exception":27,"../utils":30,"./ast":17}],21:[function(require,module,exports){
@@ -5001,7 +5002,7 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: return $$[$0-1];
+case 1: return $$[$0-1]; 
 break;
 case 2:this.$ = new yy.Program($$[$0], null, {}, yy.locInfo(this._$));
 break;
@@ -5041,7 +5042,7 @@ case 18:
     program.chained = true;
 
     this.$ = { strip: $$[$0-2].strip, program: program, chain: true };
-
+  
 break;
 case 19:this.$ = $$[$0];
 break;
@@ -5083,7 +5084,7 @@ case 37:this.$ = yy.preparePath(true, $$[$0], this._$);
 break;
 case 38:this.$ = yy.preparePath(false, $$[$0], this._$);
 break;
-case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2];
+case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
 break;
 case 40:this.$ = [{part: $$[$0]}];
 break;
@@ -5432,22 +5433,22 @@ case 0:
                                      this.begin("mu");
                                    }
                                    if(yy_.yytext) return 14;
-
+                                 
 break;
 case 1:return 14;
 break;
 case 2:
                                    this.popState();
                                    return 14;
-
+                                 
 break;
 case 3:
                                   yy_.yytext = yy_.yytext.substr(5, yy_.yyleng-9);
                                   this.popState();
                                   return 16;
-
+                                 
 break;
-case 4: return 14;
+case 4: return 14; 
 break;
 case 5:
   this.popState();
@@ -5458,13 +5459,13 @@ case 6:return 59;
 break;
 case 7:return 62;
 break;
-case 8: return 17;
+case 8: return 17; 
 break;
 case 9:
                                   this.popState();
                                   this.begin('raw');
                                   return 21;
-
+                                 
 break;
 case 10:return 53;
 break;
@@ -5939,7 +5940,7 @@ WhitespaceControl.prototype.MustacheStatement = function(mustache) {
   return mustache.strip;
 };
 
-WhitespaceControl.prototype.PartialStatement =
+WhitespaceControl.prototype.PartialStatement = 
     WhitespaceControl.prototype.CommentStatement = function(node) {
   /* istanbul ignore next */
   var strip = node.strip || {};
@@ -6352,23 +6353,21 @@ function indexOf(array, value) {
 
 exports.indexOf = indexOf;
 function escapeExpression(string) {
-  if (typeof string !== 'string') {
-    // don't escape SafeStrings, since they're already safe
-    if (string && string.toHTML) {
-      return string.toHTML();
-    } else if (string == null) {
-      return '';
-    } else if (!string) {
-      return string + '';
-    }
-
-    // Force a string conversion as this will be done by the append regardless and
-    // the regex test will do this transparently behind the scenes, causing issues if
-    // an object's to string has escaped characters in it.
-    string = '' + string;
+  // don't escape SafeStrings, since they're already safe
+  if (string && string.toHTML) {
+    return string.toHTML();
+  } else if (string == null) {
+    return "";
+  } else if (!string) {
+    return string + '';
   }
 
-  if (!possible.test(string)) { return string; }
+  // Force a string conversion as this will be done by the append regardless and
+  // the regex test will do this transparently behind the scenes, causing issues if
+  // an object's to string has escaped characters in it.
+  string = "" + string;
+
+  if(!possible.test(string)) { return string; }
   return string.replace(badChars, escapeChar);
 }
 
@@ -12303,7 +12302,7 @@ module.exports = amdefine;
 
     function timedOut() {
       self._timedOut = true
-      self.request.abort()
+      self.request.abort()      
     }
 
     function error(resp, msg, t) {

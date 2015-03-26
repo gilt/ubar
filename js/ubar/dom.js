@@ -3,24 +3,18 @@
 
 function create (handlebars, when, request) {
 
-  handlebars.templates = handlebars.templates || {};
-
   function loadTemplate (templateUrl) {
-    if (!templateCache[templateUrl]) {
-      templateCache[templateUrl] = request({
+    return request({
         url : templateUrl,
         dataType : 'text'
-      }).then(function (xhr) {
-        return compileTemplate(templateUrl, xhr.responseText)({});
+      }).then(function (resp) {
+        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+        return compileTemplate(content);
       });
-    }
-
-    return templateCache[templateUrl];
   }
 
-  function compileTemplate (templateUrl, templateString) {
-    handlebars.templates[templateUrl] = handlebars.compile(templateString);
-    return handlebars.templates[templateUrl];
+  function compileTemplate (templateString) {
+    return handlebars.compile(templateString)({});
   }
 
   /**
