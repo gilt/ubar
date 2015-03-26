@@ -102,7 +102,7 @@ function create (
   function redirect (location) {
     var
       // successfully redirected to the app
-      successCallback = function () { renderOffBanner(); },
+      successCallback = function () { },
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
@@ -111,9 +111,10 @@ function create (
 
     ubarStorage.setRedirected();
     ubarDom.remove();
-    ubar_tracking.attemptToRedirectToApp({ location: location });
-
-    resolver.redirectWithFallback(successCallback, failureCallback);
+    renderOffBanner().then(function() {
+      ubar_tracking.attemptToRedirectToApp({ location: location });
+      resolver.redirectWithFallback(successCallback, failureCallback);
+    });
   }
 
   /**
@@ -123,7 +124,7 @@ function create (
    * @method renderOffBanner
    */
   function renderOffBanner() {
-    ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
+    return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
       bindOffBannerButtonEvents();
       ubarDom.show();
       ubar_tracking.showReturningBanner();
@@ -137,7 +138,7 @@ function create (
    * @method renderOnBanner
    */
   function renderOnBanner() {
-    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+    return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
       bindOnBannerButtonEvents();
       ubarDom.show();
       ubar_tracking.showSendingBanner();
@@ -169,12 +170,14 @@ function create (
     // TODO : user ubar = on param
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
+    CONFIG.ios_app_deep_link = "maps://";
+
     if (device.isAppSupported(CONFIG)) {
       ubarStorage = new UbarStorage( CONFIG );
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
 
-      // TODO: preload ubar off banner template here
+      ubarDom.loadBanner( CONFIG.returning_template_path );
 
       if (ubarStorage.isEnabled()) {
         if (ubarStorage.isUserRedirected()) {

@@ -297,16 +297,61 @@ if (typeof define === 'function' && define.amd) {
 
 function create (handlebars, when, request) {
 
+  var templatesCache = templatesCache || {};
+
+  /**
+   * Returns a promise that resolves to a template function from templateCache.
+   * If the template is not in templateCache, it requests the template and puts the template in templateCache.
+   *
+   * @public
+   * @method loadTemplate
+   *
+   * @param   {String}  templateUrl  URL of template
+   *
+   * @return  {Promise}              Resolves to template function or rejects with reason
+   */
   function loadTemplate (templateUrl) {
-    return request({
-        url : templateUrl,
-        dataType : 'text'
-      }).then(function (resp) {
-        var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
-        return compileTemplate(content);
-      });
+    if (!templatesCache[templateUrl]) {
+      templatesCache[templateUrl] = requestTemplate(templateUrl);
+    }
+
+    return templatesCache[templateUrl];
   }
 
+  /**
+   * Requests the provided template.
+   *
+   * @public
+   * @method requestTemplate
+   *
+   * @param   {String}  templateUrl  URL of template
+   *
+   * @return  {Promise}              Resolves to compiled template
+   */
+  function requestTemplate (templateUrl) {
+    var dfd = when.defer();
+
+    request({
+      url : templateUrl,
+      dataType : 'text',
+      success: function (resp) {
+        dfd.resolve(resp);
+      }
+    });
+
+    return dfd.promise;
+  }
+
+  /**
+   * Compiles the provided template.
+   *
+   * @public
+   * @method compileTemplate
+   *
+   * @param   {String}  templateUrl  URL of template
+   *
+   * @return  {String}               Resolves to the compiled template
+   */
   function compileTemplate (templateString) {
     return handlebars.compile(templateString)({});
   }
@@ -335,19 +380,27 @@ function create (handlebars, when, request) {
    */
   UbarDom.prototype.renderBanner = function renderBanner (templateSource) {
     var
-      dfd = when.defer(),
       self = this,
       ubarDiv = document.createElement('div');
 
-    loadTemplate(templateSource).then(function (renderedHtml) {
-      ubarDiv.innerHTML = renderedHtml;
+    return loadTemplate(templateSource).then(function (resp) {
+      var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+
+      ubarDiv.innerHTML = compileTemplate(content);
       document.body.insertBefore(ubarDiv, document.body.firstChild);
       self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
-
-      dfd.resolve();
     });
+  };
 
-    return dfd.promise;
+  /**
+   * Loads a template, but does not render it.
+   *
+   * @public
+   * @method loadBanner
+   * @param  {Object} templateSource The template to render
+   */
+  UbarDom.prototype.loadBanner = function renderBanner (templateSource) {
+    loadTemplate(templateSource);
   };
 
   /**
@@ -1050,9 +1103,9 @@ function create (ubarHelpers) {
   var urlConfig = {
     ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
     ios_app_deep_link     : 'gilt://',
-    android_app_store_url : 'https://www.android.com',
+    android_app_store_url : 'https://play.google.com/store/apps/details?id=com.gilt.android&hl=en',
     android_app_deep_link : 'gilt://',
-    windows_app_store_url : 'https://www.microsoft.com/en-us/mobile/',
+    windows_app_store_url : 'http://www.windowsphone.com/en-us/store/app/gilt/fff0a9b7-074c-4a43-805d-cb6c81e319f8',
     windows_app_deep_link : 'gilt://'
   };
 
@@ -1337,7 +1390,7 @@ function create (
   function redirect (location) {
     var
       // successfully redirected to the app
-      successCallback = function () { renderOffBanner(); },
+      successCallback = function () { },
 
        // fail to redirect to app, redirect to app store
       failureCallback = function () {
@@ -1346,9 +1399,10 @@ function create (
 
     ubarStorage.setRedirected();
     ubarDom.remove();
-    ubar_tracking.attemptToRedirectToApp({ location: location });
-
-    resolver.redirectWithFallback(successCallback, failureCallback);
+    renderOffBanner().then(function() {
+      ubar_tracking.attemptToRedirectToApp({ location: location });
+      resolver.redirectWithFallback(successCallback, failureCallback);
+    });
   }
 
   /**
@@ -1358,7 +1412,7 @@ function create (
    * @method renderOffBanner
    */
   function renderOffBanner() {
-    ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
+    return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
       bindOffBannerButtonEvents();
       ubarDom.show();
       ubar_tracking.showReturningBanner();
@@ -1372,7 +1426,7 @@ function create (
    * @method renderOnBanner
    */
   function renderOnBanner() {
-    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
+    return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
       bindOnBannerButtonEvents();
       ubarDom.show();
       ubar_tracking.showSendingBanner();
@@ -1404,12 +1458,14 @@ function create (
     // TODO : user ubar = on param
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
+    CONFIG.ios_app_deep_link = "maps://";
+
     if (device.isAppSupported(CONFIG)) {
       ubarStorage = new UbarStorage( CONFIG );
       ubarDom = new UbarDom( CONFIG );
       resolver = new Resolver( CONFIG );
 
-      // TODO: preload ubar off banner template here
+      ubarDom.loadBanner( CONFIG.returning_template_path );
 
       if (ubarStorage.isEnabled()) {
         if (ubarStorage.isUserRedirected()) {
