@@ -132,14 +132,14 @@
   }
 
   function init () {
-    var refreshButton = document.querySelectorAll('.refresh-button')[0];
+    //var refreshButton = document.querySelectorAll('.refresh-button')[0];
 
     setConfigs();
     setPageValues();
 
-    bean.on(refreshButton, 'touchend click', function () {
-      location.href = location.origin + location.pathname;
-    });
+    // bean.on(refreshButton, 'touchend click', function () {
+    //   location.href = location.origin + location.pathname;
+    // });
 
     ubar.init(defaultConfig);
   }
@@ -1501,7 +1501,6 @@ function create (
       resolver = new Resolver( CONFIG );
 
       // TODO: preload ubar off banner template here
-      ubarDom.preloadTemplate(CONFIG.returning_template_path);
 
       if (ubarStorage.isEnabled()) {
         if (ubarStorage.isUserRedirected()) {

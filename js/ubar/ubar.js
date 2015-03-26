@@ -174,7 +174,6 @@ function create (
       resolver = new Resolver( CONFIG );
 
       // TODO: preload ubar off banner template here
-      ubarDom.preloadTemplate(CONFIG.returning_template_path);
 
       if (ubarStorage.isEnabled()) {
         if (ubarStorage.isUserRedirected()) {

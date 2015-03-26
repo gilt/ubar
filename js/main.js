@@ -131,14 +131,14 @@
   }
 
   function init () {
-    var refreshButton = document.querySelectorAll('.refresh-button')[0];
+    //var refreshButton = document.querySelectorAll('.refresh-button')[0];
 
     setConfigs();
     setPageValues();
 
-    bean.on(refreshButton, 'touchend click', function () {
-      location.href = location.origin + location.pathname;
-    });
+    // bean.on(refreshButton, 'touchend click', function () {
+    //   location.href = location.origin + location.pathname;
+    // });
 
     ubar.init(defaultConfig);
   }
