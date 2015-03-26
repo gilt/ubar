@@ -1398,7 +1398,9 @@ function create (
       };
 
     ubarStorage.setRedirected();
+
     ubarDom.remove();
+
     renderOffBanner().then(function() {
       ubar_tracking.attemptToRedirectToApp({ location: location });
       resolver.redirectWithFallback(successCallback, failureCallback);
@@ -1461,8 +1463,6 @@ function create (
 
     // TODO : user ubar = on param
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
-
-    CONFIG.ios_app_deep_link = "maps://";
 
     if (device.isAppSupported(CONFIG)) {
       ubarStorage = new UbarStorage( CONFIG );
