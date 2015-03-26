@@ -1485,26 +1485,13 @@ function create (
     return config;
   }
 
-  /**
-   * Renders the on banner and binds events
-   *
-   * @private
-   * @method renderOnBanner
-   */
-  function renderOnBanner() {
-    ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
-      bindOnBannerButtonEvents();
-      ubarDom.show();
-      ubar_tracking.showSendingBanner();
-    });
-  }
-
   /* Initialize UBAR with parameters set in config.js
    *
    * @public
    * @method init
    */
   function init (user_config) {
+
     // TODO : user ubar = on param
     CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
 
@@ -1514,9 +1501,14 @@ function create (
       resolver = new Resolver( CONFIG );
 
       // TODO: preload ubar off banner template here
+      ubarDom.preloadTemplate(CONFIG.returning_template_path);
 
       if (ubarStorage.isEnabled()) {
-        ubarStorage.isUserRedirected() ? renderOffBanner() : redirect(CONFIG.tracking_immediate_redirection);
+        if (ubarStorage.isUserRedirected()) {
+          renderOffBanner();
+        } else {
+          redirect(CONFIG.tracking_immediate_redirection);
+        }
 
       } else if (!ubarStorage.isDisabled()) {
         renderOnBanner();
