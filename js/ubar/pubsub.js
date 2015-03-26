@@ -37,7 +37,7 @@ function create () {
 
     for (var i = 0; i < topics[topic].length; i++) {
       if (typeof topics[topic][i] === 'function') {
-        topics[topic][i](data != undefined ? data : {});
+        topics[topic][i](data !== undefined ? data : {});
       }
     }
   }

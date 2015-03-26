@@ -261,7 +261,7 @@ function create () {
 
     for (var i = 0; i < topics[topic].length; i++) {
       if (typeof topics[topic][i] === 'function') {
-        topics[topic][i](data != undefined ? data : {});
+        topics[topic][i](data !== undefined ? data : {});
       }
     }
   }
@@ -442,7 +442,7 @@ function create (moment) {
     defaultDuration = moment.duration( 0 );
 
     if (!time_string) {
-      console.log('Error: empty time_string in getTimeinMoments');
+      console.error('Error: empty time_string in getTimeinMoments');
       return defaultDuration;
     }
 
@@ -451,7 +451,7 @@ function create (moment) {
     timeUnit   = timeString[1];
 
     if ( timeString.length > 2 ) {
-      console.log('Error: time_string has invalid parameters: ' + timeString);
+      console.error('Error: time_string has invalid parameters: ' + timeString);
       return defaultDuration;
     }
 

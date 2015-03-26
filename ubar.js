@@ -736,7 +736,7 @@ function create (moment) {
     defaultDuration = moment.duration( 0 );
 
     if (!time_string) {
-      console.log('Error: empty time_string in getTimeinMoments');
+      console.error('Error: empty time_string in getTimeinMoments');
       return defaultDuration;
     }
 
@@ -745,7 +745,7 @@ function create (moment) {
     timeUnit   = timeString[1];
 
     if ( timeString.length > 2 ) {
-      console.log('Error: time_string has invalid parameters: ' + timeString);
+      console.error('Error: time_string has invalid parameters: ' + timeString);
       return defaultDuration;
     }
 
@@ -869,7 +869,7 @@ function create () {
 
     for (var i = 0; i < topics[topic].length; i++) {
       if (typeof topics[topic][i] === 'function') {
-        topics[topic][i](data != undefined ? data : {});
+        topics[topic][i](data !== undefined ? data : {});
       }
     }
   }
@@ -2796,7 +2796,7 @@ exports["default"] = Handlebars;
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
 
-var VERSION = "3.0.1";
+var VERSION = "3.0.0";
 exports.VERSION = VERSION;var COMPILER_REVISION = 6;
 exports.COMPILER_REVISION = COMPILER_REVISION;
 var REVISION_CHANGES = {
@@ -3861,7 +3861,7 @@ function transformLiteralToPath(sexpr) {
     var literal = sexpr.path;
     // Casting to string here to make false and 0 literal values play nicely with the rest
     // of the system.
-    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.loc);
+    sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.log);
   }
 }
 },{"../exception":28,"../utils":31,"./ast":18}],22:[function(require,module,exports){
@@ -6424,23 +6424,21 @@ function indexOf(array, value) {
 
 exports.indexOf = indexOf;
 function escapeExpression(string) {
-  if (typeof string !== 'string') {
-    // don't escape SafeStrings, since they're already safe
-    if (string && string.toHTML) {
-      return string.toHTML();
-    } else if (string == null) {
-      return '';
-    } else if (!string) {
-      return string + '';
-    }
-
-    // Force a string conversion as this will be done by the append regardless and
-    // the regex test will do this transparently behind the scenes, causing issues if
-    // an object's to string has escaped characters in it.
-    string = '' + string;
+  // don't escape SafeStrings, since they're already safe
+  if (string && string.toHTML) {
+    return string.toHTML();
+  } else if (string == null) {
+    return "";
+  } else if (!string) {
+    return string + '';
   }
 
-  if (!possible.test(string)) { return string; }
+  // Force a string conversion as this will be done by the append regardless and
+  // the regex test will do this transparently behind the scenes, causing issues if
+  // an object's to string has escaped characters in it.
+  string = "" + string;
+
+  if(!possible.test(string)) { return string; }
   return string.replace(badChars, escapeChar);
 }
 
