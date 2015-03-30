@@ -9,221 +9,223 @@
     <script src="ubar.js"></script>
   </head>
   <body>
-    <header class="header">
+    <div class="ubar-page-wrapper">
+      <header class="header">
+        <div class="container">
+          <div class="logo">ubar</div>
+          <nav class="nav">
+            <ul>
+              <li>
+                <a href="#about">About</a>
+              </li>
+              <li>
+                <a href="#documentation">Docs</a>
+              </li>
+              <li>
+                <a href="#demo">Demo</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
       <div class="container">
-        <div class="logo">ubar</div>
-        <nav class="nav">
-          <ul>
-            <li>
-              <a href="#about">About</a>
-            </li>
-            <li>
-              <a href="#documentation">Docs</a>
-            </li>
-            <li>
-              <a href="#demo">Demo</a>
-            </li>
-          </ul>
-        </nav>
+        <section id="about" class="panel">
+          <h2>What is UBAR?</h2>
+          <p>UBAR (Unidirectional Browser App Resolver) is a front-end library that shepherds users into native apps from the browser and handles users returning to the browser.</p>
+
+          <p>With UBAR you can promote your app to your mobile-web users in a similar fashion to <a href="https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html">Smart App Banners</a> but with extra functionality as well as greater ability to customize look and feel.</p>
+        </section>
+        <section id="documentation" class="panel">
+          <h2>Documentation</h2>
+          <p>Coming Soon</p>
+        </section>
+        <section id="demo" class="panel">
+          <h2>Demo</h2>
+          <p>Simply view this page in an iOS device 7.0 or higher to see ubar in action. Use the settings below to play with the configuration</p>
+          <hr class="horizontal-line" />
+          <h3>Url Configuration</h3>
+          <p>The settings configure the actions of the two major buttons on the first ubar banner - Install App (link to your app on App Store) and Open to App (deep link to the current page on your app)</p>
+          <div class="three-columns">
+            <div class="box">
+              <h3>iOS</h3>
+              <label class="input-group">App Store URL
+                <input placeholder class="url_config" type="url" name="ios_app_store_url" data-name="ios_app_store_url" value="">
+              </label>
+              <label class="input-group">Your App's Deeplink
+                <input class="url_config" type="text" name="ios_app_deep_link" data-name="ios_app_deep_link" value="">
+              </label>
+            </div>
+            <div class="box">
+              <h3>Android</h3>
+              <label class="input-group">Play Store URL
+                <input class="url_config" type="url" name="android_app_store_url" data-name="android_app_store_url" value="">
+              </label>
+              <label class="input-group">Your App's Deeplink
+                <input class="url_config" type="text" name="android_app_deep_link" data-name="android_app_deep_link" value="">
+              </label>
+            </div>
+            <div class="box">
+              <h3>Windows</h3>
+              <label class="input-group">App Store URL
+                <input class="url_config" type="url" name="windows_app_store_url" data-name="windows_app_store_url" value="">
+              </label>
+              <label class="input-group">Your App's Deeplink
+                <input class="url_config" type="text" name="windows_app_deep_link" data-name="windows_app_deep_link" value="">
+              </label>
+            </div>
+          </div>
+          <hr class="horizontal-line" />
+          <h3>Expiration Configuration</h3>
+          <p>The settings configure the expiration for various states</p>
+          <div class="three-columns">
+            <div class="box">
+              <h3>Ubar On</h3>
+              <label class="input-group">Always redirects users landing on a page to your app
+                <select class="select_config" name="enabled_time">
+                  <option value="10 seconds">10 seconds</option>
+                  <option value="30 seconds">30 seconds</option>
+                  <option value="60 seconds">60 seconds</option>
+                  <option value="2 minutes">2</option>
+                  <option value="1 week">1 week</option>
+                  <option value="2 weeks">2 weeks</option>
+                  <option value="1 year">1 year</option>
+                </select>
+              </label>
+            </div>
+            <div class="box">
+              <h3>Ubar Off</h3>
+              <label class="input-group">Don't redirect user to the app, nor show any banners
+                <select class="select_config" name="disabled_time">
+                  <option value="10 seconds">10 seconds</option>
+                  <option value="30 seconds">30 seconds</option>
+                  <option value="60 seconds">60 seconds</option>
+                  <option value="2 minutes">2</option>
+                  <option value="1 week">1 week</option>
+                  <option value="2 weeks">2 weeks</option>
+                </select>
+              </label>
+            </div>
+            <div class="box">
+              <h3>Redirected</h3>
+              <label class="input-group">Timeframe for user to return to browser to turn ubar off
+                <select class="select_config" name="manage_window_time">
+                  <option value="10 seconds">10 seconds</option>
+                  <option value="30 seconds">30 seconds</option>
+                  <option value="60 seconds">60 seconds</option>
+                  <option value="2 minutes">2 minutes</option>
+                  <option value="4 minutes">4 minutes</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <hr class="horizontal-line" />
+          <h3>Interval Configuration</h3>
+          <p>Since we don't have access to whether or not the user has the app, we use time elapsed to infer whether or not user has the app</p>
+          <div class="three-columns">
+            <div class="box">
+              <h3>Redirect to App Store</h3>
+              <label class="input-group">If User is still in the same browser tab after we attempt to redirect them to the app for this amount of time, we presume the user doesn't have the app and redirect them to the app store to install the app
+                <select class="select_config" name="app_store_redirect">
+                  <option value="0.4 seconds">0.4 seconds</option>
+                  <option value="0.6 seconds">0.6 seconds</option>
+                  <option value="0.8 seconds">0.8 seconds</option>
+                  <option value="1.0 seconds">1.0 seconds</option>
+                  <option value="1.2 seconds">1.2 seconds</option>
+                  <option value="1.4 seconds">1.4 seconds</option>
+                  <option value="1.6 seconds">1.6 seconds</option>
+                  <option value="1.8 seconds">1.8 seconds</option>
+                  <option value="2.0 seconds">2.0 seconds</option>
+                  <option value="2.2 seconds">2.2 seconds</option>
+                  <option value="3.0 seconds">3.0 seconds</option>
+                  <option value="4.0 seconds">4.0 seconds</option>
+                  <option value="5.0 seconds">5.0 seconds</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <hr class="horizontal-line" />
+
+
+          <h3>Device Configuration</h3>
+          <p>The settings configure which devices are eligible for ubar </p>
+          <div class="three-columns">
+            <div class="box">
+              <h3>iOS</h3>
+              <label class="input-group">Supported
+                <select class="select_config" name="ios_support">
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+              </label>
+              <label class="input-group">Minimum version to support
+                <select class="select_config" name="min_ios_support">
+                  <option value="0">Any</option>
+                  <option value="5.0">5.0</option>
+                  <option value="5.1">5.1</option>
+                  <option value="6.0">8.0</option>
+                  <option value="6.1">6.1</option>
+                  <option value="7.0">7.0</option>
+                  <option value="7.1">7.1</option>
+                  <option value="8.0">8.0</option>
+                  <option value="8.2">8.2</option>
+                </select>
+              </label>
+            </div>
+            <div class="box">
+              <h3>Android</h3>
+              <label class="input-group">Supported
+                <select class="select_config" name="android_support">
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+              </label>
+              <label class="input-group">Minimum version to support
+                <select class="select_config" name="min_android_support">
+                  <option value="0">Any</option>
+                  <option value="2.3">2.3</option>
+                  <option value="4.0">4.0</option>
+                  <option value="4.1">4.1</option>
+                  <option value="4.2">4.2</option>
+                  <option value="4.3">4.3</option>
+                  <option value="5.0">5.0</option>
+                </select>
+              </label>
+            </div>
+            <div class="box">
+              <h3>Windows</h3>
+              <label class="input-group">Supported
+                <select class="select_config" name="windows_mobile_support">
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+              </label>
+              <label class="input-group">Minimum version to support
+                <select class="select_config" name="min_windows_mobile_support">
+                  <option value="0">Any</option>
+                  <option value="7.0">7.0</option>
+                  <option value="8.0">8.0</option>
+                  <option value="9.0">9.0</option>
+                  <option value="10.0">10.0</option>
+                  <option value="Infinity">Infinity</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <hr class="horizontal-line" />
+
+
+          <button class="button expand-button ubar-test-button test-submit test-submit-last">Apply Settings to Ubar</button>
+
+        </section>
       </div>
-    </header>
-    <div class="container">
-      <section id="about" class="panel">
-        <h2>What is UBAR?</h2>
-        <p>UBAR (Unidirectional Browser App Resolver) is a front-end library that shepherds users into native apps from the browser and handles users returning to the browser.</p>
-
-        <p>With UBAR you can promote your app to your mobile-web users in a similar fashion to <a href="https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html">Smart App Banners</a> but with extra functionality as well as greater ability to customize look and feel.</p>
-      </section>
-      <section id="documentation" class="panel">
-        <h2>Documentation</h2>
-        <p>Coming Soon</p>
-      </section>
-      <section id="demo" class="panel">
-        <h2>Demo</h2>
-        <p>Simply view this page in an iOS device 7.0 or higher to see ubar in action. Use the settings below to play with the configuration</p>
-        <hr class="horizontal-line" />
-        <h3>Url Configuration</h3>
-        <p>The settings configure the actions of the two major buttons on the first ubar banner - Install App (link to your app on App Store) and Open to App (deep link to the current page on your app)</p>
-        <div class="three-columns">
-          <div class="box">
-            <h3>iOS</h3>
-            <label class="input-group">App Store URL
-              <input placeholder class="url_config" type="url" name="ios_app_store_url" data-name="ios_app_store_url" value="">
-            </label>
-            <label class="input-group">Your App's Deeplink
-              <input class="url_config" type="text" name="ios_app_deep_link" data-name="ios_app_deep_link" value="">
-            </label>
-          </div>
-          <div class="box">
-            <h3>Android</h3>
-            <label class="input-group">Play Store URL
-              <input class="url_config" type="url" name="android_app_store_url" data-name="android_app_store_url" value="">
-            </label>
-            <label class="input-group">Your App's Deeplink
-              <input class="url_config" type="text" name="android_app_deep_link" data-name="android_app_deep_link" value="">
-            </label>
-          </div>
-          <div class="box">
-            <h3>Windows</h3>
-            <label class="input-group">App Store URL
-              <input class="url_config" type="url" name="windows_app_store_url" data-name="windows_app_store_url" value="">
-            </label>
-            <label class="input-group">Your App's Deeplink
-              <input class="url_config" type="text" name="windows_app_deep_link" data-name="windows_app_deep_link" value="">
-            </label>
-          </div>
+      <footer class="footer">
+        <div class="container">
+          <p>Gilt Groupe</p>
         </div>
-        <hr class="horizontal-line" />
-        <h3>Expiration Configuration</h3>
-        <p>The settings configure the expiration for various states</p>
-        <div class="three-columns">
-          <div class="box">
-            <h3>Ubar On</h3>
-            <label class="input-group">Always redirects users landing on a page to your app
-              <select class="select_config" name="enabled_time">
-                <option value="10 seconds">10 seconds</option>
-                <option value="30 seconds">30 seconds</option>
-                <option value="60 seconds">60 seconds</option>
-                <option value="2 minutes">2</option>
-                <option value="1 week">1 week</option>
-                <option value="2 weeks">2 weeks</option>
-                <option value="1 year">1 year</option>
-              </select>
-            </label>
-          </div>
-          <div class="box">
-            <h3>Ubar Off</h3>
-            <label class="input-group">Don't redirect user to the app, nor show any banners
-              <select class="select_config" name="disabled_time">
-                <option value="10 seconds">10 seconds</option>
-                <option value="30 seconds">30 seconds</option>
-                <option value="60 seconds">60 seconds</option>
-                <option value="2 minutes">2</option>
-                <option value="1 week">1 week</option>
-                <option value="2 weeks">2 weeks</option>
-              </select>
-            </label>
-          </div>
-          <div class="box">
-            <h3>Redirected</h3>
-            <label class="input-group">Timeframe for user to return to browser to turn ubar off
-              <select class="select_config" name="manage_window_time">
-                <option value="10 seconds">10 seconds</option>
-                <option value="30 seconds">30 seconds</option>
-                <option value="60 seconds">60 seconds</option>
-                <option value="2 minutes">2 minutes</option>
-                <option value="4 minutes">4 minutes</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <hr class="horizontal-line" />
-        <h3>Interval Configuration</h3>
-        <p>Since we don't have access to whether or not the user has the app, we use time elapsed to infer whether or not user has the app</p>
-        <div class="three-columns">
-          <div class="box">
-            <h3>Redirect to App Store</h3>
-            <label class="input-group">If User is still in the same browser tab after we attempt to redirect them to the app for this amount of time, we presume the user doesn't have the app and redirect them to the app store to install the app
-              <select class="select_config" name="app_store_redirect">
-                <option value="0.4 seconds">0.4 seconds</option>
-                <option value="0.6 seconds">0.6 seconds</option>
-                <option value="0.8 seconds">0.8 seconds</option>
-                <option value="1.0 seconds">1.0 seconds</option>
-                <option value="1.2 seconds">1.2 seconds</option>
-                <option value="1.4 seconds">1.4 seconds</option>
-                <option value="1.6 seconds">1.6 seconds</option>
-                <option value="1.8 seconds">1.8 seconds</option>
-                <option value="2.0 seconds">2.0 seconds</option>
-                <option value="2.2 seconds">2.2 seconds</option>
-                <option value="3.0 seconds">3.0 seconds</option>
-                <option value="4.0 seconds">4.0 seconds</option>
-                <option value="5.0 seconds">5.0 seconds</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <hr class="horizontal-line" />
-
-
-        <h3>Device Configuration</h3>
-        <p>The settings configure which devices are eligible for ubar </p>
-        <div class="three-columns">
-          <div class="box">
-            <h3>iOS</h3>
-            <label class="input-group">Supported
-              <select class="select_config" name="ios_support">
-                <option value="true">true</option>
-                <option value="false">false</option>
-              </select>
-            </label>
-            <label class="input-group">Minimum version to support
-              <select class="select_config" name="min_ios_support">
-                <option value="0">Any</option>
-                <option value="5.0">5.0</option>
-                <option value="5.1">5.1</option>
-                <option value="6.0">8.0</option>
-                <option value="6.1">6.1</option>
-                <option value="7.0">7.0</option>
-                <option value="7.1">7.1</option>
-                <option value="8.0">8.0</option>
-                <option value="8.2">8.2</option>
-              </select>
-            </label>
-          </div>
-          <div class="box">
-            <h3>Android</h3>
-            <label class="input-group">Supported
-              <select class="select_config" name="android_support">
-                <option value="true">true</option>
-                <option value="false">false</option>
-              </select>
-            </label>
-            <label class="input-group">Minimum version to support
-              <select class="select_config" name="min_android_support">
-                <option value="0">Any</option>
-                <option value="2.3">2.3</option>
-                <option value="4.0">4.0</option>
-                <option value="4.1">4.1</option>
-                <option value="4.2">4.2</option>
-                <option value="4.3">4.3</option>
-                <option value="5.0">5.0</option>
-              </select>
-            </label>
-          </div>
-          <div class="box">
-            <h3>Windows</h3>
-            <label class="input-group">Supported
-              <select class="select_config" name="windows_mobile_support">
-                <option value="true">true</option>
-                <option value="false">false</option>
-              </select>
-            </label>
-            <label class="input-group">Minimum version to support
-              <select class="select_config" name="min_windows_mobile_support">
-                <option value="0">Any</option>
-                <option value="7.0">7.0</option>
-                <option value="8.0">8.0</option>
-                <option value="9.0">9.0</option>
-                <option value="10.0">10.0</option>
-                <option value="Infinity">Infinity</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <hr class="horizontal-line" />
-
-
-        <button class="button expand-button ubar-test-button test-submit test-submit-last">Apply Settings to Ubar</button>
-
-      </section>
+      </footer>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <p>Gilt Groupe</p>
-      </div>
-    </footer>
   </body>
 </html>

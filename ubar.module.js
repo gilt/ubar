@@ -1162,11 +1162,11 @@ function create (ubarHelpers) {
    */
   var classNames = {
     component_class    : 'component-ubar',
-    on_button_class    : 'ubar-on-button',
+    on_button_class    : 'ubar-open-app-button',
     install_class      : 'ubar-install-app-button',
-    off_class          : 'ubar-off-button',
-    open_in_app_class  : 'ubar-open-in-app-button',
-    close_button_class : 'ubar-close-banner-button',
+    off_class          : 'ubar-preferences-button',
+    open_in_app_class  : 'ubar-open-page-in-app-button',
+    close_button_class : 'ubar-close-button',
     ubar_show_class    : 'ubar-show',
     ubar_hide_class    : 'ubar-hide'
   };

@@ -1,14 +1,20 @@
-@import "_settings.less";
-@import "_functions.less";
+@import "breakpoints.less";
+@import "color.less";
+@import "utility.less";
+@import "button.less";
+@import "typography.less";
 
+@component-ubar-ipad-height : 110px;
+
+@ubar-image-ipad-size: 60px;
+@ubar-image-iphone-portrait-size: 45px;
+@ubar-image-iphone-landscape-size: 50px;
 
 .component-ubar {
-
-  border-bottom: 1px solid @secondary;
-  font-family: @typeface;
-  font-size: @base-font-size;
-  height: @component-height;
-  padding: 10px 0 0;
+  color: @primary;
+  display: inline-block;
+  line-height: normal;
+  position: relative;
   width: 100%;
 
   &.ubar-show {
@@ -19,71 +25,143 @@
     display: none;
   }
 
+  .content {
+    margin-left: 13px;
+  }
+
   .ubar-close-button {
+    .sans;
     background: none;
     border: none;
-    color: @secondary;
-    font-size: @title-font-size;
-    position: absolute;
-    right: 0;
-    top: 0;
+    display: block;
+    float: left;
+    font-size: 20px;
+    line-height: @component-ubar-ipad-height;
+
+    @media @viewport-tiny,
+           @viewport-narrow {
+      line-height: 10px;
+      padding: 10px;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    @media @viewport-medium,
+           @viewport-wide {
+      margin-left: 20px;
+      margin-right: 20px;
+      padding: 0;
+    }
   }
 
   .ubar-copy {
 
+    @media @viewport-medium,
+           @viewport-wide {
+      display: inline-block;
+      position: relative;
+      width: 320px;
+    }
+
     .app-icon {
-      background: url(@icon-image) center center no-repeat;
-      background-clip: border-box;
-      display: inline-block;
+      .border-radius(15px);
+      #gradient > .vertical(#292929, #000);
+      display: block;
       float: left;
-      height: @icon-size;
-      margin: 0 10px 0;
-      width: @icon-size;
-      .border-radius(@icon-radius);
-      .browser-prefix(background-size, cover);
-    }
+      height: @ubar-image-ipad-size;
+      margin: 15px 10px 15px 0;
+      padding: 10px;
+      width: @ubar-image-ipad-size;
 
-    .ubar-text-wrapper {
-
-      display: inline-block;
-
-      .ubar-banner-title {
-        color: @primary;
-        font-size: @title-font-size;
-        line-height: 100%;
-        margin: 0;
-        padding: 2px 0;
+      @media @viewport-tiny {
+        height: @ubar-image-iphone-portrait-size;
+        padding: 5px;
+        width: @ubar-image-iphone-portrait-size;
+      }
+      @media @viewport-narrow {
+        height: @ubar-image-iphone-landscape-size;
+        margin: 15px 15px 15px 0;
+        padding: 5px;
+        width: @ubar-image-iphone-landscape-size;
       }
 
-      .ubar-banner-desc {
-        color: @secondary;
-        margin: 0;
-        font-size: @base-font-size;
-        line-height: 125%;
-        padding: 0px 0px 5px;
+      .svg-image{
+        height: @ubar-image-ipad-size;
+        width: @ubar-image-ipad-size;
+
+        @media @viewport-tiny {
+          height: @ubar-image-iphone-portrait-size;
+          width: @ubar-image-iphone-portrait-size;
+        }
+        @media @viewport-narrow {
+          height: @ubar-image-iphone-landscape-size;
+          width: @ubar-image-iphone-landscape-size;
+        }
       }
 
+      .letter {
+        fill : #ffffff;
+      }
     }
 
+    .ubar-banner-title {
+      .sans-strong;
+      font-size: 16px;
+      margin: 0;
+      padding: 35px 0 0;
+
+      @media @viewport-tiny,
+             @viewport-narrow {
+        padding: 23px 0 0;
+      }
+    }
+
+    .ubar-banner-desc {
+      .sans;
+      font-size: 13px;
+      margin: 2px 0 0;
+      padding: 0 0 15px 0;
+    }
   }
 
   .ubar-actions {
+    display: inline-block;
+    padding: 0 0 15px 13px;
+    position: relative;
+    top: -11px;
 
-    .ubar-button-wrapper {
-
-      display: inline-block;
-      float: left;
-      margin: 0 10px 0 0;
-
-      .ubar-inverse-button{
-        .buttonize(@inverse);
-      }
-
-      .ubar-button {
-        .buttonize(@accent);
-      }
-
+    @media @viewport-tiny,
+           @viewport-narrow {
+      top: 0;
+      padding-left: 0;
     }
 
+    .ubar-button {
+      .buttonize;
+      .tintify;
+      .sans;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      text-align: center;
+      width: 162px;
+
+      @media @viewport-tiny,
+             @viewport-narrow {
+        font-weight: normal;
+        width: 140px;
+      }
+    }
+
+    .ubar-button:last-child {
+      margin-left: 5px;
+    }
+
+    .ubar-preferences-button {
+      color: @gold;
+      border: 1px solid @accent;
+      background: #fff;
+    }
   }
 }
