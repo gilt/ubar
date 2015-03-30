@@ -16,7 +16,7 @@ gulp.task('less', function() {
 
 gulp.task('less-page', function() {
   return gulp.src(PAGE)
-          .pipe(debug({title : 'debug-less'}))
+          .pipe(debug({title : 'debug-less-page'}))
           .pipe(less())
           .pipe(gulp.dest(DEST_FOLDER));
 });
