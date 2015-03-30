@@ -45,11 +45,16 @@ function create (
     bean.on(installAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubar_tracking.choseDownloadApp( { location : CONFIG.tracking_sending_banner } );
+
       resolver.redirectToAppStore();
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
+
+      ubar_tracking.closeBanner({ location : CONFIG.tracking_sending_banner });
+      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_sending_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -79,11 +84,16 @@ function create (
     bean.on(openInAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubar_tracking.returnToApp();
+
       redirect(CONFIG.tracking_returning_banner);
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
+
+      ubar_tracking.closeBanner({ location : CONFIG.tracking_returning_banner });
+      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_returning_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -131,7 +141,7 @@ function create (
     return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
       bindOffBannerButtonEvents();
       ubarDom.show();
-      ubar_tracking.showReturningBanner();
+      ubar_tracking.showBanner({ location : CONFIG.tracking_returning_banner});
     });
   }
 
@@ -147,7 +157,7 @@ function create (
     return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
       bindOnBannerButtonEvents();
       ubarDom.show();
-      ubar_tracking.showSendingBanner();
+      ubar_tracking.showBanner({location : CONFIG.tracking_sending_banner});
     });
   }
 
