@@ -1,25 +1,25 @@
 .buttonize (@tint: @accent) {
+  .border-radius(6px);
   .primary;
   .inline-block;
-  font-weight: normal;
-  line-height: 1;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  text-align: center;
-  .border-radius(6px);
   #gradient > .vertical(#fafafa, #ebe9e9);
   &.tint {
     .tintify(@tint);
   }
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
 }
 
 .tintify (@shade: @accent) {
-  color: #fff;
   #gradient > .vertical(lighten(@shade, 7%), @shade);
   border-top-color: lighten(@shade, 8%);
   border-right-color: transparent;
   border-bottom-color: darken(@shade, 1%);
   border-left-color: transparent;
+  color: #fff;
 
   &:hover {
     #gradient > .vertical(lighten(@shade, 9%), lighten(@shade, 2%));

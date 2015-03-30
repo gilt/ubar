@@ -132,17 +132,14 @@
   }
 }
 .component-ubar .ubar-actions .ubar-button {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
   color: #383838;
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
   *zoom: 1;
-  line-height: 1;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
   background-color: #f4f3f3;
   background-image: -moz-linear-gradient(top, #fafafa, #ebe9e9);
   background-image: -ms-linear-gradient(top, #fafafa, #ebe9e9);
@@ -150,7 +147,9 @@
   background-image: -webkit-linear-gradient(top, #fafafa, #ebe9e9);
   background-image: -o-linear-gradient(top, #fafafa, #ebe9e9);
   background-image: linear-gradient(top, #fafafa, #ebe9e9);
-  color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  line-height: 1;
   background-color: #de9502;
   background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
   background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
@@ -163,6 +162,7 @@
   border-right-color: transparent;
   border-bottom-color: #c48402;
   border-left-color: transparent;
+  color: #fff;
   font-family: "Proxima Nova Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   font-size: 13px;
@@ -172,7 +172,6 @@
   width: 162px;
 }
 .component-ubar .ubar-actions .ubar-button.tint {
-  color: #fff;
   background-color: #de9502;
   background-image: -moz-linear-gradient(top, #ec9f02, #c98702);
   background-image: -ms-linear-gradient(top, #ec9f02, #c98702);
@@ -185,6 +184,7 @@
   border-right-color: transparent;
   border-bottom-color: #c48402;
   border-left-color: transparent;
+  color: #fff;
 }
 .component-ubar .ubar-actions .ubar-button.tint:hover {
   background-color: #e89c02;
