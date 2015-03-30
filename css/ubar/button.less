@@ -1,0 +1,43 @@
+.buttonize (@tint: @accent) {
+  .primary;
+  .inline-block;
+  font-weight: normal;
+  line-height: 1;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  text-align: center;
+  .border-radius(6px);
+  #gradient > .vertical(#fafafa, #ebe9e9);
+  &.tint {
+    .tintify(@tint);
+  }
+}
+
+.tintify (@shade: @accent) {
+  color: #fff;
+  #gradient > .vertical(lighten(@shade, 7%), @shade);
+  border-top-color: lighten(@shade, 8%);
+  border-right-color: transparent;
+  border-bottom-color: darken(@shade, 1%);
+  border-left-color: transparent;
+
+  &:hover {
+    #gradient > .vertical(lighten(@shade, 9%), lighten(@shade, 2%));
+    border-top-color: lighten(@shade, 10%);
+    border-bottom-color: lighten(@shade, 1%);
+  }
+
+  &:disabled {
+    background-color: #aaa;
+    background-image: none;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+
+    &:hover {
+      background-color: #aaa;
+      background-image: none;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+    }
+  }
+}
