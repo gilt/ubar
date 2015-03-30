@@ -994,6 +994,44 @@ function create (pubsub) {
     pubsub.publish('turnedUbarOff', trackingLocationObject);
   }
 
+  /**
+  * Called when the user elects to download the app.
+  * Publish event with key 'choseDownloadApp'.
+  *
+  * @public
+  * @method: _choseDownloadApp
+  * @param {Object} {location : 'where this was called'}
+  *
+  */
+  function _choseDownloadApp (trackingLocationObject) {
+    pubsub.publish('choseDownloadApp', trackingLocationObject);
+  }
+
+  /**
+  * Called when the user closes the Ubar banner.
+  * Publish event with key 'closedBanner'.
+  *
+  * @public
+  * @method: _closeBanner
+  * @param {Object} {location : 'where this was called'}
+  *
+  */
+  function _closeBanner (trackingLocationObject) {
+    pubsub.publish('closedBanner', trackingLocationObject);
+  }
+
+  /**
+  * Called when the user elects to return to the app.
+  * Publish event with key 'returnedToApp'.
+  *
+  * @public
+  * @method: _returnToApp
+  * @param {Object} {location : 'where this was called'}
+  *
+  */
+  function _returnToApp (trackingLocationObject) {
+    pubsub.publish('returnedToApp', trackingLocationObject);
+  }
 
   /**
   * Called when an attempt has been made to redirect the
@@ -1023,38 +1061,27 @@ function create (pubsub) {
 
 
   /**
-  * Called when the returning banner is displayed to the user.
-  * Publish event with key 'showedReturningBanner'.
+  * Called when an ubar banner is displayed to the user.
+  * Publish event with key 'showedBanner'.
   *
   * @public
-  * @method: _showReturningBanner
+  * @method: _showBanner
   * @param {Object} { location : 'where this was called'}
   */
-  function _showReturningBanner ( trackingLocationObject ) {
-    pubsub.publish('showedReturningBanner', trackingLocationObject);
-  }
-
-
-  /**
-  * Called when the initial sending banner is displayed to the
-  * user. Publish event with key 'showedSendingBanner'.
-  *
-  * @public
-  * @method: _showSendingBanner
-  * @param {Object} { location : 'where this was called'}
-  */
-  function _showSendingBanner ( trackingLocationObject ) {
-    pubsub.publish('showedSendingBanner', trackingLocationObject);
+  function _showBanner ( trackingLocationObject ) {
+    pubsub.publish('showedBanner', trackingLocationObject);
   }
 
 
   return {
     turnUbarOn: _turnUbarOn,
     turnUbarOff: _turnUbarOff,
+    choseDownloadApp : _choseDownloadApp,
+    closeBanner : _closeBanner,
+    returnToApp : _returnToApp,
     attemptToRedirectToAppStore: _attemptToRedirectToAppStore,
     attemptToRedirectToApp: _attemptToRedirectToApp,
-    showReturningBanner: _showReturningBanner,
-    showSendingBanner: _showSendingBanner
+    showBanner: _showBanner
   };
 }
 
@@ -1333,11 +1360,16 @@ function create (
     bean.on(installAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubar_tracking.choseDownloadApp( { location : CONFIG.tracking_sending_banner } );
+
       resolver.redirectToAppStore();
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
+
+      ubar_tracking.closeBanner({ location : CONFIG.tracking_sending_banner });
+      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_sending_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -1367,11 +1399,16 @@ function create (
     bean.on(openInAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
+      ubar_tracking.returnToApp();
+
       redirect(CONFIG.tracking_returning_banner);
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
+
+      ubar_tracking.closeBanner({ location : CONFIG.tracking_returning_banner });
+      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_returning_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -1419,7 +1456,7 @@ function create (
     return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
       bindOffBannerButtonEvents();
       ubarDom.show();
-      ubar_tracking.showReturningBanner();
+      ubar_tracking.showBanner({ location : CONFIG.tracking_returning_banner});
     });
   }
 
@@ -1435,7 +1472,7 @@ function create (
     return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
       bindOnBannerButtonEvents();
       ubarDom.show();
-      ubar_tracking.showSendingBanner();
+      ubar_tracking.showBanner({location : CONFIG.tracking_sending_banner});
     });
   }
 

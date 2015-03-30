@@ -43,6 +43,48 @@
       test.should.equal(true);
     });
 
+    it("choseDownloadApp publishes an event with key: choseDownloadApp", function () {
+      var test = false;
+
+      subscribe('choseDownloadApp', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.choseDownloadApp();
+
+      test.should.equal(true);
+    });
+
+    it("closeBanner publishes an event with key: closedBanner", function () {
+      var test = false;
+
+      subscribe('closedBanner', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.closeBanner();
+
+      test.should.equal(true);
+    });
+
+    it("returnToApp publishes an event with key: returnedToApp", function () {
+      var test = false;
+
+      subscribe('returnedToApp', function () {
+        test = true;
+      });
+
+      test.should.equal(false);
+
+      ubarTracking.returnToApp();
+
+      test.should.equal(true);
+    });
+
     it("attemptToRedirectToAppStore publishes an event with key: attemptedToRedirectToAppStore", function () {
       var test = false;
 
@@ -71,30 +113,16 @@
       test.should.equal(true);
     });
 
-    it("showReturningBanner publishes an event with key: showedReturningBanner", function () {
+    it("showBanner publishes an event with key: showedBanner", function () {
       var test = false;
 
-      subscribe('showedReturningBanner', function () {
+      subscribe('showedBanner', function () {
         test = true;
       });
 
       test.should.equal(false);
 
-      ubarTracking.showReturningBanner();
-
-      test.should.equal(true);
-    });
-
-    it("showSendngBanner publishes an event with key: showedSendingBanner", function () {
-      var test = false;
-
-      subscribe('showedSendingBanner', function () {
-        test = true;
-      });
-
-      test.should.equal(false);
-
-      ubarTracking.showSendingBanner();
+      ubarTracking.showBanner();
 
       test.should.equal(true);
     });
