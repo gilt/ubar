@@ -15,7 +15,7 @@ var CSS_BASE_FILE = './css/' + MODULE_NAME + '/' + MODULE_NAME + '.less';
 var CSS_DEST_FOLDER = './';
 var CSS_DEST_FILE = MODULE_NAME + '.css';
 
-var CSS_PAGE_BASE_FILE = './css/page/page.less';
+var CSS_PAGE_BASE_FILE = './css/gh_pages/gh_pages.less';
 
 // SPEC configs
 var SPEC_SOURCE_FOLDER = './test/';
