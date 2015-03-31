@@ -20,7 +20,7 @@
       this.server = sinon.fakeServer.create();
 
       this.server.respondWith("GET", defaultConfig.sending_template_path,
-        [ 200, { "Content-Type": "text" }, JSON.stringify({ 'responseText' : templateHtml }) ]);
+        [ 200, { "Content-Type": "text" }, templateHtml ]);
 
       // Wait until banner is rendered before continuing with any tests
       ubarDom.renderBanner(defaultConfig.sending_template_path).then(function() {

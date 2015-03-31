@@ -39,7 +39,7 @@ function create (handlebars, when, request) {
 
     request({
       url : templateUrl,
-      dataType : 'text',
+      type: 'text',
       success: function (resp) {
         dfd.resolve(resp);
       }
@@ -90,7 +90,7 @@ function create (handlebars, when, request) {
       ubarDiv = document.createElement('div');
 
     return loadTemplate(templateSource).then(function (resp) {
-      var content = resp instanceof XMLHttpRequest ? resp.responseText : JSON.parse(resp).responseText;
+      var content = resp.responseText;
 
       ubarDiv.innerHTML = compileTemplate(content);
       document.body.insertBefore(ubarDiv, document.body.firstChild);
