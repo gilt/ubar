@@ -1,7 +1,7 @@
 {
   "name": "ubar",
   "group": "ubar",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Unidirectional Browser App Resolver",
   "repository": [
     {
@@ -74,12 +74,10 @@
     "vinyl-transform": "^1.0.0",
     "watchify": "^2.4.0"
   },
-  "main" : "./js/ubar/ubar.js",
+  "main" : "./dist/js/ubar.js",
   "scripts": {
     "start": "mochify --watch",
     "phantom": "mochify",
-    "wd": "mochify --wd",
-    "cover": "mochify --cover",
     "test": "npm run phantom && npm run wd && npm run cover"
   }
 }
