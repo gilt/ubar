@@ -10,15 +10,4 @@ gulp.task('mochify-phantomjs', function(){
     .bundle();
 });
 
-// NOT WORKING YET. `npm run wd` also doesn't work on my computer
-gulp.task('mochify-wd', function(){
-  return mochify(SOURCE_FILES, { wd: true , phantomjs: PHANTOMJS_LOCATION})
-    .bundle();
-});
-
-gulp.task('mochify-cover', function () {
-  return mochify(SOURCE_FILES, { cover : true, phantomjs: PHANTOMJS_LOCATION })
-    .bundle();
-});
-
-gulp.task('mochify', ['mochify-phantomjs' /*, 'mochify-wd','mochify-cover' */ ]);
+gulp.task('mochify', ['mochify-phantomjs']);
