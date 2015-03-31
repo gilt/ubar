@@ -30,7 +30,6 @@ gulp.task('less-gh-pages', function() {
           .pipe(gulp.dest(DEST_FOLDER));
 });
 
-
 /**
  * Gulp task to convert less to css for both module and github page
  *
