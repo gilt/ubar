@@ -4,7 +4,7 @@ var MODULE_NAME = 'ubar';
 var JS_BASE_FILE = './js/main.js';
 var JS_MODULE_BASE_FILE = './js/' + MODULE_NAME + '/' + MODULE_NAME + '.js';
 var JS_SOURCE_FILES = './js/' + MODULE_NAME + '/*.js';
-var JS_DEST_FOLDER = './';
+var JS_DEST_FOLDER = './dist/js';
 var JS_DEST_FILE = './' + MODULE_NAME + '.js';
 var JS_DEST_MINIFIED_FILE = './' + MODULE_NAME + '.min.js';
 var JS_MODULE_ONLY = './' + MODULE_NAME + '.module.js';
@@ -12,7 +12,7 @@ var JS_MODULE_ONLY = './' + MODULE_NAME + '.module.js';
 // CSS configs
 var CSS_SOURCE_FILES = './css/' + MODULE_NAME + '/*.less';
 var CSS_BASE_FILE = './css/' + MODULE_NAME + '/' + MODULE_NAME + '.less';
-var CSS_DEST_FOLDER = './';
+var CSS_DEST_FOLDER = './dist/css';
 var CSS_DEST_FILE = MODULE_NAME + '.css';
 
 var CSS_PAGE_BASE_FILE = './css/gh_pages/gh_pages.less';

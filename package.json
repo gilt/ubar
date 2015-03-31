@@ -74,7 +74,7 @@
     "vinyl-transform": "^1.0.0",
     "watchify": "^2.4.0"
   },
-  "main" : "./js/ubar/ubar.js",
+  "main" : "./dist/js/ubar.js",
   "scripts": {
     "start": "mochify --watch",
     "phantom": "mochify",
