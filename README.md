@@ -11,6 +11,8 @@ With UBAR you can promote your app to your mobile-web users in a similar fashion
 Mobile browser Users who turn UBAR on, will instantly be redirected to the app's deep link so they can continue in the app rather than the mobile-web.
 However, if the user returns from the app to the mobile web shortly after having being redirected to the app, UBAR will recognize that they perhaps prefer the mobile web to the app and give them the ability to turn UBAR off and only continue in the mobile web.
 
+For more details, [click here to see the Github Page](http://gilt.github.com/ubar).
+
 
 How does UBAR work?
 -------------------
