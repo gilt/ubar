@@ -37,7 +37,92 @@
         </section>
         <section id="documentation" class="panel">
           <h2>Documentation</h2>
-          <p>Coming Soon</p>
+
+          <h3>Installation</h3>
+
+          <p>Ubar can be downloaded using npm.</p>
+
+          <pre><code>
+          npm install ubar
+          // or
+          npm install --save ubar
+          </code></pre>
+
+          <h3>Usage</h3>
+
+          <p>Ubar is a mostly self contained component which you can override when necessary.
+          Ubar works with requirejs, browserify, and on the window.</p>
+
+          <p><strong>Using requirejs:</strong>
+          Copy ubar css, js, and templates directories from node modules into your project directory (i.e. public/). In your main js module (app.js) require ubar:</p>
+
+          <pre><code>
+          define(function(require) {
+            var ubar = require('./ubar');
+
+            ubar.init();
+          });
+          </code></pre>
+
+          <p>You can also shim ubar in your requirejs config to look in your node_modules folder.</p>
+
+          <pre><code>
+          // config.js
+          requirejs.config({
+              baseUrl: 'public',
+              paths: {
+                  ubar: '../node_modules/ubar/js/ubar/ubar'
+              }
+          });
+
+          // app.js
+          define(function(require) {
+            var ubar = require('ubar');
+
+            ubar.init();
+          });
+          </code></pre>
+
+          <p><strong>Using browserify:</strong>
+          If you are using browserify, there is no need to copy the js to your project
+          directory. Instead just require ubar. If you are planning on using the ubar template and css, then you may still want to copy the ubar templates and less files to your project directory. For the <a href="http://gilt.github.com/ubar">sample ubar page</a>, we've chosen to accomplish this using gulp.</p>
+
+          <pre><code>
+          var ubar = require('ubar');
+
+          ubar.init();
+          </code></pre>
+
+          <p><strong>On the window:</strong>
+          If you muuuuuust set ubar to the window (its strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserified.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.</p>
+
+          <pre><code>
+          window.ubar.init();
+          </code></pre>
+
+          <h3>Customizing ubar</h3>
+
+          <p>Ubar allows you to customize every config value. To see a full list of config values look in <a href="https://github.com/gilt/ubar/blob/master/js/ubar/config.js">js/ubar/config.js</a>. Below is an example of a customized ubar:</p>
+
+          <pre><code>
+          ubar.init({
+            ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+            ios_app_deep_link     : 'gilt://',
+            android_app_store_url : 'https://play.google.com/store/apps/details?id=com.gilt.android&amp;hl=en',
+            android_app_deep_link : 'gilt://',
+            windows_app_store_url : 'http://www.windowsphone.com/en-us/store/app/gilt/fff0a9b7-074c-4a43-805d-cb6c81e319f8',
+            windows_app_deep_link : 'gilt://'
+          });
+          </code></pre>
+
+          <p>Ubar by default uses vanilla <a href="http://handlebarsjs.com/">Handlebars</a> for templating and <a href="https://github.com/ded/reqwest">reqwest</a> for asynchronously loading the banner templates. Ubar allows you to use other templating modules by passing renderTemplate and loadTemplate methods during the ubar init. Ubar expects these methods to return an <a href="https://promisesaplus.com/">A+ Promise</a> (ubar uses <a href="https://github.com/cujojs/when">when</a> be default).</p>
+
+          <pre><code>
+          ubar.init({
+            renderTemplate : function () { console.log('I render templates and return a Promise.');},
+            loadTemplate : function () { console.log('I load templates and return a Promise.');}
+          });
+          </code></pre>
         </section>
         <section id="demo" class="panel">
           <h2>Demo</h2>
