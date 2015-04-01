@@ -300,10 +300,34 @@ function create (handlebars, when, request) {
   var templatesCache = templatesCache || {};
 
   /**
+   * Requests the provided template.
+   *
+   * @private
+   * @method requestTemplate
+   *
+   * @param   {String}  templateUrl  URL of template
+   *
+   * @return  {Promise}              Resolves to compiled template
+   */
+  function requestTemplate (templateUrl) {
+    var dfd = when.defer();
+
+    request({
+      url : templateUrl,
+      type: 'text',
+      success: function (resp) {
+        dfd.resolve(handlebars.compile(resp.responseText));
+      }
+    });
+
+    return dfd.promise;
+  }
+
+  /**
    * Returns a promise that resolves to a template function from templateCache.
    * If the template is not in templateCache, it requests the template and puts the template in templateCache.
    *
-   * @public
+   * @protected
    * @method loadTemplate
    *
    * @param   {String}  templateUrl  URL of template
@@ -319,41 +343,21 @@ function create (handlebars, when, request) {
   }
 
   /**
-   * Requests the provided template.
+   * Renders template with passed in content
    *
-   * @public
-   * @method requestTemplate
-   *
-   * @param   {String}  templateUrl  URL of template
-   *
-   * @return  {Promise}              Resolves to compiled template
-   */
-  function requestTemplate (templateUrl) {
-    var dfd = when.defer();
-
-    request({
-      url : templateUrl,
-      type: 'text',
-      success: function (resp) {
-        dfd.resolve(resp);
-      }
-    });
-
-    return dfd.promise;
-  }
-
-  /**
-   * Compiles the provided template.
-   *
-   * @public
-   * @method compileTemplate
+   * @protected
+   * @method renderTemplate
    *
    * @param   {String}  templateUrl  URL of template
+   * @param   {Object}  content      data to render template with
    *
    * @return  {String}               Resolves to the compiled template
    */
-  function compileTemplate (templateString) {
-    return handlebars.compile(templateString)({});
+  function renderTemplate (templateUrl, content) {
+    content = content || {};
+    return loadTemplate(templateUrl).then(function (template) {
+      return template(content);
+    });
   }
 
   /**
@@ -369,6 +373,9 @@ function create (handlebars, when, request) {
     this.MAIN_UBAR_CLASS = config.component_class;
     this.UBAR_SHOW_CLASS = config.ubar_show_class;
     this.UBAR_HIDE_CLASS = config.ubar_hide_class;
+
+    this._renderTemplate = config.renderTemplate || renderTemplate;
+    this._loadTemplate = config.loadTemplate || loadTemplate;
   };
 
   /**
@@ -377,30 +384,29 @@ function create (handlebars, when, request) {
    * @public
    * @method renderBanner
    * @param  {Object} templateSource The template to render
+   *
+   * @return  {Promise} Resolves after adding bannder to the dom, otherwise rejects.
    */
   UbarDom.prototype.renderBanner = function renderBanner (templateSource) {
     var
       self = this,
       ubarDiv = document.createElement('div');
 
-    return loadTemplate(templateSource).then(function (resp) {
-      var content = resp.responseText;
-
-      ubarDiv.innerHTML = compileTemplate(content);
+    return this._renderTemplate(templateSource).then(function (renderedHtml) {
+      ubarDiv.innerHTML = renderedHtml;
       document.body.insertBefore(ubarDiv, document.body.firstChild);
       self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
     });
   };
 
-  /**
-   * Loads a template, but does not render it.
+  /** Loads a template, but does not render it.
    *
    * @public
    * @method loadBanner
    * @param  {Object} templateSource The template to render
    */
   UbarDom.prototype.loadBanner = function renderBanner (templateSource) {
-    loadTemplate(templateSource);
+    this._loadTemplate(templateSource);
   };
 
   /**
