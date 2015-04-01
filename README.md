@@ -108,15 +108,10 @@ Usage
 Ubar is a mostly self contained component which you can override when necessary.
 Ubar works with requirejs, browserify, and on the window.
 
-<<<<<<< HEAD
 **Using requirejs:**
 Copy ubar css, js, and templates directories from node modules into your project directory (i.e. public/).
 
 In your main js module (app.js) require ubar:
-=======
-Using requirejs:
-Copy ubar css, js, and templates directories into your project directories (i.e. public).
-In your main module (app.js) require ubar:
 ````
 define(function(require) {
   var ubar = require('./ubar');
@@ -143,21 +138,21 @@ define(function(require) {
 ````
 **Using browserify:**
 If you are using browserify, there is no need to copy the js to your project
-directory. Instead just require ubar. If you are planning on using the ubar template and css, then you may still want to copy the ubar tempaltes and less files to your project directory. For the [sample ubar page](http://gilt.github.com/ubar), we've chosen to accomplish this using gulp.
+directory. Instead just require ubar. If you are planning on using the ubar template and css, then you may still want to copy the ubar templates and less files to your project directory. For the [sample ubar page](http://gilt.github.com/ubar), we've chosen to accomplish this using gulp.
 ````
 var ubar = require('ubar');
 
 ubar.init();
 ````
 **On the window:**
-If you muuuuuust set ubar to the window (and we strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserifyied.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
+If you muuuuuust set ubar to the window (its strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserified.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
 ````
 window.ubar.init();
 ````
 
 Customizing ubar
 ----------------
-Ubar allows you to customize every config value. To see a full list of config values look in js/ubar/config.js. Below is an example of a customized ubar:
+Ubar allows you to customize every config value. To see a full list of config values look in [js/ubar/config.js](https://github.com/gilt/ubar/blob/master/js/ubar/config.js). Below is an example of a customized ubar:
 ````
 ubar.init({
   ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
@@ -168,7 +163,7 @@ ubar.init({
   windows_app_deep_link : 'gilt://'
 });
 ````
-Ubar by default uses vanilla [Handlebars](http://handlebarsjs.com/) for templating and [reqwest](https://github.com/ded/reqwest) for asynchronously loading the banner templates. Ubar allows you to use other templating modules by passing renderTemplate and loadTemplate methods during the ubar init. Ubar expects these methods to return an A+ Promise.
+Ubar by default uses vanilla [Handlebars](http://handlebarsjs.com/) for templating and [reqwest](https://github.com/ded/reqwest) for asynchronously loading the banner templates. Ubar allows you to use other templating modules by passing renderTemplate and loadTemplate methods during the ubar init. Ubar expects these methods to return an [A+ Promise](https://promisesaplus.com/) (ubar uses [when](https://github.com/cujojs/when) be default).
 ````
 ubar.init({
   renderTemplate : function () { console.log('I render templates and return a Promise.');},
