@@ -1479,7 +1479,7 @@ if (typeof define === 'function' && define.amd) {
     or an empty object, as in Gilt's case
   */
   exports[moduleName] = create(
-    exports.pubsub || pubsub
+    exports.ubar_pubsub || ubar_pubsub
   );
 }
 
