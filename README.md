@@ -147,7 +147,7 @@ ubar.init();
 ````
 
 **On the window:**
-If you muuuuuuust set ubar to the window (and we strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserifyied.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
+If you muuuuuust set ubar to the window (and we strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserifyied.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
 ````
 window.ubar.init();
 ````
