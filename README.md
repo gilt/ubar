@@ -108,10 +108,15 @@ Usage
 Ubar is a mostly self contained component which you can override when necessary.
 Ubar works with requirejs, browserify, and on the window.
 
+<<<<<<< HEAD
 **Using requirejs:**
 Copy ubar css, js, and templates directories from node modules into your project directory (i.e. public/).
 
 In your main js module (app.js) require ubar:
+=======
+Using requirejs:
+Copy ubar css, js, and templates directories into your project directories (i.e. public).
+In your main module (app.js) require ubar:
 ````
 define(function(require) {
   var ubar = require('./ubar');
@@ -136,7 +141,6 @@ define(function(require) {
   ubar.init();
 });
 ````
-
 **Using browserify:**
 If you are using browserify, there is no need to copy the js to your project
 directory. Instead just require ubar. If you are planning on using the ubar template and css, then you may still want to copy the ubar tempaltes and less files to your project directory. For the [sample ubar page](http://gilt.github.com/ubar), we've chosen to accomplish this using gulp.
@@ -145,7 +149,6 @@ var ubar = require('ubar');
 
 ubar.init();
 ````
-
 **On the window:**
 If you muuuuuust set ubar to the window (and we strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserifyied.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
 ````
@@ -164,7 +167,7 @@ ubar.init({
   windows_app_store_url : 'http://www.windowsphone.com/en-us/store/app/gilt/fff0a9b7-074c-4a43-805d-cb6c81e319f8',
   windows_app_deep_link : 'gilt://'
 });
-```
+````
 Ubar by default uses vanilla [Handlebars](http://handlebarsjs.com/) for templating and [reqwest](https://github.com/ded/reqwest) for asynchronously loading the banner templates. Ubar allows you to use other templating modules by passing renderTemplate and loadTemplate methods during the ubar init. Ubar expects these methods to return an A+ Promise.
 ````
 ubar.init({
