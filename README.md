@@ -1,4 +1,4 @@
-UBAR 
+UBAR
 =====
 UBAR: Unidirectional Browser App Resolver.
 
@@ -93,3 +93,79 @@ Turn UBAR On Banner
 What it means to have UBAR on
 ------------------------------
 The next time your user who has previously turned UBAR on, comes to your mobile-web site, the user wants to be redirected to your app from step 3 onwards of the above chart.
+
+Installation
+--------------
+Ubar can be downloaded using npm.
+````
+npm install ubar
+// or
+npm install --save ubar
+````
+
+Usage
+--------------
+Ubar is a mostly self contained component which you can override when necessary.
+Ubar works with requirejs, browserify, and on the window.
+
+Using requirejs:
+Copy ubar css, js, and templates directories into your project directories (i.e. public).
+In your main module (app.js) require ubar
+````
+define(function(require) {
+  var ubar = require('./ubar');
+
+  ubar.init();
+});
+````
+You can also shim ubar to look in your node_modules folder in your requirejs config
+````
+requirejs.config({
+    baseUrl: 'lib',
+    paths: {
+        ubar: '../node_modules/ubar/js/ubar/ubar'
+    }
+});
+
+define(function(require) {
+  var ubar = require('ubar');
+
+  ubar.init();
+});
+````
+
+Using browserify:
+If you are using browserify, there is no need to copy the js to your ptoject
+directory. Instead just require ubar. If you are planning on ussing the ubar template and css, then you may still want to copy the ubar tempaltes and less files to your project directory. For the [sample ubar page](http://gilt.github.com/ubar), we've chosen to use gulp.
+````
+var ubar = require('ubar');
+
+ubar.init();
+````
+
+On the window:
+If you muuuust set ubar to the window (and we strongly suggest you don't), ubar will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserifyied.min.js to your project folder. Add a script tag to your html page for ubar and ubar will then be avalible on the window.
+````
+window.ubar.init();
+````
+
+Customizing ubar
+----------------
+Ubar allows you to customize every config value. To see a full list of config values look in js/ubar/config.js. Below is an example of a custom ubar init:
+````
+ubar.init({
+  ios_app_store_url     : 'https://itunes.apple.com/us/app/appname/id331804452?mt=8',
+  ios_app_deep_link     : 'gilt://',
+  android_app_store_url : 'https://play.google.com/store/apps/details?id=com.gilt.android&hl=en',
+  android_app_deep_link : 'gilt://',
+  windows_app_store_url : 'http://www.windowsphone.com/en-us/store/app/gilt/fff0a9b7-074c-4a43-805d-cb6c81e319f8',
+  windows_app_deep_link : 'gilt://'
+});
+
+Ubar by default uses vanilla Handlebars for templating and ded/reqwest for asynchronously loading the banner templates. Ubar allows you to use other templating modules by passing an renderTemplate and loadTemplate methods during the ubar init. Ubar expects these methods to return an A+ Promise.
+````
+ubar.init({
+  renderTemplate : function () { console.log('I render templates and return a Promise.');},
+  loadTemplate : function () { console.log('I load templates and return a Promise.');}
+});
+````
