@@ -198,8 +198,6 @@ function create (
    * @param {Object} config  ubar instance config
    */
   Ubar = function Ubar (config) {
-    if (ubarInstance) return ubarInstance;
-
     this.config = setConfigTime(ubarHelpers.extend( ubar_config, config ));
 
     ubarStorage = new UbarStorage(this.config);
