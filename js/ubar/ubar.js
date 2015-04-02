@@ -15,37 +15,40 @@ function create (
 ) {
 
   var
-    CONFIG = {},
+    Ubar, // Ubar constructor
     ubarStorage, // storage instance
     ubarDom, // dom instance
-    resolver; // app deeplink resolver/handler
+    resolver,  // app deeplink resolver/handler
+    ubarInstance; // Ubar is a Singleton
 
   /**
    * Binds the events of Ubar ON Banner Buttons
    *
    * @private
    * @method bindOnBannerButtonEvents
+   *
+   * @param {Object} config  ubar instance config
    */
-  function bindOnBannerButtonEvents () {
-    var ubarComponentDiv    = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-        onButton            = ubarComponentDiv.querySelectorAll('.' + (CONFIG.on_button_class) )[0],
-        installAppButton    = ubarComponentDiv.querySelectorAll('.' +(CONFIG.install_class) )[0],
-        closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_button_class) )[0];
+  function bindOnBannerButtonEvents (config) {
+    var ubarComponentDiv    = document.querySelectorAll('.' + (config.component_class) )[0],
+        onButton            = ubarComponentDiv.querySelectorAll('.' + (config.on_button_class) )[0],
+        installAppButton    = ubarComponentDiv.querySelectorAll('.' +(config.install_class) )[0],
+        closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
     bean.on(onButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
       ubarStorage.enable();
 
-      ubar_tracking.turnUbarOn({ location : CONFIG.tracking_sending_banner});
+      ubar_tracking.turnUbarOn({ location : config.tracking_sending_banner});
 
-      redirect(CONFIG.tracking_sending_banner);
+      redirect(config.tracking_sending_banner, config);
     });
 
     bean.on(installAppButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      ubar_tracking.choseDownloadApp( { location : CONFIG.tracking_sending_banner } );
+      ubar_tracking.choseDownloadApp( { location : config.tracking_sending_banner } );
 
       resolver.redirectToAppStore();
     });
@@ -53,8 +56,8 @@ function create (
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      ubar_tracking.closeBanner({ location : CONFIG.tracking_sending_banner });
-      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_sending_banner });
+      ubar_tracking.closeBanner({ location : config.tracking_sending_banner });
+      ubar_tracking.turnUbarOff({ location : config.tracking_sending_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -66,19 +69,21 @@ function create (
    *
    * @private
    * @method bindOffBannerButtonEvents
+   *
+   * @param {Object} config  ubar instance config
    */
-  function bindOffBannerButtonEvents () {
-    var ubarComponentDiv = document.querySelectorAll('.' + (CONFIG.component_class) )[0],
-        offButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.off_class) )[0],
-        openInAppButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.open_in_app_class) )[0],
-        closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (CONFIG.close_button_class) )[0];
+  function bindOffBannerButtonEvents (config) {
+    var ubarComponentDiv = document.querySelectorAll('.' + (config.component_class) )[0],
+        offButton = ubarComponentDiv.querySelectorAll('.' + (config.off_class) )[0],
+        openInAppButton = ubarComponentDiv.querySelectorAll('.' + (config.open_in_app_class) )[0],
+        closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
     bean.on(offButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
       ubarDom.remove();
       ubarStorage.disable();
-      ubar_tracking.turnUbarOff({ location: CONFIG.tracking_returning_banner });
+      ubar_tracking.turnUbarOff({ location: config.tracking_returning_banner });
     });
 
     bean.on(openInAppButton, 'touchstart', function (ev) {
@@ -86,14 +91,14 @@ function create (
 
       ubar_tracking.returnToApp();
 
-      redirect(CONFIG.tracking_returning_banner);
+      redirect(config.tracking_returning_banner, config);
     });
 
     bean.on(closeBannerButton, 'touchstart', function (ev) {
       ev.preventDefault();
 
-      ubar_tracking.closeBanner({ location : CONFIG.tracking_returning_banner });
-      ubar_tracking.turnUbarOff({ location : CONFIG.tracking_returning_banner });
+      ubar_tracking.closeBanner({ location : config.tracking_returning_banner });
+      ubar_tracking.turnUbarOff({ location : config.tracking_returning_banner });
 
       ubarDom.remove();
       ubarStorage.disable();
@@ -109,7 +114,7 @@ function create (
   * @private
   * @method redirect
   */
-  function redirect (location) {
+  function redirect (location, config) {
     var
       // successfully redirected to the app
       successCallback = function () { },
@@ -123,7 +128,7 @@ function create (
 
     ubarDom.remove();
 
-    renderOffBanner().then(function() {
+    renderOffBanner(config).then(function() {
       ubar_tracking.attemptToRedirectToApp({ location: location });
       resolver.redirectWithFallback(successCallback, failureCallback);
     });
@@ -135,13 +140,15 @@ function create (
    * @private
    * @method renderOffBanner
    *
+   * @param {Object} config  ubar instance config
+   *
    * @return  {Promise}       Resolves to rendered template
    */
-  function renderOffBanner() {
-    return ubarDom.renderBanner( CONFIG.returning_template_path ).then(function() {
-      bindOffBannerButtonEvents();
+  function renderOffBanner (config) {
+    return ubarDom.renderBanner(config.returning_template_path ).then(function() {
+      bindOffBannerButtonEvents(config);
       ubarDom.show();
-      ubar_tracking.showBanner({ location : CONFIG.tracking_returning_banner});
+      ubar_tracking.showBanner({ location : config.tracking_returning_banner});
     });
   }
 
@@ -151,13 +158,15 @@ function create (
    * @private
    * @method renderOnBanner
    *
+   * @param {Object} config  ubar instance config
+   *
    * @return  {Promise}       Resolves to rendered template
    */
-  function renderOnBanner() {
-    return ubarDom.renderBanner( CONFIG.sending_template_path ).then(function() {
-      bindOnBannerButtonEvents();
+  function renderOnBanner (config) {
+    return ubarDom.renderBanner( config.sending_template_path ).then(function() {
+      bindOnBannerButtonEvents(config);
       ubarDom.show();
-      ubar_tracking.showBanner({location : CONFIG.tracking_sending_banner});
+      ubar_tracking.showBanner({location : config.tracking_sending_banner});
     });
   }
 
@@ -166,6 +175,8 @@ function create (
    *
    * @private
    * @method setConfigTime
+   *
+   * @param {Object} config  ubar instance config
    */
   function setConfigTime (config) {
     config.enabled_time = ubarHelpers.getTimeInMoments( config.enabled_time );
@@ -176,40 +187,80 @@ function create (
     return config;
   }
 
-  /* Initialize UBAR with parameters set in config.js
+  /**
+   * Private constructor for ubar. Ubar is a Singleton which allows the user
+   * render the Open To App banner and to toggle the ubar cookie state.
+   *
+   * @constructor
+   * @private
+   * @method Ubar
+   *
+   * @param {Object} config  ubar instance config
+   */
+  Ubar = function Ubar (config) {
+    if (ubarInstance) return ubarInstance;
+
+    this.config = setConfigTime(ubarHelpers.extend( ubar_config, config ));
+
+    ubarStorage = new UbarStorage(this.config);
+
+    this.enable = ubarStorage.enable;
+    this.disable = ubarStorage.disable;
+    this.isDisabled = ubarStorage.isDisabled;
+    this.isEnabled = ubarStorage.isEnabled;
+    this.subscribe = pubsub.subscribe;
+  };
+
+  /**
+   * Render the Open To App banner.
    *
    * @public
-   * @method init
+   * @method render
    */
-  function init (user_config) {
+  Ubar.prototype.render = function render () {
+    var self = this;
 
-    // TODO : user ubar = on param
-    CONFIG = setConfigTime(ubarHelpers.extend( ubar_config, user_config ));
+    if (device.isAppSupported(self.config)) {
 
-    if (device.isAppSupported(CONFIG)) {
-      ubarStorage = new UbarStorage( CONFIG );
-      ubarDom = new UbarDom( CONFIG );
-      resolver = new Resolver( CONFIG );
+      ubarDom = new UbarDom(self.config);
+      resolver = new Resolver(self.config);
 
-      ubarDom.loadBanner( CONFIG.returning_template_path );
+      ubarDom.loadBanner(self.config.returning_template_path);
 
       if (ubarStorage.isEnabled()) {
         if (ubarStorage.isUserRedirected()) {
-          renderOffBanner();
+          renderOffBanner(self.config);
         } else {
-          redirect(CONFIG.tracking_immediate_redirection);
+          redirect(self.config.tracking_immediate_redirection, self.config);
         }
 
       } else if (!ubarStorage.isDisabled()) {
-        renderOnBanner();
+        renderOnBanner(self.config);
       }
     }
+  };
+
+  /**
+   * Create Ubar Singleton if it does not yet exist. Either
+   * way return instance of Ubar.
+   *
+   * @public
+   * @method init
+   *
+   * @param {Object} config  ubar instance config
+   *
+   * @return {Ubar}
+   */
+  function init (config) {
+    if (!ubarInstance) {
+      ubarInstance = new Ubar(config);
+    }
+
+    return ubarInstance;
   }
 
   return {
-    init : init,
-    subscribe : pubsub.subscribe,
-    _bindOnBannerButtonEvents : bindOnBannerButtonEvents
+    init : init
   };
 }
 

@@ -3,13 +3,14 @@
     For testing only. No need to do UMD syntax :)
   */
   var
-    ubar = require('./ubar/ubar'),
+    Ubar = require('./ubar/ubar'),
     defaultConfig = require('./ubar/config'),
     Storage = require('./ubar/storage'),
     storage = new Storage(defaultConfig),
     bean = require('bean'),
     helpers = require('./ubar/helpers'),
-    cookieValues = {};
+    cookieValues = {},
+    ubar;
 
   function setConfigValuesFromUrl () {
     var paramsArray, key, value;
@@ -131,16 +132,12 @@
   }
 
   function init () {
-    //var refreshButton = document.querySelectorAll('.refresh-button')[0];
-
     setConfigs();
     setPageValues();
 
-    // bean.on(refreshButton, 'touchend click', function () {
-    //   location.href = location.origin + location.pathname;
-    // });
+    ubar = Ubar.init(defaultConfig);
 
-    ubar.init(defaultConfig);
+    ubar.render();
   }
 
   document.addEventListener("DOMContentLoaded", init);
