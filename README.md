@@ -150,7 +150,7 @@ var ubar = Ubar.init();
 ubar.render();
 ````
 **On the window:**
-If you muuuuuust set UBAR to the window (its strongly suggest you don't), UBAR will work there too. Copy /dist/ubar.browserified.full.js or dist/ubar.browserified.min.js to your project folder. Add a script tag to your html page for UBAR and UBAR will then be avalible on the window.
+If you muuuuuust set UBAR to the window (its strongly suggest you don't), UBAR will work there too. Copy dist/ubar.browserified.full.js or dist/ubar.browserified.min.js to your project folder. Add a script tag to your html page for UBAR and UBAR will then be available on the window.
 ````
 var ubarInstance = window.ubar.init();
 
