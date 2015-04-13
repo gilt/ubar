@@ -10,6 +10,8 @@ function create () {
 			return new Child();
 		};
 
+
+	return {};
 }
 
 if (typeof define === 'function' && define.amd) {

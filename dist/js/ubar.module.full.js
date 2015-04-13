@@ -10,6 +10,8 @@ function create () {
 			return new Child();
 		};
 
+
+	return {};
 }
 
 if (typeof define === 'function' && define.amd) {
@@ -1356,6 +1358,7 @@ if (typeof define === 'function' && define.amd) {
 'use strict';
 
 function create (
+  ubar_polyfill, // returns empty object
   ubar_config,
   UbarStorage,
   UbarDom,
@@ -1619,7 +1622,8 @@ function create (
 if (typeof define === 'function' && define.amd) {
   define(
     moduleName,
-    ['./config',
+    ['./es5_polyfill',
+     './config',
      './storage',
      './dom',
      './device',
@@ -1640,6 +1644,7 @@ if (typeof define === 'function' && define.amd) {
     module because browserify uses static module analysis.
   */
   module.exports = create(
+    require('./es5_polyfill'),
     require('./config'),
     require('./storage'),
     require('./dom'),
@@ -1650,8 +1655,7 @@ if (typeof define === 'function' && define.amd) {
     require('./tracking'),
     require('bean'),
     require('when'),
-    require('moment'),
-    require('./es5_polyfill')
+    require('moment')
   );
 
 } else {
@@ -1660,6 +1664,7 @@ if (typeof define === 'function' && define.amd) {
     or an empty object, as in Gilt's case
   */
   exports[moduleName] = create(
+    exports.ubar_es5_polyfill || ubar_es5_polyfill,
     exports.ubar_config   || ubar_config,
     exports.ubar_storage  || ubar_storage,
     exports.ubar_dom      || ubar_dom,
@@ -1670,8 +1675,7 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_tracking || ubar_tracking,
     exports.bean          || bean,
     exports.when          || when,
-    exports.moment        || moment,
-    exports.ubar_es5_polyfill || ubar_es5_polyfill
+    exports.moment        || moment
   );
 }
 
