@@ -46,8 +46,17 @@ function create () {
 		return new Child();
 	}
 
+	function stringTrimPolyfill () {
+    // Make sure we trim BOM and NBSP
+    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+    return function() {
+      return this.replace(rtrim, '');
+    };
+  }
+
 	Object.create = Object.create || objectCreatePolyfill;
 	Array.prototype.reduce = Array.prototype.reduce || arrayReducePolyfill;
+	String.prototype.trim = String.prototype.trim || stringTrimPolyfill;
 
 	return {};
 }

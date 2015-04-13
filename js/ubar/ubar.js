@@ -201,13 +201,21 @@ function create (
   Ubar = function Ubar (config) {
     this.config = setConfigTime(ubarHelpers.extend( ubar_config, config ));
 
-    ubarStorage = new UbarStorage(this.config);
+    if (device.isAppSupported(this.config)) {
+      ubarStorage = new UbarStorage(this.config);
 
-    this.enable = ubarStorage.enable;
-    this.disable = ubarStorage.disable;
-    this.isDisabled = ubarStorage.isDisabled;
-    this.isEnabled = ubarStorage.isEnabled;
-    this.subscribe = pubsub.subscribe;
+      this.enable = ubarStorage.enable;
+      this.disable = ubarStorage.disable;
+      this.isDisabled = ubarStorage.isDisabled;
+      this.isEnabled = ubarStorage.isEnabled;
+      this.subscribe = pubsub.subscribe;
+    } else {
+      this.enable = function () {};
+      this.disable = function () {};
+      this.isDisabled = function () {};
+      this.isEnabled = function () {};
+      this.subscribe = function () {};
+    }
   };
 
   /**
