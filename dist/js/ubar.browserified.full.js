@@ -827,7 +827,7 @@ function create () {
 		return new Child();
 	}
 
-	Object.create = Object.create || objectCreatePolyfil;
+	Object.create = Object.create || objectCreatePolyfill;
 	Array.prototype.reduce = Array.prototype.reduce || arrayReducePolyfill;
 
 	return {};
