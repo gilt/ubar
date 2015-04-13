@@ -134,8 +134,6 @@
   }
 
   function init () {
-    debugger;
-
     setConfigs();
     setPageValues();
 
@@ -144,7 +142,7 @@
     ubar.render();
   }
 
-  if (document.addEventListener) {
+  if (document.addEventListener !== undefined) {
     document.addEventListener('DOMContentLoaded', init);
   }  else {
     window.attachEvent('onload', init);
