@@ -830,9 +830,7 @@ function create () {
 	function stringTrimPolyfill () {
     // Make sure we trim BOM and NBSP
     var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-    return function() {
-      return this.replace(rtrim, '');
-    };
+    return this.replace(rtrim, '');
   }
 
 	Object.create = Object.create || objectCreatePolyfill;
