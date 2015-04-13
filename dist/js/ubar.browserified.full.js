@@ -784,13 +784,51 @@ if (typeof define === 'function' && define.amd) {
 
 function create () {
 
-	Object.create = Object.create ||
-		function(proto) {
-			function Child() {}
-			Child.prototype = proto;
-			return new Child();
-		};
+	function arrayReducePolyfill (fun /*, initialValue */) {
+    if (this === void 0 || this === null) { throw new TypeError(); }
 
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    // no value to return if no initial value and an empty array
+    if (len === 0 && arguments.length === 1) { throw new TypeError(); }
+
+    var k = 0;
+    var accumulator;
+    if (arguments.length >= 2) {
+      accumulator = arguments[1];
+    } else {
+      do {
+        if (k in t) {
+          accumulator = t[k++];
+          break;
+        }
+
+        // if array contains no values, no initial value to return
+        if (++k >= len) { throw new TypeError(); }
+      }
+      while (true);
+    }
+
+    while (k < len) {
+      if (k in t) {
+        accumulator = fun.call(undefined, accumulator, t[k], k, t);
+      }
+      k++;
+    }
+
+    return accumulator;
+  }
+
+	function objectCreatePolyfill (proto) {
+		function Child() {}
+		Child.prototype = proto;
+		return new Child();
+	}
+
+	Object.create = Object.create || objectCreatePolyfil;
+	Array.prototype.reduce = Array.prototype.reduce || arrayReducePolyfill;
 
 	return {};
 }
