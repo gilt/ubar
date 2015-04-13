@@ -145,7 +145,11 @@
     ubar.render();
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', init);
+  }  else {
+    window.attachEvent('onload', init);
+  }
 
 })();
 
