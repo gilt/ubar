@@ -786,7 +786,12 @@ if (typeof define === 'function' && define.amd) {
 
 function create () {
 
-	function arrayReducePolyfill (fun /*, initialValue */) {
+  /**
+   * Polyfill for the Array.prototype.reduce method
+   * Taken from github.com/inexorabletash/polyfill.
+   * https://github.com/inexorabletash/polyfill/blob/efdd3211a40f21f8fdd2c382074b0679cc294525/es5.js
+  */
+  function arrayReducePolyfill (fun /*, initialValue */) {
     if (this === void 0 || this === null) { throw new TypeError(); }
 
     var t = Object(this);
@@ -822,24 +827,43 @@ function create () {
 
     return accumulator;
   }
+  /**
+   * Polyfill for the Object.create method
+   * Taken from Mozilla.
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Polyfill
+  */
+  function objectCreatePolyfill (prototype) {
+    var Temp = function () {}, result;
 
-	function objectCreatePolyfill (proto) {
-		function Child() {}
-		Child.prototype = proto;
-		return new Child();
-	}
+    if (arguments.length > 1) {
+      throw Error('Second argument not supported');
+    }
+    if (typeof prototype != 'object') {
+      throw new TypeError('Argument must be an object');
+    }
 
-	function stringTrimPolyfill () {
+    Temp.prototype = prototype;
+    result = new Temp();
+    Temp.prototype = null;
+    return result;
+  }
+
+  /**
+   * Polyfill for the String.prototype.trim method
+   * Taken from Mozilla.
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
+  */
+  function stringTrimPolyfill () {
     // Make sure we trim BOM and NBSP
     var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
     return this.replace(rtrim, '');
   }
 
-	Object.create = Object.create || objectCreatePolyfill;
-	Array.prototype.reduce = Array.prototype.reduce || arrayReducePolyfill;
-	String.prototype.trim = String.prototype.trim || stringTrimPolyfill;
+  Object.create = Object.create || objectCreatePolyfill;
+  Array.prototype.reduce = Array.prototype.reduce || arrayReducePolyfill;
+  String.prototype.trim = String.prototype.trim || stringTrimPolyfill;
 
-	return {};
+  return {};
 }
 
 if (typeof define === 'function' && define.amd) {
@@ -1858,8 +1882,7 @@ if (typeof define === 'function' && define.amd) {
      './tracking',
      'bean',
      'when',
-     'moment',
-     '.es5_polyfill'],
+     'moment'],
     create
   );
 

@@ -285,8 +285,7 @@ if (typeof define === 'function' && define.amd) {
      './tracking',
      'bean',
      'when',
-     'moment',
-     '.es5_polyfill'],
+     'moment'],
     create
   );
 
