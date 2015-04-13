@@ -132,10 +132,10 @@
   }
 
   function init () {
+    debugger;
+
     setConfigs();
     setPageValues();
-
-    debugger;
 
     ubar = Ubar.init(defaultConfig);
 
