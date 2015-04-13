@@ -135,6 +135,8 @@
     setConfigs();
     setPageValues();
 
+    debugger;
+
     ubar = Ubar.init(defaultConfig);
 
     ubar.render();
