@@ -488,7 +488,7 @@ if (typeof define === 'function' && define.amd) {
 'use strict';
 
 function create (moment) {
-
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
   /**
    * Get Time in Moments
    *
