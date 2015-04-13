@@ -34,6 +34,7 @@ module.exports = {
   ],
 
   source_map : [
+    'js/' + MODULE_NAME + '/es5_polyfill.js',
     'js/' + MODULE_NAME + '/device.js',
     'js/' + MODULE_NAME + '/pubsub.js',
     'js/' + MODULE_NAME + '/dom.js',

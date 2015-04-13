@@ -147,7 +147,7 @@
 
 })();
 
-},{"./ubar/config":2,"./ubar/helpers":5,"./ubar/storage":8,"./ubar/ubar":10,"bean":11}],2:[function(require,module,exports){
+},{"./ubar/config":2,"./ubar/helpers":6,"./ubar/storage":9,"./ubar/ubar":11,"bean":12}],2:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -356,7 +356,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_config' /* moduleName */));
 
-},{"./helpers":5}],3:[function(require,module,exports){
+},{"./helpers":6}],3:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -776,7 +776,42 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_dom' /* moduleName */));
 
-},{"handlebars":32,"reqwest":45,"when":63}],5:[function(require,module,exports){
+},{"handlebars":33,"reqwest":46,"when":64}],5:[function(require,module,exports){
+(function(exports, moduleName) {
+'use strict';
+
+function create () {
+
+	Object.create = Object.create ||
+		function(proto) {
+			function Child() {}
+			Child.prototype = proto;
+			return new Child();
+		};
+
+}
+
+if (typeof define === 'function' && define.amd) {
+  define(moduleName, [], create);
+
+} else if (typeof module === 'object' && module.exports) {
+  /*
+    Using CommonJS syntax, we have to explicitly require each
+    module because browserify uses static module analysis.
+  */
+  module.exports = create();
+
+} else {
+  /*
+    Gilt build syntax. 'exports' variable could be window here
+    or an empty object, as in Gilt's case
+  */
+  exports[moduleName] = create();
+}
+
+}(typeof exports === 'object' && exports || this, 'ubar_es5_polyfill' /* moduleName */));
+
+},{}],6:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -887,7 +922,7 @@ if (typeof define === 'function' && define.amd) {
 }(typeof exports === 'object' && exports || this, 'ubar_helpers' /* moduleName */));
 
 
-},{"moment":44}],6:[function(require,module,exports){
+},{"moment":45}],7:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -959,7 +994,7 @@ if (typeof define === 'function' && define.amd) {
 }(typeof exports === 'object' && exports || this, 'ubar_pubsub' /* moduleName */));
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1131,7 +1166,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_resolver' /* moduleName */));
 
-},{"./device":3,"moment":44}],8:[function(require,module,exports){
+},{"./device":3,"moment":45}],9:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1319,7 +1354,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_storage' /* moduleName */));
 
-},{"./helpers":5}],9:[function(require,module,exports){
+},{"./helpers":6}],10:[function(require,module,exports){
 (function(exports, moduleName) {
 
 'use strict';
@@ -1484,7 +1519,7 @@ if (typeof define === 'function' && define.amd) {
 
 }(typeof exports === 'object' && exports || this, 'ubar_tracking' /* moduleName */));
 
-},{"./pubsub":6}],10:[function(require,module,exports){
+},{"./pubsub":7}],11:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
@@ -1762,7 +1797,8 @@ if (typeof define === 'function' && define.amd) {
      './tracking',
      'bean',
      'when',
-     'moment'],
+     'moment',
+     '.es5_polyfill'],
     create
   );
 
@@ -1782,7 +1818,8 @@ if (typeof define === 'function' && define.amd) {
     require('./tracking'),
     require('bean'),
     require('when'),
-    require('moment')
+    require('moment'),
+    require('./es5_polyfill')
   );
 
 } else {
@@ -1801,13 +1838,14 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_tracking || ubar_tracking,
     exports.bean          || bean,
     exports.when          || when,
-    exports.moment        || moment
+    exports.moment        || moment,
+    exports.ubar_es5_polyfill || ubar_es5_polyfill
   );
 }
 
 }(typeof exports === 'object' && exports || this, 'ubar' /* moduleName */));
 
-},{"./config":2,"./device":3,"./dom":4,"./helpers":5,"./pubsub":6,"./resolver":7,"./storage":8,"./tracking":9,"bean":11,"moment":44,"when":63}],11:[function(require,module,exports){
+},{"./config":2,"./device":3,"./dom":4,"./es5_polyfill":5,"./helpers":6,"./pubsub":7,"./resolver":8,"./storage":9,"./tracking":10,"bean":12,"moment":45,"when":64}],12:[function(require,module,exports){
 /*!
   * Bean - copyright (c) Jacob Thornton 2011-2012
   * https://github.com/fat/bean
@@ -2550,9 +2588,9 @@ if (typeof define === 'function' && define.amd) {
   return bean
 });
 
-},{}],12:[function(require,module,exports){
-
 },{}],13:[function(require,module,exports){
+
+},{}],14:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2780,7 +2818,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":14}],14:[function(require,module,exports){
+},{"_process":15}],15:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2840,7 +2878,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (global){
 "use strict";
 /*globals Handlebars: true */
@@ -2893,7 +2931,7 @@ Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./handlebars.runtime":16,"./handlebars/compiler/ast":18,"./handlebars/compiler/base":19,"./handlebars/compiler/compiler":21,"./handlebars/compiler/javascript-compiler":23}],16:[function(require,module,exports){
+},{"./handlebars.runtime":17,"./handlebars/compiler/ast":19,"./handlebars/compiler/base":20,"./handlebars/compiler/compiler":22,"./handlebars/compiler/javascript-compiler":24}],17:[function(require,module,exports){
 (function (global){
 "use strict";
 /*globals Handlebars: true */
@@ -2942,7 +2980,7 @@ Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./handlebars/base":17,"./handlebars/exception":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],17:[function(require,module,exports){
+},{"./handlebars/base":18,"./handlebars/exception":29,"./handlebars/runtime":30,"./handlebars/safe-string":31,"./handlebars/utils":32}],18:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -3186,7 +3224,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":28,"./utils":31}],18:[function(require,module,exports){
+},{"./exception":29,"./utils":32}],19:[function(require,module,exports){
 "use strict";
 var AST = {
   Program: function(statements, blockParams, strip, locInfo) {
@@ -3329,7 +3367,7 @@ var AST = {
 // Must be exported as an object rather than the root of the module as the jison lexer
 // must modify the object to operate properly.
 exports["default"] = AST;
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 var parser = require("./parser")["default"];
 var AST = require("./ast")["default"];
@@ -3358,7 +3396,7 @@ function parse(input, options) {
 }
 
 exports.parse = parse;
-},{"../utils":31,"./ast":18,"./helpers":22,"./parser":24,"./whitespace-control":27}],20:[function(require,module,exports){
+},{"../utils":32,"./ast":19,"./helpers":23,"./parser":25,"./whitespace-control":28}],21:[function(require,module,exports){
 "use strict";
 var isArray = require("../utils").isArray;
 
@@ -3513,7 +3551,7 @@ CodeGen.prototype = {
 };
 
 exports["default"] = CodeGen;
-},{"../utils":31,"source-map":33}],21:[function(require,module,exports){
+},{"../utils":32,"source-map":34}],22:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 var isArray = require("../utils").isArray;
@@ -4015,7 +4053,7 @@ function transformLiteralToPath(sexpr) {
     sexpr.path = new AST.PathExpression(false, 0, [literal.original+''], literal.original+'', literal.loc);
   }
 }
-},{"../exception":28,"../utils":31,"./ast":18}],22:[function(require,module,exports){
+},{"../exception":29,"../utils":32,"./ast":19}],23:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 
@@ -4135,7 +4173,7 @@ exports.prepareRawBlock = prepareRawBlock;function prepareBlock(openBlock, progr
 }
 
 exports.prepareBlock = prepareBlock;
-},{"../exception":28}],23:[function(require,module,exports){
+},{"../exception":29}],24:[function(require,module,exports){
 "use strict";
 var COMPILER_REVISION = require("../base").COMPILER_REVISION;
 var REVISION_CHANGES = require("../base").REVISION_CHANGES;
@@ -5209,7 +5247,7 @@ function strictLookup(requireTerminal, compiler, parts, type) {
 }
 
 exports["default"] = JavaScriptCompiler;
-},{"../base":17,"../exception":28,"../utils":31,"./code-gen":20}],24:[function(require,module,exports){
+},{"../base":18,"../exception":29,"../utils":32,"./code-gen":21}],25:[function(require,module,exports){
 "use strict";
 /* jshint ignore:start */
 /* istanbul ignore next */
@@ -5768,7 +5806,7 @@ function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Pa
 return new Parser;
 })();exports["default"] = handlebars;
 /* jshint ignore:end */
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 var Visitor = require("./visitor")["default"];
 
@@ -5909,7 +5947,7 @@ PrintVisitor.prototype.Hash = function(hash) {
 PrintVisitor.prototype.HashPair = function(pair) {
   return pair.key + '=' + this.accept(pair.value);
 };
-},{"./visitor":26}],26:[function(require,module,exports){
+},{"./visitor":27}],27:[function(require,module,exports){
 "use strict";
 var Exception = require("../exception")["default"];
 var AST = require("./ast")["default"];
@@ -6033,7 +6071,7 @@ Visitor.prototype = {
 };
 
 exports["default"] = Visitor;
-},{"../exception":28,"./ast":18}],27:[function(require,module,exports){
+},{"../exception":29,"./ast":19}],28:[function(require,module,exports){
 "use strict";
 var Visitor = require("./visitor")["default"];
 
@@ -6246,7 +6284,7 @@ function omitLeft(body, i, multiple) {
 }
 
 exports["default"] = WhitespaceControl;
-},{"./visitor":26}],28:[function(require,module,exports){
+},{"./visitor":27}],29:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -6278,7 +6316,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -6499,7 +6537,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":17,"./exception":28,"./utils":31}],30:[function(require,module,exports){
+},{"./base":18,"./exception":29,"./utils":32}],31:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -6511,7 +6549,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function() {
 };
 
 exports["default"] = SafeString;
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var escape = {
@@ -6615,7 +6653,7 @@ exports.blockParams = blockParams;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // USAGE:
 // var handlebars = require('handlebars');
 
@@ -6643,7 +6681,7 @@ if (typeof require !== 'undefined' && require.extensions) {
   require.extensions[".hbs"] = extension;
 }
 
-},{"../dist/cjs/handlebars":15,"../dist/cjs/handlebars/compiler/printer":25,"../dist/cjs/handlebars/compiler/visitor":26,"fs":12}],33:[function(require,module,exports){
+},{"../dist/cjs/handlebars":16,"../dist/cjs/handlebars/compiler/printer":26,"../dist/cjs/handlebars/compiler/visitor":27,"fs":13}],34:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -6653,7 +6691,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":39,"./source-map/source-map-generator":40,"./source-map/source-node":41}],34:[function(require,module,exports){
+},{"./source-map/source-map-consumer":40,"./source-map/source-map-generator":41,"./source-map/source-node":42}],35:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6752,7 +6790,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":42,"amdefine":43}],35:[function(require,module,exports){
+},{"./util":43,"amdefine":44}],36:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6896,7 +6934,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":36,"amdefine":43}],36:[function(require,module,exports){
+},{"./base64":37,"amdefine":44}],37:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6940,7 +6978,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":43}],37:[function(require,module,exports){
+},{"amdefine":44}],38:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7022,7 +7060,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":43}],38:[function(require,module,exports){
+},{"amdefine":44}],39:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -7110,7 +7148,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":42,"amdefine":43}],39:[function(require,module,exports){
+},{"./util":43,"amdefine":44}],40:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7687,7 +7725,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":34,"./base64-vlq":35,"./binary-search":37,"./util":42,"amdefine":43}],40:[function(require,module,exports){
+},{"./array-set":35,"./base64-vlq":36,"./binary-search":38,"./util":43,"amdefine":44}],41:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8089,7 +8127,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":34,"./base64-vlq":35,"./mapping-list":38,"./util":42,"amdefine":43}],41:[function(require,module,exports){
+},{"./array-set":35,"./base64-vlq":36,"./mapping-list":39,"./util":43,"amdefine":44}],42:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8505,7 +8543,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":40,"./util":42,"amdefine":43}],42:[function(require,module,exports){
+},{"./source-map-generator":41,"./util":43,"amdefine":44}],43:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8826,7 +8864,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":43}],43:[function(require,module,exports){
+},{"amdefine":44}],44:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 0.1.0 Copyright (c) 2011, The Dojo Foundation All Rights Reserved.
@@ -9129,7 +9167,7 @@ function amdefine(module, requireFn) {
 module.exports = amdefine;
 
 }).call(this,require('_process'),"/node_modules/handlebars/node_modules/source-map/node_modules/amdefine/amdefine.js")
-},{"_process":14,"path":13}],44:[function(require,module,exports){
+},{"_process":15,"path":14}],45:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.9.0
@@ -12176,7 +12214,7 @@ module.exports = amdefine;
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*!
   * Reqwest! A general purpose XHR connection manager
   * license MIT (c) Dustin Diaz 2014
@@ -12793,7 +12831,7 @@ module.exports = amdefine;
   return reqwest
 });
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12812,7 +12850,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":47,"./env":59,"./makePromise":61}],47:[function(require,module,exports){
+},{"./Scheduler":48,"./env":60,"./makePromise":62}],48:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12894,7 +12932,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12922,7 +12960,7 @@ define(function() {
 	return TimeoutError;
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -12979,7 +13017,7 @@ define(function() {
 
 
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13270,7 +13308,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../apply":49,"../state":62}],51:[function(require,module,exports){
+},{"../apply":50,"../state":63}],52:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13432,7 +13470,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13461,7 +13499,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13483,7 +13521,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../state":62}],54:[function(require,module,exports){
+},{"../state":63}],55:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13550,7 +13588,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13576,7 +13614,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13656,7 +13694,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../TimeoutError":48,"../env":59}],57:[function(require,module,exports){
+},{"../TimeoutError":49,"../env":60}],58:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13744,7 +13782,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../env":59,"../format":60}],58:[function(require,module,exports){
+},{"../env":60,"../format":61}],59:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13784,7 +13822,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -13861,7 +13899,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":14}],60:[function(require,module,exports){
+},{"_process":15}],61:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13919,7 +13957,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -14850,7 +14888,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 }).call(this,require('_process'))
-},{"_process":14}],62:[function(require,module,exports){
+},{"_process":15}],63:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -14887,7 +14925,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 
 /**
@@ -15118,4 +15156,4 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./lib/Promise":46,"./lib/TimeoutError":48,"./lib/apply":49,"./lib/decorators/array":50,"./lib/decorators/flow":51,"./lib/decorators/fold":52,"./lib/decorators/inspect":53,"./lib/decorators/iterate":54,"./lib/decorators/progress":55,"./lib/decorators/timed":56,"./lib/decorators/unhandledRejection":57,"./lib/decorators/with":58}]},{},[1]);
+},{"./lib/Promise":47,"./lib/TimeoutError":49,"./lib/apply":50,"./lib/decorators/array":51,"./lib/decorators/flow":52,"./lib/decorators/fold":53,"./lib/decorators/inspect":54,"./lib/decorators/iterate":55,"./lib/decorators/progress":56,"./lib/decorators/timed":57,"./lib/decorators/unhandledRejection":58,"./lib/decorators/with":59}]},{},[1]);

@@ -275,7 +275,8 @@ if (typeof define === 'function' && define.amd) {
      './tracking',
      'bean',
      'when',
-     'moment'],
+     'moment',
+     '.es5_polyfill'],
     create
   );
 
@@ -295,7 +296,8 @@ if (typeof define === 'function' && define.amd) {
     require('./tracking'),
     require('bean'),
     require('when'),
-    require('moment')
+    require('moment'),
+    require('./es5_polyfill')
   );
 
 } else {
@@ -314,7 +316,8 @@ if (typeof define === 'function' && define.amd) {
     exports.ubar_tracking || ubar_tracking,
     exports.bean          || bean,
     exports.when          || when,
-    exports.moment        || moment
+    exports.moment        || moment,
+    exports.ubar_es5_polyfill || ubar_es5_polyfill
   );
 }
 
