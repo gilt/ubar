@@ -4,6 +4,8 @@
   */
   var
     Ubar = require('./ubar/ubar'),
+    // hack of sorts to get pollyfill code to run before loading defaultConfig
+    pollyfills = require('./ubar/es5_polyfill'),
     defaultConfig = require('./ubar/config'),
     Storage = require('./ubar/storage'),
     storage = new Storage(defaultConfig),

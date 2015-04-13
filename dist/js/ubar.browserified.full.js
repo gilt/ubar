@@ -5,6 +5,8 @@
   */
   var
     Ubar = require('./ubar/ubar'),
+    // hack of sorts to get pollyfill code to run before loading defaultConfig
+    pollyfills = require('./ubar/es5_polyfill'),
     defaultConfig = require('./ubar/config'),
     Storage = require('./ubar/storage'),
     storage = new Storage(defaultConfig),
@@ -147,7 +149,7 @@
 
 })();
 
-},{"./ubar/config":2,"./ubar/helpers":6,"./ubar/storage":9,"./ubar/ubar":11,"bean":12}],2:[function(require,module,exports){
+},{"./ubar/config":2,"./ubar/es5_polyfill":5,"./ubar/helpers":6,"./ubar/storage":9,"./ubar/ubar":11,"bean":12}],2:[function(require,module,exports){
 (function(exports, moduleName) {
 'use strict';
 
