@@ -19,6 +19,7 @@ var rename = require('gulp-rename');
 var source = require('vinyl-source-stream');
 var transform = require('vinyl-transform');
 var uglify = require('gulp-uglify');
+var streamify = require('gulp-streamify');
 
 var configObject = require('../config');
 
@@ -51,16 +52,14 @@ gulp.task('lint-js', function() {
  * browserify included.
  */
 gulp.task('bundle-browserified-js', function() {
-  var browserified = transform(function(filename) {
-    var b = browserify(filename);
-    return b.bundle();
-  });
+  var bundleStream = browserify(JS_BASE_FILE).bundle();
 
-  return gulp.src(JS_BASE_FILE)
-    .pipe(browserified)
+  return bundleStream
+    .pipe(source(JS_BASE_FILE))
     .pipe(print())
     .pipe(rename(JS_DEST_BROWSERIFIED_FILE))
-    .pipe(gulp.dest(JS_DEST_FOLDER));
+    .pipe(gulp.dest(JS_DEST_FOLDER))
+    .pipe(print());
 });
 
 
@@ -73,7 +72,8 @@ gulp.task('bundle-modularized-js', function () {
     .pipe(print())
     .pipe(concat(JS_DEST_FULL_FILE, {newLine: ';'}))
     .pipe(rename(JS_DEST_FULL_FILE))
-    .pipe(gulp.dest(JS_DEST_FOLDER));
+    .pipe(gulp.dest(JS_DEST_FOLDER))
+    .pipe(print());
 });
 
 
@@ -81,16 +81,15 @@ gulp.task('bundle-modularized-js', function () {
  * Gulp task to obfuscate the browserified javascript.
  */
 gulp.task('uglify-browserified-js', function() {
-  var browserified = transform(function(filename) {
-    var b = browserify(filename);
-    return b.bundle();
-  });
+  var bundleStream = browserify(JS_BASE_FILE).bundle();
 
-  return gulp.src(JS_BASE_FILE)
-    .pipe(browserified)
-    .pipe(uglify())
+  return bundleStream
+    .pipe(source(JS_BASE_FILE))
+    .pipe(print())
+    .pipe(streamify(uglify()))
     .pipe(rename(JS_DEST_BROWSERIFIED_MINIFIED_FILE))
-    .pipe(gulp.dest(JS_DEST_FOLDER));
+    .pipe(gulp.dest(JS_DEST_FOLDER))
+    .pipe(print());
 });
 
 
@@ -103,7 +102,8 @@ gulp.task('uglify-modularized-js', function() {
     .pipe(concat(JS_BASE_FILE, {newLine: ';'}))
     .pipe(uglify())
     .pipe(rename(JS_DEST_MINIFIED_FILE))
-    .pipe(gulp.dest(JS_DEST_FOLDER));
+    .pipe(gulp.dest(JS_DEST_FOLDER))
+    .pipe(print());
 });
 
 
