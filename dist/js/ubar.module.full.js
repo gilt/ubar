@@ -1016,7 +1016,7 @@ function create (ubarHelpers) {
    * @method enableUbar
    */
   ubarStorage.prototype.enable = function enable () {
-    this.docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS);
+    this.docCookies.setItem(this.UBAR_KEY, true, this.EXP_DURATION_ENABLED_MS, DEFAULT_BASE_PATH);
   };
 
   /**
