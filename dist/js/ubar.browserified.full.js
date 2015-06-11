@@ -1249,7 +1249,8 @@ function create (ubarHelpers) {
 
   var
     docCookies, // cookie getter and setter
-    ubarStorage; // Strorage constructor
+    ubarStorage, // Strorage constructor
+    DEFAULT_BASE_PATH = '/';
 
   /**
    * Class responsible for getting and setting UBAR cookies.
@@ -1367,7 +1368,8 @@ function create (ubarHelpers) {
    * @method setRedirected
    */
   ubarStorage.prototype.setRedirected = function setRedirected () {
-    this.docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS);
+    this.docCookies.setItem(this.REDIRECTED_NAME, true, this.EXP_DURATION_REDIRECTED_MS, DEFAULT_BASE_PATH
+      );
   };
 
   /**
@@ -1378,7 +1380,7 @@ function create (ubarHelpers) {
    * @method disableUbar
    */
   ubarStorage.prototype.disable = function disable () {
-    this.docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS);
+    this.docCookies.setItem(this.UBAR_KEY, false, this.EXP_DURATION_DISABLED_MS, DEFAULT_BASE_PATH);
   };
 
   /**
@@ -1400,8 +1402,8 @@ function create (ubarHelpers) {
    * @method clear
    */
   ubarStorage.prototype.clear = function clear () {
-    this.docCookies.removeItem(this.UBAR_KEY);
-    this.docCookies.removeItem(this.REDIRECTED_NAME);
+    this.docCookies.removeItem(this.UBAR_KEY, DEFAULT_BASE_PATH);
+    this.docCookies.removeItem(this.REDIRECTED_NAME, DEFAULT_BASE_PATH);
   };
 
   return ubarStorage;
