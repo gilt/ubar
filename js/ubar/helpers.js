@@ -77,11 +77,18 @@ function create (moment) {
     return obj;
   }
 
+  function bind (func, context) {
+    return function() {
+      return func.apply(context, arguments);
+    };
+  }
+
   return {
     getTimeInMoments: getTimeInMoments,
     getTimeInSeconds: getTimeInSeconds,
     isObject: isObject,
-    extend: extend
+    extend: extend,
+    bind : bind
   };
 }
 
