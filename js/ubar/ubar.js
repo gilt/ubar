@@ -204,16 +204,10 @@ function create (
     if (device.isAppSupported(this.config)) {
       ubarStorage = new UbarStorage(this.config);
 
-      var bind = function(func, context) {
-        return function() {
-          return func.apply(context, arguments);
-        };
-      };
-
-      this.enable = bind(ubarStorage.enable, ubarStorage);
-      this.disable = bind(ubarStorage.disable, ubarStorage);
-      this.isDisabled = bind(ubarStorage.isDisabled, ubarStorage);
-      this.isEnabled = bind(ubarStorage.isEnabled, ubarStorage);
+      this.enable = ubarHelpers.bind(ubarStorage.enable, ubarStorage);
+      this.disable = ubarHelpers.bind(ubarStorage.disable, ubarStorage);
+      this.isDisabled = ubarHelpers.bind(ubarStorage.isDisabled, ubarStorage);
+      this.isEnabled = ubarHelpers.bind(ubarStorage.isEnabled, ubarStorage);
       this.subscribe = pubsub.subscribe;
     } else {
       this.enable = function () {};
