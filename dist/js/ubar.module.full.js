@@ -736,12 +736,17 @@ function create (device, moment) {
    * @method redirectToApp
    */
   Resolver.prototype.redirectToApp = function redirectToApp (deepLinkToApp) {
-    deepLinkToApp = deepLinkToApp || this.app_deep_link_url ;
-    var ifrm = document.createElement("IFRAME");
-    ifrm.style.display = "none";
-    ifrm.id = "app-linker";
-    ifrm.setAttribute('src', deepLinkToApp);
-    document.body.appendChild(ifrm);
+    deepLinkToApp = deepLinkToApp || this.app_deep_link_url;
+
+    if (device.isIOS && device._getIOSVersion() > 8) {
+      window.location.href = deepLinkToApp;
+    } else {
+      var ifrm = document.createElement("IFRAME");
+      ifrm.style.display = "none";
+      ifrm.id = "app-linker";
+      ifrm.setAttribute('src', deepLinkToApp);
+      document.body.appendChild(ifrm);
+    }
   };
 
   /**
