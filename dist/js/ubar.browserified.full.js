@@ -405,6 +405,18 @@ function create () {
   }
 
   /**
+   * Determine if device is ios and using safari based on user agent.
+   *
+   * @private
+   * @method isIosSafari
+   *
+   * @return {Boolean}
+   */
+  function isIosSafari () {
+    return isIOS() && getUserAgent().match(/Version\//i) !== null;
+  }
+
+  /**
    * Determine if device is android based on user agent.
    *
    * @private
@@ -443,7 +455,7 @@ function create () {
       return parseFloat(getUserAgent().match(/OS (\d+)_(\d+)/)[0].split(" ")[1].replace("_", "."), 10);
     }
     catch(err) {
-      console.log('Tring to get IOS version for non-IOS device. ', err.message);
+      console.log('Trying to get IOS version for non-IOS device. ', err.message);
       return 0;
     }
 
@@ -464,7 +476,7 @@ function create () {
       return parseFloat(getUserAgent().match(/Android (\d+).(\d+)/)[0].split(" ")[1], 10);
     }
     catch(err) {
-      console.log('Tring to get Android version for non-Android device. ', err.message);
+      console.log('Trying to get Android version for non-Android device. ', err.message);
       return 0;
     }
   }
@@ -484,7 +496,7 @@ function create () {
       return parseFloat(getUserAgent().match(/(IEMobile\/)((\d+).(\d+))/)[0].split("/")[1], 10);
     }
     catch(err) {
-      console.log('Tring to get WindowsMobile version for non-WindowMobile device. ', err.message);
+      console.log('Trying to get WindowsMobile version for non-WindowMobile device. ', err.message);
       return 0;
     }
   }
@@ -553,6 +565,7 @@ function create () {
   return  {
     isAppSupported  : isAppSupported,
     isIOS           : isIOS,
+    isIosSafari     : isIosSafari,
     isAndroid       : isAndroid,
     isWindowsMobile : isWindowsMobile,
     _setUserAgent             : _setUserAgent,
@@ -1111,7 +1124,7 @@ function create (device, moment) {
   Resolver.prototype.redirectToApp = function redirectToApp (deepLinkToApp) {
     deepLinkToApp = deepLinkToApp || this.app_deep_link_url;
 
-    if (device.isIOS && device._getIOSVersion() > 8) {
+    if (device.isIosSafari() && device._getIOSVersion() >= 9) {
       window.location.href = deepLinkToApp;
     } else {
       var ifrm = document.createElement("IFRAME");

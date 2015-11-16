@@ -19,7 +19,9 @@
     'ios6'       : 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25',
     'ios7'       : 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53',
     'ios8'       : 'Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25',
-    'ios8_1'     : 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/38.0.2125.67 Mobile/12B411 Safari/600.1.4',
+    'ios8_1'     : 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B411 Safari/600.1.4',
+    'ios9_1'     : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/10A5376e Safari/601.1.46',
+    'ios_chrome' : 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 9_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3',
     'android2_3' : 'Mozilla/5.0 (Linux; U; Android 2.3.4; fr-fr; HTC Desire Build/GRJ22) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',
     'android4_0' : 'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
     'android4_1' : 'Mozilla/5.0 (Linux; U; Android 4.1.2; nl-nl; GT-I9300 Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
@@ -36,6 +38,8 @@
     'ios7'       : true,
     'ios8'       : true,
     'ios8_1'     : true,
+    'ios9_1'     : true,
+    'ios_chrome' : true,
     'android2_3' : false,
     'android4_0' : false,
     'android4_1' : false,
@@ -79,6 +83,14 @@
         });
         it("should return true for IOS8.1", function () {
           setUserAgent(userAgentList.ios8_1);
+          device.isIOS().should.equal(true);
+        });
+        it("should return true for IOS9_1", function () {
+          setUserAgent(userAgentList.ios9_1);
+          device.isIOS().should.equal(true);
+        });
+        it("should return true for ios chrome device", function () {
+          setUserAgent(userAgentList.ios_chrome);
           device.isIOS().should.equal(true);
         });
         it("should return false for Android", function () {
@@ -143,6 +155,17 @@
         it("should return 0 for WindowsMobile", function () {
           setUserAgent(userAgentList.windows10);
           device._getIOSVersion().should.equal(0);
+        });
+      });
+
+      describe("getIosSafari", function () {
+        it("should return true for IOS9_1", function () {
+          setUserAgent(userAgentList.ios9_1);
+          device.isIosSafari().should.equal(true);
+        });
+        it("should return false for ios_chrome", function () {
+          setUserAgent(userAgentList.ios_chrome);
+          device.isIosSafari().should.equal(false);
         });
       });
     });
