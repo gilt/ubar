@@ -124,6 +124,11 @@ a img {
 :focus {
   outline: 0;
 }
+@media (max-device-width: 667px) {
+  .fork-me {
+    display: none;
+  }
+}
 .ubar-page-wrapper h2 {
   color: #383838;
   font-family: Georgia, "Times New Roman", Times, serif;
