@@ -1,7 +1,7 @@
 {
   "name": "ubar",
   "group": "ubar",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Unidirectional Browser App Resolver",
   "repository": [
     {
