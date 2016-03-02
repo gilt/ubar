@@ -36,7 +36,7 @@ function create (
         installAppButton    = ubarComponentDiv.querySelectorAll('.' +(config.install_class) )[0],
         closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
-    bean.on(onButton, 'touchstart', function (ev) {
+    bean.on(onButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubarStorage.enable();
@@ -46,7 +46,7 @@ function create (
       redirect(config.tracking_sending_banner, config);
     });
 
-    bean.on(installAppButton, 'touchstart', function (ev) {
+    bean.on(installAppButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.choseDownloadApp( { location : config.tracking_sending_banner } );
@@ -54,14 +54,14 @@ function create (
       resolver.redirectToAppStore();
     });
 
-    bean.on(closeBannerButton, 'touchstart', function (ev) {
+    bean.on(closeBannerButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.closeBanner({ location : config.tracking_sending_banner });
       ubar_tracking.turnUbarOff({ location : config.tracking_sending_banner });
 
-      ubarDom.remove();
       ubarStorage.disable();
+      ubarDom.remove();
     });
   }
 
@@ -79,7 +79,7 @@ function create (
         openInAppButton = ubarComponentDiv.querySelectorAll('.' + (config.open_in_app_class) )[0],
         closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
-    bean.on(offButton, 'touchstart', function (ev) {
+    bean.on(offButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubarDom.remove();
@@ -87,7 +87,7 @@ function create (
       ubar_tracking.turnUbarOff({ location: config.tracking_returning_banner });
     });
 
-    bean.on(openInAppButton, 'touchstart', function (ev) {
+    bean.on(openInAppButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.returnToApp();
@@ -95,7 +95,7 @@ function create (
       redirect(config.tracking_returning_banner, config);
     });
 
-    bean.on(closeBannerButton, 'touchstart', function (ev) {
+    bean.on(closeBannerButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.closeBanner({ location : config.tracking_returning_banner });

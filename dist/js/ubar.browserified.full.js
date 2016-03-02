@@ -1096,6 +1096,38 @@ if (typeof define === 'function' && define.amd) {
 function create (device, moment) {
 
   /**
+   * Get deep link from config based on device type
+   *
+   * @private
+   * @method getAppDeepLink
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+  */
+  function getAppDeepLink (config) {
+    if (device.isWindowsMobile()) return config.windows_app_deep_link;
+    if (device.isAndroid()) return config.android_app_deep_link;
+    return config.ios_app_deep_link;
+  }
+
+  /**
+   * Get app store link from config based on device type
+   *
+   * @private
+   * @method getAppStoreUrl
+   *
+   * @param {Object} config  Ubar config object
+   *
+   * @return {String}
+   */
+  function getAppStoreUrl (config) {
+    if (device.isWindowsMobile()) return config.windows_app_store_url;
+    if (device.isAndroid()) return config.android_app_store_url;
+    return config.ios_app_store_url;
+  }
+
+  /**
    * An object to send users out of the browser and into native apps
    * via supported deep linking.
    * This object also tries to gracfully handle users returning to
@@ -1108,9 +1140,9 @@ function create (device, moment) {
    *
    */
   var Resolver = function (config) {
-    this.app_store_redirect = moment.duration(config.app_store_redirect).asMilliseconds();
-    this.app_deep_link_url  = this.getAppDeepLink(config);
-    this.app_store_url      = this.getAppStoreUrl(config);
+    this.appStoreRedirect = moment.duration(config.app_store_redirect).asMilliseconds();
+    this.appDeepLinkUrl   = getAppDeepLink(config);
+    this.appStoreUrl      = getAppStoreUrl(config);
   };
 
   /**
@@ -1122,9 +1154,9 @@ function create (device, moment) {
    * @method redirectToApp
    */
   Resolver.prototype.redirectToApp = function redirectToApp (deepLinkToApp) {
-    deepLinkToApp = deepLinkToApp || this.app_deep_link_url;
+    deepLinkToApp = deepLinkToApp || this.appDeepLinkUrl;
 
-    if (device.isIosSafari() && device._getIOSVersion() >= 9) {
+    if (device.isIos() && device._getIOSVersion() >= 9) {
       window.location.href = deepLinkToApp;
     } else {
       var ifrm = document.createElement("IFRAME");
@@ -1136,38 +1168,6 @@ function create (device, moment) {
   };
 
   /**
-   * Get deep link from config based on device type
-   *
-   * @public
-   * @method getAppDeepLink
-   *
-   * @param {Object} config  Ubar config object
-   *
-   * @return {String}
-  */
-  Resolver.prototype.getAppDeepLink = function getAppDeepLink (config) {
-    if (device.isWindowsMobile()) return config.windows_app_deep_link;
-    if (device.isAndroid()) return config.android_app_deep_link;
-    return config.ios_app_deep_link;
-  };
-
-  /**
-   * Get app store link from config based on device type
-   *
-   * @public
-   * @method getAppStoreUrl
-   *
-   * @param {Object} config  Ubar config object
-   *
-   * @return {String}
-   */
-  Resolver.prototype.getAppStoreUrl = function getAppStoreUrl (config) {
-    if (device.isWindowsMobile()) return config.windows_app_store_url;
-    if (device.isAndroid()) return config.android_app_store_url;
-    return config.ios_app_store_url;
-  };
-
-  /**
    * Resets UBAR if User doesn't have the App
    * and takes them to the App Store to
    * Download the Gilt App
@@ -1176,7 +1176,7 @@ function create (device, moment) {
    * @method redirectToAppStore
    */
   Resolver.prototype.redirectToAppStore = function redirectToAppStore () {
-    window.location.href = ( this.app_store_url );
+    window.location.href = this.appStoreUrl;
   };
 
   /**
@@ -1195,7 +1195,7 @@ function create (device, moment) {
     success = success || function () {};
 
     var
-      time_before_redirect = this.app_store_redirect,
+      time_before_redirect = this.appStoreRedirect,
       currentTime     = Date.now(),
       endTimerAt      = currentTime + (time_before_redirect),
       intervalLength  = time_before_redirect/3,
@@ -1212,7 +1212,7 @@ function create (device, moment) {
 
     redirectToAppStoreTimer = setInterval(function() {
       currentTime = Date.now();
-      if( currentTime >= (endTimerAt - timeThreshold) &&
+      if ( currentTime >= (endTimerAt - timeThreshold) &&
           currentTime <= (endTimerAt + timeThreshold) ){
         /** This means time is progressing naturally
           * and the user has not left safari, hence
@@ -1660,7 +1660,7 @@ function create (
         installAppButton    = ubarComponentDiv.querySelectorAll('.' +(config.install_class) )[0],
         closeBannerButton   = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
-    bean.on(onButton, 'touchstart', function (ev) {
+    bean.on(onButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubarStorage.enable();
@@ -1670,7 +1670,7 @@ function create (
       redirect(config.tracking_sending_banner, config);
     });
 
-    bean.on(installAppButton, 'touchstart', function (ev) {
+    bean.on(installAppButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.choseDownloadApp( { location : config.tracking_sending_banner } );
@@ -1678,14 +1678,14 @@ function create (
       resolver.redirectToAppStore();
     });
 
-    bean.on(closeBannerButton, 'touchstart', function (ev) {
+    bean.on(closeBannerButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.closeBanner({ location : config.tracking_sending_banner });
       ubar_tracking.turnUbarOff({ location : config.tracking_sending_banner });
 
-      ubarDom.remove();
       ubarStorage.disable();
+      ubarDom.remove();
     });
   }
 
@@ -1703,7 +1703,7 @@ function create (
         openInAppButton = ubarComponentDiv.querySelectorAll('.' + (config.open_in_app_class) )[0],
         closeBannerButton = ubarComponentDiv.querySelectorAll('.' + (config.close_button_class) )[0];
 
-    bean.on(offButton, 'touchstart', function (ev) {
+    bean.on(offButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubarDom.remove();
@@ -1711,7 +1711,7 @@ function create (
       ubar_tracking.turnUbarOff({ location: config.tracking_returning_banner });
     });
 
-    bean.on(openInAppButton, 'touchstart', function (ev) {
+    bean.on(openInAppButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.returnToApp();
@@ -1719,7 +1719,7 @@ function create (
       redirect(config.tracking_returning_banner, config);
     });
 
-    bean.on(closeBannerButton, 'touchstart', function (ev) {
+    bean.on(closeBannerButton, 'touchend', function (ev) {
       ev.preventDefault();
 
       ubar_tracking.closeBanner({ location : config.tracking_returning_banner });

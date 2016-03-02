@@ -26,24 +26,24 @@
     describe('getAppDeepLink for ', function () {
 
       it('windows should return windows_app_deep_link', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(true);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(false);
-        ubarResolver.getAppDeepLink(defaultConfig).should.equal(defaultConfig.windows_app_deep_link);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appDeepLinkUrl.should.equal(defaultConfig.windows_app_deep_link);
       });
 
       it('ios should return ios_app_deep_link', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(false);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(false);
-        ubarResolver.getAppDeepLink(defaultConfig).should.equal(defaultConfig.ios_app_deep_link);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appDeepLinkUrl.should.equal(defaultConfig.ios_app_deep_link);
       });
 
       it('android should return android_app_deep_link', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(false);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(true);
-        ubarResolver.getAppDeepLink(defaultConfig).should.equal(defaultConfig.android_app_deep_link);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appDeepLinkUrl.should.equal(defaultConfig.android_app_deep_link);
       });
     });
 
@@ -51,24 +51,24 @@
     describe('getAppStoreUrl for ', function () {
 
       it('android should return android_app_store_url', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(false);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(true);
-        ubarResolver.getAppStoreUrl(defaultConfig).should.equal(defaultConfig.android_app_store_url);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appStoreUrl.should.equal(defaultConfig.android_app_store_url);
       });
 
       it('iOS should return ios_app_store_url', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(false);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(false);
-        ubarResolver.getAppStoreUrl(defaultConfig).should.equal(defaultConfig.ios_app_store_url);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appStoreUrl.should.equal(defaultConfig.ios_app_store_url);
       });
 
       it('Windows should return android_app_store_url', function () {
-        ubarResolver = new Resolver(defaultConfig);
         sinonSandbox.stub(ubarDevice, 'isWindowsMobile').returns(true);
         sinonSandbox.stub(ubarDevice, 'isAndroid').returns(false);
-        ubarResolver.getAppStoreUrl(defaultConfig).should.equal(defaultConfig.windows_app_store_url);
+        ubarResolver = new Resolver(defaultConfig);
+        ubarResolver.appStoreUrl.should.equal(defaultConfig.windows_app_store_url);
       });
 
     });
