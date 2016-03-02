@@ -64,7 +64,7 @@ function create (device, moment) {
   Resolver.prototype.redirectToApp = function redirectToApp (deepLinkToApp) {
     deepLinkToApp = deepLinkToApp || this.appDeepLinkUrl;
 
-    if (device.isIos() && device._getIOSVersion() >= 9) {
+    if (device.isIOS() && device._getIOSVersion() >= 9) {
       window.location.href = deepLinkToApp;
     } else {
       var ifrm = document.createElement("IFRAME");
