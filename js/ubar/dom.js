@@ -80,7 +80,6 @@ function create (handlebars, when, request) {
     this.UBAR_SHOW_CLASS = config.ubar_show_class;
     this.UBAR_HIDE_CLASS = config.ubar_hide_class;
     this.UBAR_CONTAINER_CLASS = config.ubar_container;
-
     this._renderTemplate = config.renderTemplate || renderTemplate;
     this._loadTemplate = config.loadTemplate || loadTemplate;
   };
