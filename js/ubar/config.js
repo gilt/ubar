@@ -87,7 +87,8 @@ function create (ubarHelpers) {
     open_in_app_class  : 'ubar-open-page-in-app-button',
     close_button_class : 'ubar-close-button',
     ubar_show_class    : 'ubar-show',
-    ubar_hide_class    : 'ubar-hide'
+    ubar_hide_class    : 'ubar-hide',
+    ubar_container     : 'ubar-container'
   };
 
   /**
