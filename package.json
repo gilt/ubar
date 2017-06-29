@@ -1,7 +1,7 @@
 {
   "name": "ubar",
   "group": "ubar",
-  "version": "0.0.22",
+  "version": "0.1.0",
   "description": "Unidirectional Browser App Resolver",
   "repository": [
     {
@@ -25,6 +25,10 @@
     {
       "name": "Gregory Mazurek",
       "email": "gmazurek@gilt.com"
+    },
+    {
+      "name": "Riccardo Bellingeri",
+      "email": "rbellingeri@gilt.com"
     }
   ],
   "author": {

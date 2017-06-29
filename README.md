@@ -105,7 +105,7 @@ npm install --save ubar
 
 Usage
 --------------
-The UBAR module exposes 1 function, init. init takes a config object wihich overrides the defualt UBAR config values and returns the UBAR singleton. The UBAR singleton allows you to render the Open to App banner, set and get the UBAR cookie state, and subscribe to tracking events. UBAR works with requirejs, browserify, and on the window.
+The UBAR module exposes 1 function, init. init takes a config object which overrides the defualt UBAR config values and returns the UBAR singleton. The UBAR singleton allows you to render the Open to App banner, set and get the UBAR cookie state, and subscribe to tracking events. UBAR works with requirejs, browserify, and on the window.
 
 **Using requirejs:**
 Copy UBAR css, js, and templates directories from node modules into your project directory (i.e. public/).

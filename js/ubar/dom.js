@@ -79,29 +79,35 @@ function create (handlebars, when, request) {
     this.MAIN_UBAR_CLASS = config.component_class;
     this.UBAR_SHOW_CLASS = config.ubar_show_class;
     this.UBAR_HIDE_CLASS = config.ubar_hide_class;
-
+    this.UBAR_CONTAINER_CLASS = config.ubar_container;
     this._renderTemplate = config.renderTemplate || renderTemplate;
     this._loadTemplate = config.loadTemplate || loadTemplate;
   };
 
   /**
-   * Renders a template as the first element inside body.
+   * Renders UBAR template.
+   *
+   * If a pre-existing UBAR-dedicated container element is found in the DOM, then uses that. Otherwise, creates a new container as the first element of the body.
+   * Injects the UBAR markup in the container.
    *
    * @public
    * @method renderBanner
    * @param  {Object} templateSource The template to render
-   *
-   * @return  {Promise} Resolves after adding bannder to the dom, otherwise rejects.
+   * @return  {Promise} Resolves after adding banner to the dom, otherwise rejects.
    */
   UbarDom.prototype.renderBanner = function renderBanner (templateSource) {
     var
       self = this,
-      ubarDiv = document.createElement('div');
+      ubarContainerElt = document.querySelector('.' + self.UBAR_CONTAINER_CLASS);
 
     return this._renderTemplate(templateSource).then(function (renderedHtml) {
-      ubarDiv.innerHTML = renderedHtml;
-      document.body.insertBefore(ubarDiv, document.body.firstChild);
-      self.banner = document.querySelectorAll('.' + self.MAIN_UBAR_CLASS)[0];
+      if (!ubarContainerElt) {
+        // No pre-existing UBAR Container Element was found.
+        ubarContainerElt = document.createElement('div');
+        document.body.insertBefore(ubarContainerElt, document.body.firstChild);
+      }
+      ubarContainerElt.innerHTML = renderedHtml;
+      self.banner = ubarContainerElt.querySelector('.' + self.MAIN_UBAR_CLASS);
     });
   };
 

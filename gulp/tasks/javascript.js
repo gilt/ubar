@@ -24,10 +24,8 @@ var streamify = require('gulp-streamify');
 var configObject = require('../config');
 
 var JS_BASE_FILE = configObject.js.JS_BASE_FILE;
-var JS_BASE_MODULE_FILE = configObject.js.JS_BASE_MODULE_FILE;
 var JS_DEST_BROWSERIFIED_FILE = configObject.js.JS_DEST_BROWSERIFIED_FILE;
 var JS_DEST_BROWSERIFIED_MINIFIED_FILE = configObject.js.JS_DEST_BROWSERIFIED_MINIFIED_FILE;
-var JS_DEST_FULL_FILE = configObject.js.JS_DEST_FULL_FILE;
 var JS_DEST_FOLDER = configObject.js.JS_DEST_FOLDER;
 var JS_DEST_MINIFIED_FILE = configObject.js.JS_DEST_MINIFIED_FILE;
 var JS_DEST_FULL_FILE = configObject.js.JS_DEST_FULL_FILE;
