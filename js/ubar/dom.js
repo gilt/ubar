@@ -86,6 +86,7 @@ function create (handlebars, when, request) {
 
   /**
    * Renders UBAR template.
+   *
    * If a pre-existing UBAR-dedicated container element is found in the DOM, then uses that. Otherwise, creates a new container as the first element of the body.
    * Injects the UBAR markup in the container.
    *
@@ -101,12 +102,12 @@ function create (handlebars, when, request) {
 
     return this._renderTemplate(templateSource).then(function (renderedHtml) {
       if (!ubarContainerElt) {
-        // No pre-existing UBAR container was found.
+        // No pre-existing UBAR Container Element was found.
         ubarContainerElt = document.createElement('div');
         document.body.insertBefore(ubarContainerElt, document.body.firstChild);
       }
       ubarContainerElt.innerHTML = renderedHtml;
-      self.banner = document.querySelector('.' + self.MAIN_UBAR_CLASS);
+      self.banner = ubarContainerElt.querySelector('.' + self.MAIN_UBAR_CLASS);
     });
   };
 
