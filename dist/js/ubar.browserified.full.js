@@ -732,7 +732,7 @@ function create (handlebars, when, request) {
    * @method removeBanner
    */
   UbarDom.prototype.remove = function remove () {
-    var ubarContainerElt = this.banner.parentElement || {};
+    var ubarContainerElt = (this.banner || {}).parentElement || {};
 
     if (this.banner && ubarContainerElt.parentElement) {
       ubarContainerElt.parentElement.removeChild(ubarContainerElt);
