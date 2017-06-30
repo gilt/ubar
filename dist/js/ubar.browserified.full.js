@@ -727,12 +727,15 @@ function create (handlebars, when, request) {
   /**
    * Removes ubar banners from the DOM.
    *
+   * As browser support for `ChildNode.remove()` isn't great, we need to rely on `Node.removeChild()` instead.
    * @public
    * @method removeBanner
    */
   UbarDom.prototype.remove = function remove () {
-    if (this.banner && this.banner.parentElement) {
-      this.banner.parentElement.remove();
+    var ubarContainerElt = this.banner.parentElement || {};
+
+    if (this.banner && ubarContainerElt.parentElement) {
+      ubarContainerElt.parentElement.removeChild(ubarContainerElt);
       this.banner = undefined;
     }
   };
