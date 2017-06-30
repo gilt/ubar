@@ -540,7 +540,7 @@ function create (handlebars, when, request) {
    */
   UbarDom.prototype.remove = function remove () {
     if (this.banner && this.banner.parentElement) {
-      document.body.removeChild(this.banner.parentElement);
+      this.banner.parentElement.remove();
       this.banner = undefined;
     }
   };
