@@ -98,16 +98,16 @@ function create (handlebars, when, request) {
   UbarDom.prototype.renderBanner = function renderBanner (templateSource) {
     var
       self = this,
-      ubarContainerElt = document.querySelector('.' + self.UBAR_CONTAINER_CLASS);
+      ubarContainer = document.querySelector('.' + self.UBAR_CONTAINER_CLASS);
 
     return this._renderTemplate(templateSource).then(function (renderedHtml) {
-      if (!ubarContainerElt) {
+      if (!ubarContainer) {
         // No pre-existing UBAR Container Element was found.
-        ubarContainerElt = document.createElement('div');
-        document.body.insertBefore(ubarContainerElt, document.body.firstChild);
+        ubarContainer = document.createElement('div');
+        document.body.insertBefore(ubarContainer, document.body.firstChild);
       }
-      ubarContainerElt.innerHTML = renderedHtml;
-      self.banner = ubarContainerElt.querySelector('.' + self.MAIN_UBAR_CLASS);
+      ubarContainer.innerHTML = renderedHtml;
+      self.banner = ubarContainer.querySelector('.' + self.MAIN_UBAR_CLASS);
     });
   };
 
@@ -129,10 +129,19 @@ function create (handlebars, when, request) {
    * @method removeBanner
    */
   UbarDom.prototype.remove = function remove () {
-    var ubarContainerElt = (this.banner || {}).parentElement || {};
+    var ubarContainer;
 
-    if (this.banner && ubarContainerElt.parentElement) {
-      ubarContainerElt.parentElement.removeChild(ubarContainerElt);
+    if (this.banner && this.banner.parentElement) {
+      ubarContainer = this.banner.parentElement;
+      if (ubarContainer.parentElement) {
+        // If the container has a parent element, then it's safe to remove the container.
+        ubarContainer.parentElement.removeChild(ubarContainer);
+      }
+      else {
+        // Otherwise, just remove the banner.
+        ubarContainer.removeChild(this.banner);
+      }
+
       this.banner = undefined;
     }
   };
